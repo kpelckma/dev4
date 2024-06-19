@@ -1,0 +1,27 @@
+== Firmware Structure
+
+The abstraction layer between the BSP module (bsp_sis8300ku) and application is shown below. 
+
+image::top_diagram.svg[]
+
+The interface between application and BSP is defined to be universal yet configurable by BSP. In this example project, interface definitions come from desy_common library however the configuration of these interfaces (eg. how AXI.4 parameters should etc) is defined inside the bsp_sis8300ku module. 
+
+Here are the things BSP provides to the application:
+
+* AXI.4 Lite Bus for the register access
+* AXI.4 Full Bus for the DDR access
+* MicroTCA Backplane MLVDS Signals 
+* Zone3 Pins
+* Various clocks and resets synchronized to those clocks
+* Interrupts originating from PCIe Endpoint (xDMA IP IRQ)
+
+
+=== Example Application 
+
+This project shows how typical application can be for a bsp_sis8300ku module. It uses DAQ module to capture signals and convert them to AXi.4 Full packages and send it to the DDR. It has has TIMING module to produce necessary triggers needed by DAQ. 
+
+The selection of which signals to sample by DAQ is determined on the `pkg_app_config<conf1/conf2>` VHDL package. 
+
+For both configurations DAQ samples ADC signals coming from the BSP as well as few simple 32-bit counters.
+
+The application also provides the logic necessary to the use the RTM components. Since this AMC board can work with both DS8VM1 and DWC8VM1 RTM, the selection of which one to use is determined by Project configuration.

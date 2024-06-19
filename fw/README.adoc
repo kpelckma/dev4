@@ -1,0 +1,92 @@
+= Example Project for SIS8300KU AMC
+
+This project shows an example project with SIS8300KU AMC board with two different RTM boards. (DRTM-DS8VM1 and DRTM-DWC8VM1)
+
+== Prerequisites
+
+Following packages/software must be available on your Linux system
+
+* Python3
+* pip
+* Vivado 2020.2 
+* asciidoctor-pdf
+
+Make sure Vivado is callable from the CLI.
+
+== Quick Start 
+
+. Clone the main repository.
+. Checkout all git submodules recursively.
++
+[source]
+----
+git submodule update --init --recursive
+----
+. Prepare the Virtual Environment for DesyRDL module. (`make env` command need to be done once. Projects with different configurations can be created without typing `make env` each time)
+
++
+[source]
+----
+make env
+----
++
+. Create the Vivado Project 
++
+Project can be created with DRTM-DS8VM1 Board with `cfg=ds8vm1` or DRTM-DWC8VM1 Board with `cfg=dwc8vm1` 
++
+[source]
+----
+make project cfg=dwc8vm1
+----
++
+. Build the Vivado Project 
++
+[source]
+----
+make build cfg=dwc8vm1
+----
+. After implementation is done, project outputs (bit/map files) will be visible under `./out` folder
+
+
+== Documentation Generation
+
+This project comes with comprehensive documentation written with Asciidoc following docs-as-code approach. 
+
+=== Automatic Documentation Generation via FWK (Recommended)
+
+FWK can generate the documentation site (static html) by using the docker images created by MSK FPGA Team under the hood. Typing `make doc cfg=<configuration>` will produce .html file along with pdf file for the project. The output pdf file will be placed under `./out/sis8300ku_example_design_<ds8vm1/dwc8vm1>`. The html link is provided on the console output after FWK is done with the Antora site generation.
+
+TIP: Docker image for the documentation generation can be accessed https://hub.docker.com/r/fwfwk/doc-antora[here]. 
+
+[source]
+----
+make doc cfg=dwc8vm1
+----
+
+For questions please contact: Cagil Gumus (cagil.guemues@desy.de)
+
+
+== Changelog
+
+=== Version 2.1
+* bsp_sis8300ku now supports PCIe Interrupts requests from the application side. (up to 16 individual triggers over xDMA IP)
+* Fixed the issue where RootComplex (CPU) reboot causes BSP registers to go zero
+* Fixed wrong DAQ settings on the application causes to ignore triggers. (DAQ needed to be in Pulsed Mode)
+** This bug was causing DAQ to ignore triggers which causes double buffering not to work properly.
+* All submodules (TIMING, DAQ, FCM, DWC8VM1, FWK, bsp_sis8300ku) are updated to the latest HEAD
+* Improved Documentation
+
+=== Version 2.0
+
+* All modules are now using DesyRDL (replacing old IBUS)
+* Every module now uses a single desy_vhdl library
+
+=== Version 1.0.1
+
+* First working version
+
+
+
+
+
+

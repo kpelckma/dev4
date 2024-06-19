@@ -1,0 +1,27 @@
+// attention: default regwidth is 32
+
+/* "The only difference between the register file component (regfile) and the
+   addrmap component (see Clause 13) is an addrmap defines an RTL implementation
+   boundary where the regfile does not."
+*/
+addrmap iq_slide #(longint unsigned WIDTH = 18, boolean MODIFYABLE = true, longint unsigned FD_CHANNELS = 8, longint unsigned TABLE_LEN = 5) {
+
+  desyrdl_interface = "AXI4L";
+
+	// simple registers can be defined anonymously:
+	reg {
+		name = "Overflow counter";
+		desc = "Increases by one for each clock with a detected overflow";
+
+		field {counter;} cnt[32];
+	} overflow_cnt[FD_CHANNELS];
+
+	reg sincos_value {
+		name = "Value within a sine/cosine look-up table";
+		desc = "Values are arranged by channel on the first index and by position within the signal on the second index";
+		field {} val[18];
+	};
+
+	sincos_value iq_sin[FD_CHANNELS][TABLE_LEN];
+	sincos_value iq_cos[FD_CHANNELS][TABLE_LEN];
+};

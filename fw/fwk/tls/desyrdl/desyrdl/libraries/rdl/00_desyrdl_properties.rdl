@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//          ____  _____________  __                                           //
+//         / __ \/ ____/ ___/\ \/ /                 _   _   _                 //
+//        / / / / __/  \__ \  \  /                 / \ / \ / \                //
+//       / /_/ / /___ ___/ /  / /               = ( M | S | K )=              //
+//      /_____/_____//____/  /_/                   \_/ \_/ \_/                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+//! @copyright Copyright 2021 DESY
+//! SPDX-License-Identifier: Apache-2.0
+////////////////////////////////////////////////////////////////////////////////
+//! @date
+//! @author Michael Buechler <michael.buechler@desy.de>
+////////////////////////////////////////////////////////////////////////////////
+//! @brief Custom properties for DesyRDL
+////////////////////////////////////////////////////////////////////////////////
+
+property desyrdl_generate_hdl { type = boolean; component = addrmap | regfile | reg | mem; };
+property desyrdl_interface { type = string; component = addrmap | regfile | reg | mem; };
+property desyrdl_access_channel {type = longint unsigned; component = addrmap; };
+property desyrdl_data_type {type = string; component = field | reg | mem; };

@@ -1,0 +1,97 @@
+== Continous Mode
+
+=== DAQ data in relation to trigger
+A trigger signal causes the DAQ burst generator to switch to the TRANSACTION state where it forwards data towards the DRAM. The data input to the burst generator that coincides with the trigger pulse is lost, as can be seen in the diagram below.
+
+image::daq_burst_gen.svg[]
+
+
+=== Timestamp Information 
+Timestamps are captured in parallel with the burst generator. As a result, all timestamps are aligned with the first sample of a buffer. The structure is shown below.
+
+image::DAQ_timestamps.svg[]
+
+
+The following information is stored while capturing a buffer:
+* The 64-bit timestamp at the first sample in the buffer. The timestamp corresponds to the clock at which the first sample is clocked into the burst generator module.
+* The number of triggers within the buffer.
+* The 32-bit timestamp offsets at each trigger within the buffer.
+
+
+=== Buffer Start Timestamp
+
+1. DATA_STROBE causes the current timestamp to be stored in a register
+2. A signal from BURST_GENERATOR indicates that the first sample of a new buffer was read by the module (buffer_start)
+3. The timestamp stored in step 1 that is valid for this first sample is written to the output of daq_timestamps
+
+
+image::timestamps_buf_start.svg[]
+
+
+
+=== Trigger Timestamps
+
+1. A counter obtains the number of clock cycles since a buffer start
+2. A trigger pulse causes the current counter value to be stored as the trigger time offset.
+3. The offset is written to the output of daq_timestamps.
+
+image::timestamps_triggers.svg[]
+
+
+=== Transfer to the CPU
+
+1. Timestamp information is picked up by the module daq_timestamps_to_mem and stored in a RAM. This memory is exposed as an AREA through IBUS.
+
+2. The AREA memory contains buffer start timestamps and trigger time offsets for both buffers.
+
+The areas are structured as follows. Trigger offsets are 32 bit unsigned integers. Buffer start timestamps are 64 bit unsigned integers.
+
+[cols="3,9"]
+|===
+|Area Address| Function
+
+|0-509	
+|Trigger time offsets for buffer 0
+
+|510
+|Buffer start timestamp for buffer 0, high 32 bit
+
+|511
+|Buffer start timestamp for buffer 0, low 32 bit
+
+|512-1021	
+|Trigger time offsets for buffer 1
+
+
+|1022	
+|Buffer start timestamp for buffer 1, high 32 bit
+
+|1023
+|Buffer start timestamp for buffer 1, low 32 bit
+
+|===
+
+
+
+=== Example of relating samples to a time reference
+
+* The CPU application sets up the acquisition
+* DAQ_timestamps resets counters
+* The CPU application knows the absolute time at this point
+
+* A trigger causes the acquisition to start
+* AREA_DAQ_TIMES provides time information, relative to the time of the reset
+
+
+=== Limitations
+
+
+REA_DAQ_TIMES_x is limited to 1024 values (32 bit each) +
+
+* two buffers per region --> 512 values per buffer +
+* the buffer_start timestamp takes two values, so 510 trigger offsets per buffer remain+
+
+The trigger offset counter is limited to 32 bits. An increasing size of the buffer combined with a low data rate (e.g. with a high strobe divider) can cause that counter to overflow. +
+
+* At 125 MHz it takes about 35 seconds to overflow a 32 bit counter +
+* A spreadsheet is provided in trigger_timestamps.ods to compare the timespan of a buffer with the time to count to 2^32-1.

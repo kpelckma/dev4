@@ -1,0 +1,8 @@
+[#README]
+= DESY VHDL Library README
+
+The main repository containing libraries for FW Framework type definitions, functions for common used mathmatical operations, several IC types and their interfaces and others.
+
+NOTE: This repository has to be added as a submodule to the superproject,
+which should consist of other components like board support package
+(BSP), application and modules.

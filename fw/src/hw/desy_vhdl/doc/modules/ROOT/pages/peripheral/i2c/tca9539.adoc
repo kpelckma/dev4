@@ -1,0 +1,36 @@
+= TCA9539 FPGA Firmware Implementation
+
+ifndef::imagesdir[:imagesdir: ../images]
+:stem: asciimath
+
+== General
+
+Texas Instruments TCA9539 is a 16-Bit I2C and SMBus I/O Expander with Interrupt
+Output, Reset Pin, and Configuration Registers.
+
+Microchip TCA9539 is a 16-bit, general purpose parallel I/O expander for I2C bus applications. https://www.ti.com/product/TCA9539[*^{counter:link}^*]. 
+
+_FPGA FW GPIO-Configuration_:
+
+* All 16 ports are inputs
+
+== Prerequest for Design Integration
+
+The FW Design of TCA9539 is ready to use together with the FW entity ENT_I2C_CONTROLLER. The TCA9539 component should be connected to the controller component. The controller converts the IC specific read and write commands to drive and scope the external TCA9539 device. Two iobuf primitives are required aditionally. See image below.
+
+image::I2C_integration.png[]
+
+== FPGA Firmware Design
+
+This Firmware design implementation of TCA9539 operates as a I2C subordinate device. It is a costimized statemachine for triggered output data propagation. 
+
+_Biref description_:
+
+* Trigger starts a output data propagation process
+** There is no termination condition apart from reset
+** One clock cycle output done signal, to indiacte that output data  was send
+* Conversion time 0.1 ms
+
+== Design Implementation 
+
+image::TCA9539_fsm.svg[]

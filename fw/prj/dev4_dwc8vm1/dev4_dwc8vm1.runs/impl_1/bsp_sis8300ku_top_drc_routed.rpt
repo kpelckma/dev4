@@ -1,0 +1,136 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.1 (lin64) Build 2902540 Wed May 27 19:54:35 MDT 2020
+| Date         : Mon Sep 25 13:34:18 2023
+| Host         : workstation running 64-bit unknown
+| Command      : report_drc -file bsp_sis8300ku_top_drc_routed.rpt -pb bsp_sis8300ku_top_drc_routed.pb -rpx bsp_sis8300ku_top_drc_routed.rpx
+| Design       : bsp_sis8300ku_top
+| Device       : xcku040-ffva1156-1-c
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max violations: <unlimited>
+             Violations found: 16
++-----------+----------+-------------------------------------------------+------------+
+| Rule      | Severity | Description                                     | Violations |
++-----------+----------+-------------------------------------------------+------------+
+| BUFC-1    | Warning  | Input Buffer Connections                        | 1          |
+| DPIP-2    | Warning  | Input pipelining                                | 6          |
+| DPOP-4    | Warning  | MREG Output pipelining                          | 3          |
+| LVDS-1    | Warning  | Bidirection LVDS IOs                            | 1          |
+| RPBF-3    | Warning  | IO port buffering is incomplete                 | 2          |
+| RTSTAT-10 | Warning  | No routable loads                               | 1          |
+| REQP-1673 | Advisory | enum_BREG_0_connects_CEB1_GND_connects_CEB2_GND | 2          |
++-----------+----------+-------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+BUFC-1#1 Warning
+Input Buffer Connections  
+Input buffer ins_payload/ins_app_top/blk_rtm.gen_dwc8vm1.ins_rtm_dwc8vm1_top/blk_rtm_io.ins_hrl_ibuf_n/IBUFCTRL_INST (in ins_payload/ins_app_top/blk_rtm.gen_dwc8vm1.ins_rtm_dwc8vm1_top/blk_rtm_io.ins_hrl_ibuf_n macro) has no loads. It is recommended to have an input buffer drive an internal load.
+Related violations: <none>
+
+DPIP-2#1 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-2#2 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0 input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-2#3 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__0 input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-2#4 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__1 input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-2#5 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__1 input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-2#6 Warning
+Input pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__1 input ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPOP-4#1 Warning
+MREG Output pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG multiplier stage ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-4#2 Warning
+MREG Output pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__0 multiplier stage ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-4#3 Warning
+MREG Output pipelining  
+DSP ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__1 multiplier stage ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+LVDS-1#1 Warning
+Bidirection LVDS IOs  
+The following port(s) use the LVDS I/O standard and have bi-directional differential usage. Please note that LVDS is a fixed impedance structure optimized to 100ohm differential. This is only intended to be used in point-to-point transmissions that do not have turn around timing requirements. If the intended usage is a bus structure, please use BLVDS/BLVDS_25, instead. pio_rtm_io_n[4], pio_rtm_io_p[4].
+Related violations: <none>
+
+RPBF-3#1 Warning
+IO port buffering is incomplete  
+Device port pio_rtm_io_n[4] expects both input and output buffering but the buffers are incomplete.
+Related violations: <none>
+
+RPBF-3#2 Warning
+IO port buffering is incomplete  
+Device port pio_rtm_io_p[4] expects both input and output buffering but the buffers are incomplete.
+Related violations: <none>
+
+RTSTAT-10#1 Warning
+No routable loads  
+129 net(s) have no routable loads. The problem bus(es) and/or net(s) are ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/LMB_CE_riu,
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/LMB_UE_riu,
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[12],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[13],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[14],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_ddr_cal_top/u_ddr_cal/u_xsdb_arbiter/Q[15],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_fixdly_rdy_upp/SYNC[0].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_fixdly_rdy_low/SYNC[0].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_phy_rdy_upp/SYNC[0].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_phy_rdy_low/SYNC[0].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_fixdly_rdy_upp/SYNC[1].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_phy_rdy_upp/SYNC[1].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_phy_rdy_low/SYNC[1].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_fixdly_rdy_low/SYNC[1].sync_reg[1],
+ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_mem_intfc/u_phy2clb_fixdly_rdy_low/SYNC[2].sync_reg[1] (the first 15 of 122 listed).
+Related violations: <none>
+
+REQP-1673#1 Advisory
+enum_BREG_0_connects_CEB1_GND_connects_CEB2_GND  
+ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG0__1: When DSP48E2 attribute BREG is set to 0, the CEB1 and CEB2 pins should be tied to GND to save power.
+Related violations: <none>
+
+REQP-1673#2 Advisory
+enum_BREG_0_connects_CEB1_GND_connects_CEB2_GND  
+ins_payload/ins_app_top/blk_mimo.ins_mimo/ins_iq2/ARG__1: When DSP48E2 attribute BREG is set to 0, the CEB1 and CEB2 pins should be tied to GND to save power.
+Related violations: <none>
+
+

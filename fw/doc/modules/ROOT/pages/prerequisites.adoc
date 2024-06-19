@@ -1,0 +1,21 @@
+== Prerequisites
+
+In order to work with this project, following packages must be installed:
+
+* OS: Preferably, Ubuntu 20.04 LTS
+* Git
+* Vivado and Vitis 2020+
+* GNU make (also shipped with Vitis)
+* Tcl shell (shipped with Vivado and Vitis)
+* python3 with
+** python3-pip
+** python3-venv
+
+For the documentation generation:
+
+* https://hub.docker.com/r/fwfwk/doc-antora[Docker image for the asciidoctor and antora packages]
+
+WARNING: In order for FWK to work properly, Vivado must be accessible by CLI. To achieve this users must source shell script provided by Xilinx. (usually under <Xilinx_Installation_DIR/Vivado/2020.2/settings64.sh)
+
+
+

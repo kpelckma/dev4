@@ -1,0 +1,30 @@
+= desy_periph Library Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:math:
+
+This repo contains bunch of peripheral IC's hdl files along with their respective test benches. 
+
+Under ./hdl folder ICs have been separated by the following categories;
+
+* i2c
+** ltc2495
+** pca9542
+
+* spi (Not implemented yet)
+* rs232 (Not implemented yet)
+* adc (Not implemented yet)
+* dac (Not implemented yet)
+
+Useful links:
+
+* xref:ltc2495.adoc[LTC2495]
+* xref:pca9542.adoc[LTC2495]
+* xref:dependencies.adoc[HDL dependencies]
+
+The main developer for this library: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this library: Katharina Schulz (katharina.schulz@desy.de)
+

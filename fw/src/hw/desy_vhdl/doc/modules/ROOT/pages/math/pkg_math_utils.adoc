@@ -1,0 +1,173 @@
+
+
+== Package math_utils
+** *Line: 26 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+package math_utils is
+----
+*Description:* 
+Package of mathematical utilities and support functions
+
+=== Type math_utils.t_saturation
+** *Line: 29 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  type t_saturation is (ST_SAT_OK, ST_SAT_OVERFLOWN, ST_SAT_UNDERFLOWN);
+----
+*Description:* 
+Saturation status after an operation.
+
+
+The encoding for _t_saturation_ is
+
+* ST_SAT_OK         = "00" (No saturation)
+* ST_SAT_OVERFLOWN  = "10" (Operation has overflown)
+* ST_SAT_UNDERFLOWN = "01" (Operation has underflown)
+
+=== Function math_utils.f_bit_length
+** *Line: 44 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_bit_length (arg: integer) return integer;
+----
+*Description:* 
+f_bit_length:
+Comparable to Python's int.bit_length(),
+but when arg is negative, calculate for two's complement.
+Attention: returns 1 for argument -1.
+When arg is zero, return 0.
+
+=== Function math_utils.f_unsigned_length
+** *Line: 49 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_unsigned_length (arg: natural) return natural;
+----
+*Description:* 
+f_unsigned_length:
+Calculates the minimum unsigned signal length to store **arg**,
+When arg is zero, return 0.
+
+=== Function math_utils.f_signed_length
+** *Line: 53 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_signed_length (arg: integer) return integer;
+----
+*Description:* 
+Calculates the minimum signed signal length to store *arg*,
+When arg is zero, return 0.
+
+=== Function math_utils.f_maximum
+** *Line: 58 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_maximum (a, b: integer) return integer;
+----
+*Description:* 
+f_maximum:
+Porting of 'maximum' from VHDL 08' not present in the
+93' standard.
+
+=== Function math_utils.f_minimum
+** *Line: 63 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_minimum (a, b: integer) return integer;
+----
+*Description:* 
+f_minimum:
+Porting of 'minimum' from VHDL 08' not present in the
+93' standard
+
+=== Function math_utils.f_max_val_for_length
+** *Line: 68 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_max_val_for_length (length: natural; sign : boolean) return integer;
+----
+*Description:* 
+f_max_val_for_length:
+Returns the maximum value representable by a numeric type of length
+_length_ and sign _sign_.
+
+=== Function math_utils.f_max_val_of
+** *Line: 70 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_max_val_of (arg: unsigned) return unsigned;
+----
+
+** *Line: 75 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_max_val_of (arg: signed) return signed;
+----
+*Description:* 
+f_max_val_of:
+Returns the maximum value representable by a numeric type.
+Signed and unsigned version.
+
+=== Function math_utils.f_min_val_for_length
+** *Line: 80 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_min_val_for_length (length: natural; sign : boolean) return integer;
+----
+*Description:* 
+f_max_val_for_length:
+Returns the maximum value representable by a numeric type of length
+_length_ and sign _sign_.
+
+=== Function math_utils.f_min_val_of
+** *Line: 82 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_min_val_of (arg: unsigned) return unsigned;
+----
+
+** *Line: 87 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_min_val_of (arg: signed) return signed;
+----
+*Description:* 
+f_min_val_of:
+Returns the minimum value representable by a numeric type.
+Signed and unsigned version.
+
+=== Function math_utils.f_is_max
+** *Line: 89 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_is_max (arg: unsigned) return boolean;
+----
+
+** *Line: 94 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_is_max (arg: signed) return boolean;
+----
+*Description:* 
+f_is_max:
+Checks whether a signal is at its maximum value.
+Signed and unsigned version.
+
+=== Function math_utils.f_is_min
+** *Line: 96 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_is_min (arg: unsigned) return boolean;
+----
+
+** *Line: 101 of link:pkg_math_utils.vhd[pkg_math_utils.vhd]*
+[source,vhdl]
+----
+  function f_is_min (arg: signed) return boolean;
+----
+*Description:* 
+f_is_min:
+Checks whether a signal is at its minimum value.
+Signed and unsigned version.
+

@@ -1,0 +1,6 @@
+{# library common files #}
+pkg_desyrdl_common.vhd desyrdl/pkg_desyrdl_common.vhd
+{% for adapter in interface_adapters %}
+{{adapter}}.vhd      desyrdl/{{adapter}}.vhd
+{% endfor %}
+

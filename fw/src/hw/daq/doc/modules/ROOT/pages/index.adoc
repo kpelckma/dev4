@@ -1,0 +1,26 @@
+= DAQ Module Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:math:
+
+image::daq_logo.png[width=30%, align=center]
+
+Welcome to the start page of the DAQ Module documentation. This documentation page includes information about the hardware and firmware.
+
+DAQ (Data Acquisition) module is responsible from grabbing the data from its application and sending into a AXI.4 Slave using AXI.4 Full and AXI.4 Lite protocol.
+
+Here are some useful links:
+
+* xref:registers.adoc[Register Descriptions]
+* xref:dependencies.adoc[HDL dependencies]
+* xref:firmware.adoc[Information about firmware implementation]
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+Tested on Vivado 2020.1 +
+Tested on ISE 14.7 +
+Tested on PlanAhead +

@@ -1,0 +1,34 @@
+
+
+== Entity cic
+** *Line: 42 of link:cic.vhd[cic.vhd]*
+[source,vhdl]
+----
+entity cic is
+  generic(G_R             : positive;
+          G_N             : positive;
+          G_M             : positive := 1;
+          G_MODE          : string   := "decimator";
+          G_EXT_TRIGGER   : boolean  := false;
+          G_SYNCH_TRIGGER : boolean  := true);
+  port(pi_clk         : in std_logic;
+       pi_rst         : in std_logic;
+       pi_stb         : in std_logic;
+       pi_data        : in signed;
+       po_vld         : out std_logic;
+       po_data        : in signed;
+       pi_sampler_trg : in std_logic := '0');
+end entity cic;
+----
+*Description:* 
+Cascaded Comb Integrator filter (CIC) to decimate/interpolate a +
+continuous stream of values. The filter is characterized by the parameters +
+`G_R`, `G_N` and `G_M`. `G_R` is the sample rate change for the signal, +
+`G_N` is the filter order that determines the stopband rejection, and `G_M` +
+is the differential delay.
+`G_MODE` defines either if the cic is used as a `"decimator"` or `"interpolator"`.
+An internal counter is used to activate the decimating/interpolating +
+sampling if `G_EXT_TRIGGER` is `false`.
+When `G_EXT_TRIGGER` is `true` the CIC sampler is driven by `pi_sampler_trg` +
+(ignored otherwise). In this mode if `G_SYNCH_TRIGGER`, the propagation of +
+`pi_sampler_trg` is synchronized with `pi_stb`.

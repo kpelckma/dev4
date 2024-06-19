@@ -1,0 +1,103 @@
+[#lib_osvvm]
+= OSVVM integration =
+:navtitle: OSVVM integration
+
+FWK supports OSVVM library integration. Integration is done over environment variable `FWK_OSVVM_PATH` setting.
+
+FWK integrates VHDL sources under module `::fwfwk::lib:osvvm` namespace as well Tcl scripts procedures under `::osvvm`.
+All the OSVVM Tcl commands should be avaiable from the FWK Tcl's files.
+
+.Clone OSVVM repository
+[source,shell]
+----
+git clone https://github.com/OSVVM/OsvvmLibraries.git /path/to/OSVVM/OsvvmLibraries
+----
+
+.Set enviroment variable
+[source,shell]
+----
+export FWK_OSVVM_PATH=/path/to/OSVVM/OsvvmLibraries
+----
+
+[NOTE]
+The OSVVM HDL library can be included to the design as pre-compiled library (preferred way) for the vendor tool or by including sources to the design.
+
+== Pre-compiled HDL libraries ==
+
+The best way to add OSVVM libraries is to compile them under vendor tool and include them with the tool commands.
+
+=== GHDL ===
+
+
+==== Compilation ====
+Requirements:
+
+* GHDL
+* tclsh
+
+First step is to compile libraries:
+
+[source,bash]
+----
+$ git clone https://github.com/OSVVM/OsvvmLibraries.git /path/to/OSVVM/OsvvmLibraries  <1>
+$ mkdir -p /path/to/compiled/HDLSimLibs/ghdl/ <2>
+$ cd /path/to/compiled/HDLSimLibs/ghdl/ <3>
+$ tclsh <4>
+% source /path/to/OSVVM/OsvvmLibraries/Scripts/StartUp.tcl  <5>
+% build /path/to/OSVVM/OsvvmLibraries <6>
+----
+<1> Clone repo
+<2> Create directory for compiled libraries
+<3> Go to created direcotry for compiled libraries
+<4> Run Tcl shell
+<5> Source OSVVM startup script in tclsh
+<6> Run build in tclsh
+
+==== Usage ====
+
+Now you can use compiled libraries with the FWK and GHDL. Set the FWK_GHDL_LIBS variable. This variable will add path to -P swith of GHDL.
+
+[source,bash]
+----
+$ FWK_GHDL_LIBS=/path/to/compiled/HDLSimLibs/ghdl/ make ghdl ghdl_sim
+----
+
+If you want to add osvvm libraries all the time you may export variable in shell or e.g. by adding it to your .bashrc.
+
+[source,bash]
+----
+$ export FWK_GHDL_LIBS=/path/to/compiled/HDLSimLibs/ghdl/
+$ make ghdl ghdl_sim
+----
+
+
+== Including OSVVM HDL in design ==
+
+If from some reason the pre-compiled libraries cannot be used, there is an option to include OSVVM sources in FWK Tcl's.
+
+In any module or project Tcl init procedure set `::fwfwk::lib::osvvm::IncludeModule` variabvle with the list of modules you want to include into the design:
+
+[source,tcl]
+----
+proc init {} {
+  set ::fwfwk::lib::osvvm::IncludeModule {osvvm Common DpRam UART Axi4 Axi4Lite Axi4Stream}
+}
+----
+
+Alternatively you can include each package separately in setSurcess procedure with the `::fwfwk:OsvvmPath` :
+
+[source,tcl]
+----
+proc setSources {} {
+  variable Sources
+  lappend Sources [list "$::fwfwk:OsvvmPath/osvvm/RandomPkg.vhd" "VHDL 2008" "osvvm"]
+}
+----
+
+
+
+
+
+
+
+

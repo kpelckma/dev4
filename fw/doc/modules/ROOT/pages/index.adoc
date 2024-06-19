@@ -1,0 +1,20 @@
+= SIS8300KU Example Design Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:front-cover-image: image:cover.svg[pdfwidth=4.25in,align=center]
+
+== Introduction
+
+This project is meant for being an example design using SIS8300KU AMC board. It is using many modules from the MSK-FPGA Framework.
+
+After building the project, users can quickly initialize the board and start reading the ADC input via Python CLI Interface. 
+
+https://gitlab.desy.de/fpgafw/scr/sis8300ku_example_application[Link for the Python Application]
+
+SIS8300KU can digitize 10 Channel at 125 MS/s 16-bit resolution as well as providing a DAC for closing fast feedback loops.
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+

@@ -1,0 +1,3 @@
+// Sourcing the images
+:imagesdir: modules/ROOT/images 
+include::modules/ROOT/pages/index.adoc[]

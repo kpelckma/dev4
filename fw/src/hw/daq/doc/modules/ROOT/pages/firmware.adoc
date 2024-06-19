@@ -1,0 +1,302 @@
+== Firmware Documentation
+
+DAQ (Data Acquisition Module) is responsible from grabbing the data from any application and sending into a memory using AXI.4 Full and AXI.4 Lite standard(burst length of 1). It is capable of creating maximum 3 regions. Each region gets its separate strobe and trigger lines. Strobing for individual regions can be sourced either from application clock or external data ready signal. (Selectable using generic (g_ext_str_ena)) Each region is composed of 3 main components which is shown in figure below.
+
+
+image::DAQ_documentation.svg[]
+
+
+=== DAQ MUX
+
+After grabbing n number of channels from the application, DAQ MUX component rearranges these channels into 'tabs'. Each tab contains x amount of selected channels. After constructing these tabs only 1 tab can be send to burst generator. This selection can be made on run time using WORD_MUX_SEL register. The way how DAQ MUX rearranges depend on APP_CONFIG of that particular project which is explained below.
+
+
+=== Burst Generator
+
+After DAQ MUX gives the active tab burst generator packs these tabs into a AXI.4 compliant bursts. Since the burst sizes are fixed to the AXI data width (e.g. 256 bits, see G_AXI_DATA_WIDTH), Burst generator decides during compilation time how many tabs can fit into 1 beat. This determines the type of transmission burst generator can create. These types are
+
+* Narrowband Transmission
+* Equalband Transmission
+* Wideband Transmission
+
+Now let's take a look at them individually 
+
+==== Narrowband Transmission
+
+Narrowband transmission is instantiated when multiple tabs can fit into a single AXI width.
+
+Here is an example to make it more clear: 
+
+....
+
+Example: 
+AXI Width = 256 bits
+Single Channel Width = 32
+Number of channels = 4
+
+This means we can fit multiple tabs into a single AXI width
+
+Which means, in this case, we can wait for the next strobe to grab the next data and pack them together into a single beat. This drastically improves the bandwidth since with 1 beat we can send more data. 
+
+During the transmission, beats are counted and proper WLAST flags are sent to AXI-to-DAQ component. 
+
+MSB         Tab Layout      LSB
+<----------- 128 bits ---------->
+|=======|=======|=======|=======|
+|  D[0] | C[0]  | B[0]  | A[0]  | 
+| 32bit | 32bit | 32bit | 32bit | 
+|=======|=======|=======|=======|
+
+MSB                        Beat Layout (SIG_DATA)            LSB
+<--------------------------- 256 bits -------------------------->
+|=======|=======|=======|=======|=======|=======|=======|=======| 
+|  D[1] | C[1]  | B[1]  | A[1]  | D[0]  | C[0]  | B[0]  | A[0]  |
+| 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit |
+|=======|=======|=======|=======|=======|=======|=======|=======|
+Where A[0] is channel 0 when strobe is high at t=0. 
+Where A[1] is channel 0 when strobe is high at t=1.
+Where B[0] is channel 1 when strobe is high at t=0. 
+Where A[1] is channel 1 when strobe is high at t=1.
+
+....
+
+==== Equalband Transmission
+Burst generator chooses Equalband Transmission type when only 1 tab can fit inside a beat.
+
+Here is an example to make it more clear: 
+
+....
+Example: 
+AXI Width = 256 Bits
+Single Channel Width = 32
+Number of channels = 5
+
+In this case we simply take the tab and LSB align it with 256 bits width beat.
+
+MSB         Tab Layout      LSB
+<----------- 128 bits ---------->
+|=======|=======|=======|=======|=======|
+|  E[0] | D[0]  | C[0]  | B[0]  | A[0]  | 
+| 32bit | 32bit | 32bit | 32bit | 32bit | 
+|=======|=======|=======|=======|=======|
+
+MSB                        Beat Layout (SIG_DATA)            LSB
+<--------------------------- 256 bits -------------------------->
+|=======|=======|=======|=======|=======|=======|=======|=======| 
+| xxxxxxdont_carexxxxxx | E[0]  | D[0]  | C[0]  | B[0]  | A[0]  |
+| xxxxxxdont_carexxxxxx | 32bit | 32bit | 32bit | 32bit | 32bit |
+|=======|=======|=======|=======|=======|=======|=======|=======|
+
+....
+
+
+==== Wideband Transmission
+
+Wideband Transmission is instantiated when TAB width is larger than the burst size(256 bits). In this case, everytime strobe comes, burst generator cuts the tab into 256 bit chunks and send it as a beat. This means burst generator needs multiple application clock cycles to send the beat. If DAQ module receives new data every application clock cycle new data which comes during transmission will be simply ignored. In other words data will be decimated.
+
+....
+
+Example: Lets imagine our tab now contains 14 channels where each channel is 32 bits width. This means that we would require multiple beats to send all the channels. 
+
+  MSB                                         Packet Layout                                                   LSB
+ <----------- ----------------------------------512 bits -------------------------------------------------------->
+ |=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|
+ |  N[0] | M[0]  | L[0]  | K[0]  | J[0]  | I[0]  | H[0]  | G[0]  | F[0]  | E[0]  | D[0]  | C[0]  | B[0]  | A[0]  |
+ | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit |
+ |=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|=======|
+
+ First Beat would look like this:  
+
+ MSB                        Beat Layout (P_O_DATA)            LSB
+ <--------------------------- 256 bits -------------------------->
+ |=======|=======|=======|=======|=======|=======|=======|=======| 
+ |  H[0] | G[0]  | F[0]  | E[0]  | D[0]  | C[0]  | B[0]  | A[0]  |
+ | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit |
+ |=======|=======|=======|=======|=======|=======|=======|=======| 
+
+ Second Beat would look like this:  
+
+ MSB                        Beat Layout (P_O_DATA)            LSB
+ <--------------------------- 256 bits -------------------------->
+ |=======|=======|=======|=======|=======|=======|=======|=======| 
+ | xxdont_carexx | N[0]  | M[0]  | L[0]  | K[0]  | J[0]  | I[0]  |
+ | xxdont_carexx | 32bit | 32bit | 32bit | 32bit | 32bit | 32bit |
+ |=======|=======|=======|=======|=======|=======|=======|=======| 
+
+....
+
+
+
+=== DAQ to AXI
+
+
+
+This component is responsible from clock domain crossing for the each region as well as performing the AXI.4 handshaking. After the burst generator the data is aligned with the region clock. This needs to be changed to Slave-to-Master clock (MIG Clock).
+
+This is achieved using the FIFOs. There are 2 FIFOs for each region. One for AXI.4 DATA and WLAST and the other for AXI.4 Addresses.
+
+Write clock to these FIFOs will be the DAQ Regions clock whereas the read clock will be the Slave-to-Master clock (MIG Clock). Consequently, Master to Slave AXI clocks will be Slave-to-Master clock since we are now sending the AXI.4 Data sync to the Slave to Master clock.
+
+AXI.4 handshaking is done using the flags of the FIFOs. For example:
+
+If the FIFOs are empty, valid signals go low. If the FIFOs are full, DAQ to AXI component signals to BURST GENERATOR to stop producing data strobes.
+
+There is also additional trick with using ALMOST EMPTY Flags of the FIFOs. WVALID signals will not go high unless there is full burst waiting inside the DATA FIFO. This is to make sure on the case of 2 DAQs, if one DAQ region works extremely slow, this will cause other region to wait. In order to solve this problem we enable the read of the FIFOs when there is a full burst inside the FIFO.
+
+
+== Working Principle of DAQ
+
+=== Pulsed Mode
+
+DAQ will start working when:
+
+WORD_ENABLE != 0 and WORD_SAMPLES > 0 and when trigger is high
+
+It will start sending the data to DDR until it satisfy WORD_SAMPLES.
+
+If trigger comes again during the transaction, DAQ will simply ignore it. (AXI.4 Address will not go back to starting point)
+After it sends all the samples it waits for the next trigger to arrive.
+
+
+=== Continuous Mode
+
+DAQ will start working when:
+WORD_ENABLE != 0 and trigger is high. WORD_SAMPLES has no effect.
+
+Samples will be sent to the first buffer in bursts until it the buffer full. The module will then switch to the other buffer until that one is full, going back to the first one. No sample is lost when switching buffers. This will go on indefinitely.
+
+At the beginning of each buffer a 64-bit timestamp is taken and stored in AREA_DAQ_TIMES_N[510:511] for buffer 0 and AREA_DAQ_TIMES_N[1022:1023] for buffer 1 (N is the DAQ region).
+
+Trigger pulses arriving during a transaction are stored as 32-bit offsets from the buffer start timestamp counted at the DAQ module clock. They are stored in AREA_DAQ_TIMES[0..509] for buffer 0 and AREA_DAQ_TIMES[512:1021] for buffer 1, see the relevant section of this document.
+
+The transaction will stop and the end of a burst if WORD_ENABLE is set to zero.
+
+== Instantiation Template
+
+....
+
+ins_daq_top : entity work.daq_top
+      generic map (
+        g_fifo_arch                => Choose which FPGA architecture (VIRTEX6, ULTRASCALE etc)
+        g_input_data_channel_count => size of pi_data 
+        g_channel_width            => size of pi_data 
+        g_add_input_buf            => relax timing by registering AXI handshake signals
+      )
+      port map (
+        pi_clk          =>  CONNECT APPLICATION CLOCK HERE
+        pi_reset        =>  SYNCHROUNOUS RESET 
+        pi_ext_str      =>  EXTERNAL STROBING FOR EACH REGION (make sure to set g_ext_str_ena)
+        pi_trg          =>  SYNCRONOUOS TRIGGER PORT FOR EACH REGION
+        pi_ibus         =>  CONNECT IBUS HERE
+        po_ibus         =>  CONNECT IBUS HERE
+        pi_axi4_s2m_m   =>  CONNECT AXI4 SIGNALS HERE FOR INPUT
+        po_axi4_m2s_m   =>  CONNECT AXI4 SIGNALS HERE FOR OUTPUT
+        pi_data         =>  2D Input Data vector from Application
+        pi_pulse_number =>  If double buffering is used, this port information will be shown to user when buffer is switched
+      );
+
+....
+
+
+== Module Configuration Guide for Users
+
+DAQ module can be configured by using special constants defined in 
+
+
+[cols="3,9"]
+|===
+|Constant Name| Description
+
+|C_DAQ_REGIONS
+|Determines how many regions will be instantiated+ 
+*Maximum: 3*
+
+|C_CHANNEL_WIDTH_BYTES
+|Sets amount of bytes each channel has
+*Suggested: 32*
+
+|C_DAQx_MAX_SAMPLES
+|Used for map file creation by tcl scripts. It will limit how much DeviceAccess can read from the AXI.4 Slave (eg DDR). *This value doesnt affect DAQ operation! It only effect map file generation*
+
+|C_DAQx_CHANNELS_IN_TAB
+|Determines the number of channels each tab will have at a given
+
+|C_DAQx_TAB_COUNT
+|Sets how many tabs will be created
+
+|C_DAQx_TAB_CONTENTS	
+|Shows how each channel is assigned inside the tab. (all tabs are shown at the same time. See example below)
+
+|C_DAQx_BUFy_OFFSET	
+|Sets the starting addreses of each DAQ Region and each buffer. *This will determine the buffer region address on the AXI.4 Slave (eg DDR). Effects the map file generation*
+
+|===
+
+
+== DAQ Settings Example
+
+Lets imagine the following situation:
+Inside application we have 11 signals we want to sample and send to DDR. These are: 2 counters, output of MIMO and Raw ADC signals of RTM inputs (lets imagine we have 8 ADC signals)
+Each of them will be assigned to what we call 'channels'. Now we need to pack them into 'tabs'. These tabs will later assigned to a 'region'
+
+----
+Channel [0] => counter
+Channel [1] => counter2
+Channel [2] => MIMO_out
+Channel [3] => ADC_raw_0
+Channel [4] => ADC_raw_1
+Channel [5] => ADC_raw_2
+Channel [6] => ADC_raw_3
+Channel [7] => ADC_raw_4
+Channel [8] => ADC_raw_5
+Channel [9] => ADC_raw_6
+Channel [10] => ADC_raw_7
+
+constant C_DAQ0_IS_CONTINOUS : natural := 0; -- Here we are making sure sampling will stop once we send WORD_SAMPLES [0] amount of data 
+constant C_DAQ0_TAB_COUNT : natural := 2; -- DAQ0 region will have 2 tabs
+constant C_DAQ0_CHANNELS_IN_TAB : natural := 8; -- Each tab will have 8 channels to observe
+constant C_DAQ0_TAB_CONTENTS : natural := (2, 1, 0, 0, 2, 3, 1, 1, 2, 4, 5, 6, 7, 8, 9, 10);
+
+----
+
+C_DAQ0_TAB_CONTENTS essentially determines how each channel is reorganized inside the tabs. Here we can see 16 entries (2x8channels). The order of the entries is how you will see data on QtHardMon. (Order is respecting downto statements inside VHDL)
+
+In this example the first entry on QtHardMon will display ADC_raw_7
+11th entry on QtHarmon will show mimo_out signal and so on...
+
+----
+constant C_DAQ0_BUF0_OFFSET : natural := 0;
+constant C_DAQ0_BUF1_OFFSET : natural := 69420;
+----
+BUF0 and BUF1 offsets are actual DDR memory addresses where corresping regions will start existing. DAQ will ping pong between these starting addresses when double buffering is turned on. (Make sure
+there is no overlaps)
+
+== Generic Descriptions in daq_top.vhd
+
+[cols="3,9"]
+|===
+|Generic Name| Description
+
+|G_FIFO_ARCH
+|Select which type of FIFO architecture will be used for both data and address FIFOs
+*Allowed: VIRTEX6, ULTRASCALE, XPM, VIRTEX5, 7SERIES*
+
+|G_INPUT_DATA_CHANNEL_COUNT
+|Number of channels provided to DAQ_TOP from application
+
+|G_CHANNEL_WIDTH
+|UNumber of bits for each input data channel *Suggested: 32*
+
+|C_DAQx_CHANNELS_IN_TAB
+|Determines the number of channels each tab will have at a given
+
+|C_DAQx_TAB_COUNT
+|Sets how many tabs will be created
+
+|C_DAQx_TAB_CONTENTS	
+|Shows how each channel is assigned inside the tab. (all tabs are shown at the same time. See example below)
+
+|C_DAQx_BUFy_OFFSET	
+|Sets the starting addreses of each DAQ Region and each buffer. *This will determine the buffer region address on the AXI.4 Slave (eg DDR). Effects the map file generation*
+
+|===

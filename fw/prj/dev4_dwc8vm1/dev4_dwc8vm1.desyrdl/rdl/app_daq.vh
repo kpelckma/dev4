@@ -1,0 +1,13 @@
+`define C_CHANNEL_WIDTH_BYTES 4
+`define C_DAQ0_BUF0_OFFSET    0
+`define C_DAQ0_BUF1_OFFSET    1048576
+`define C_DAQ0_MAX_SAMPLES    16384
+`define C_DAQ_REGIONS         1
+`define C_IRQ_CHANNEL_CNT     16
+`define C_PRJ_SHASUM          0x86b83613
+`define C_PRJ_TIMESTAMP       1695192362
+`define C_PRJ_VERSION         0x02010001
+`define C_RTM_DWC8VM1         1
+`define C_TIMESTAMP           1695192362
+`define C_TRG_CNT             3
+`define C_VERSION             0x02010001

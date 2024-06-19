@@ -1,0 +1,7 @@
+
+addrmap TOP {
+  desyrdl_generate_hdl = false ;
+  desyrdl_access_channel = 13 ;
+  desyrdl_interface = "AXI4L" ;
+  sis8300ku_bsp_logic  BSP @0;
+} ;

@@ -1,0 +1,6 @@
+name: fpga_config_manager
+title: FPGA Configuration Manager (FCM) Module
+version: main
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

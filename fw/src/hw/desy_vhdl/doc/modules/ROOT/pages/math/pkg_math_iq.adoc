@@ -1,0 +1,1115 @@
+
+
+== Package math_iq
+** *Line: 29 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+package math_iq is
+----
+*Description:* 
+Package for the `IQ` type and related functions. Useful to describe a demodulated +
+RF signal.
+
+
+This package provides the type `t_iq` which represents an `IQ` vector.
+In the package multiple functions are defined that replicate `numeric_std`
+
+**Example**
+[source, vhdl]
+----
+prs_test_iq : process
+  constant C_COMP_LENGTH : natural := 18 -- `IQ` component length
+  variable v_a           : t_iq(C_COMP_LENGTH-1 downto 0);
+  variable v_a_ex        : t_iq(C_COMP_LENGTH-1 downto 0);
+  variable v_b           : t_iq(C_COMP_LENGTH-1 downto 0);
+  variable v_sum         : t_iq(C_COMP_LENGTH-1 downto 0);
+  variable v_prod        : t_iq(C_COMP_LENGTH*2-1 downto 0);
+  variable v_sumq        : signed(C_COMP_LENGTH-1 downto 0);
+  variable v_prod_matrix : t_prod_matrix(C_COMP_LENGTH-1 downto 0);
+  variable v_dot_prod    : signed(C_COMP_LENGTH-1 downto 0);
+begin
+  v_a := f_new(-4, 9, C_COMP_LENGTH);                                      -- initialize with (I, Q) = (-4, 9)
+  v_b := f_new(to_signed(5, C_COMP_LENGTH), to_signed(-1, C_COMP_LENGTH)); -- initialize with (I, Q) = (5, -1)
+  v_sum := v_a + v_b;                                                  -- (I, Q) = (-4+5, 9-1) = (1, 8)
+  v_prod := v_a * v_b;                                                 -- (I, Q) = (-4*5, 9*-1) = (-20, -9)
+  v_a_ex := f_set_i(v_a, 6);                                             -- new I, (I, Q) = (6, 9)
+  v_sumq := f_get_q(v_a);                                                -- extract Q. v_sumq = 9
+  v_prod_matrix := f_prod_matrix(v_a, v_b);                            -- product matrix
+  v_dot_prod := f_dot_prod(v_prod_matrix);                               -- dot product
+end;
+----
+
+
+=== Type math_iq.t_iq
+** *Line: 64 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_iq is array (integer range <>) of std_logic_vector(1 downto 0);
+----
+*Description:* 
+`IQ` type. Represents a two components vector with In-phase and Quadrature +
+parts. The range of such vector is `(length-1 downto 0)` +
+where `length` is the bit length of the components.
+`I(i) = t_iq(i)(0)` and `Q(i) = t_iq(i)(0)`.
+
+=== Function math_iq.f_new
+** *Line: 66 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_new (ivalue: integer; qvalue: signed) return t_iq;
+----
+
+** *Line: 68 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_new (ivalue: signed; qvalue: integer) return t_iq;
+----
+
+** *Line: 72 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_new (ivalue: signed; qvalue: signed) return t_iq;
+----
+*Description:* 
+Generates a new `IQ` value from signed. the final component length is equal +
+to `f_maximum(ivalue'length, qvalue'length)`.
+
+** *Line: 75 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_new (
+    ivalue: integer;
+    qvalue: integer;
+    length: natural) return t_iq;
+----
+*Description:* 
+Generates a new `IQ` value. Optionally values for `I` and `Q` can be passed.
+
+=== Function math_iq.f_set_i
+** *Line: 80 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_set_i (a: t_iq; ivalue: integer) return t_iq;
+----
+
+** *Line: 83 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_set_i (a: t_iq; ivalue: signed) return t_iq;
+----
+*Description:* 
+Updates the `IQ` vector with a new `I` value.
+
+=== Function math_iq.f_set_q
+** *Line: 85 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_set_q (a: t_iq; qvalue: integer) return t_iq;
+----
+
+** *Line: 88 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_set_q (a: t_iq; qvalue: signed) return t_iq;
+----
+*Description:* 
+Updates the `IQ` vector with a new `Q` value.
+
+=== Procedure math_iq.prd_get_comp
+** *Line: 91 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_get_comp (a: in t_iq; ivalue: out signed; qvalue: out signed);
+----
+*Description:* 
+Returns the `I` and `Q` components of `a`.
+
+=== Function math_iq.f_get_i
+** *Line: 94 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_get_i (a: in t_iq) return signed;
+----
+*Description:* 
+Returns the `I` component of `a`.
+
+=== Function math_iq.f_get_q
+** *Line: 97 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_get_q (a: in t_iq) return signed;
+----
+*Description:* 
+Returns the `Q` component of `a`.
+
+=== Function math_iq.f_resize
+** *Line: 100 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_resize (a: t_iq; length: natural) return t_iq;
+----
+*Description:* 
+Resize the iq vector with a new length. `length` must be even.
+
+=== Function math_iq.f_swap
+** *Line: 103 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_swap (a: t_iq) return t_iq;
+----
+*Description:* 
+Swap `I` and `Q` or `(Q,I)`
+
+=== Function math_iq."="
+** *Line: 108 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "=" (a, b: t_iq) return boolean;
+----
+*Description:* 
+Compare when `a` and `b` are equal.
+
+=== Function math_iq."/="
+** *Line: 111 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "/=" (a, b: t_iq) return boolean;
+----
+*Description:* 
+Compare when `a` and `b` are not equal.
+
+=== Function math_iq."+"
+** *Line: 115 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "+" (a, b: t_iq) return t_iq;
+----
+*Description:* 
+Sum two `IQ` vectors. The resulting `IQ` has a length equal to +
+`f_maximum(a'length, b'length)`
+
+=== Function math_iq."-"
+** *Line: 119 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "-" (a, b: t_iq) return t_iq;
+----
+*Description:* 
+Subtract two `IQ` vectors. The resulting `IQ` has a length equal +
+to `f_maximum(a'length, b'length)`.
+
+** *Line: 122 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "-" (a: t_iq) return t_iq;
+----
+*Description:* 
+Negates an `IQ` vector.
+
+=== Function math_iq."*"
+** *Line: 126 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "*" (a, b: t_iq) return t_iq;
+----
+*Description:* 
+Element-wise multiplication of two vectors. The result has a length +
+equal to `a'length + b'length`.
+
+** *Line: 128 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "*" (a: t_iq; scalar: signed) return t_iq;
+----
+
+** *Line: 132 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "*" (scalar: signed; a : t_iq) return t_iq;
+----
+*Description:* 
+Element-wise multiplication of a vector and a scalar. The result has a length +
+equal to `a'length + scalar'length`.
+
+** *Line: 134 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "*" (a: t_iq; scalar: integer) return t_iq;
+----
+
+** *Line: 138 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function "*" (scalar: integer; a : t_iq) return t_iq;
+----
+*Description:* 
+Element-wise multiplication of a vector and a scalar. The result has a length +
+equal to `a'length*2`.
+
+=== Function math_iq.f_sum_comp
+** *Line: 143 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_sum_comp (a: t_iq) return signed;
+----
+*Description:* 
+Sum `I` and `Q`.
+
+=== Function math_iq.f_conj
+** *Line: 146 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_conj (a: t_iq) return t_iq;
+----
+*Description:* 
+Get the conjugate or `(I, -Q)`.
+
+=== Function math_iq.f_shift_left
+** *Line: 151 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift_left (a: t_iq; shift: integer) return t_iq;
+----
+*Description:* 
+Arithmetic left shift of the `IQ` components.
+
+=== Function math_iq.f_shift_right
+** *Line: 154 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift_right (a: t_iq; shift: integer) return t_iq;
+----
+*Description:* 
+Arithmetic right shift of the `IQ` components.
+
+=== Function math_iq.f_shift
+** *Line: 160 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift (a: t_iq; shift: integer) return t_iq;
+----
+*Description:* 
+Shift of the `IQ` components. Positive values shift to left, negative to the +
+right.
+
+=== Type math_iq.t_prod_matrix
+** *Line: 169 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_prod_matrix is array (integer range <>) of std_logic_vector(3 downto 0);
+----
+*Description:* 
+2x2 matrix product type. stores the componenents of mixed products between
+two vectors. The data stored corresponds to +
+`(c11=aI*bI, c12=aI*bQ, c21=aQ*bI, c22=aQ*bQ)` +
+given `a, b` as the input vectors and `aI, aQ, bI, bQ` their `IQ` components.
+This type is just an intermediate type for the functions `f_dot_prod`, +
+`f_cross_prod` and `f_cmplx_prod`. Additional functions to resize and  +
+shift the components are provided as well.
+
+=== Function math_iq.f_new
+** *Line: 173 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_new (c11, c12, c21, c22: signed) return t_prod_matrix;
+----
+*Description:* 
+Returns a new `t_prod_matrix`.
+#Do not use. For testing use only. Use <<f_prod_matrix>> instead.#
+
+=== Procedure math_iq.prd_get_comp
+** *Line: 176 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_get_comp (
+    a   : in t_prod_matrix;
+    c11 : out signed;
+    c12 : out signed;
+    c21 : out signed;
+    c22 : out signed);
+----
+*Description:* 
+Returns the four components of the product matrix.
+
+=== Function math_iq.f_prod_matrix
+** *Line: 184 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_prod_matrix (a, b: t_iq) return t_prod_matrix;
+----
+*Description:* 
+Computes the product matrix.
+
+=== Function math_iq.f_dot_prod
+** *Line: 187 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_dot_prod (m: t_prod_matrix) return signed;
+----
+*Description:* 
+Computes the dot product `(c11 + c22)`.
+
+=== Function math_iq.f_cross_prod
+** *Line: 190 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_cross_prod (m: t_prod_matrix) return signed;
+----
+*Description:* 
+Computes the cross product `(c12 - c21)`.
+
+=== Function math_iq.f_cmplx_prod
+** *Line: 193 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_cmplx_prod (m: t_prod_matrix) return t_iq;
+----
+*Description:* 
+Computes the complex product `(c11 - c22, c12 + c21)`.
+
+=== Function math_iq.f_resize
+** *Line: 196 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_resize (m: t_prod_matrix; length: natural) return t_prod_matrix;
+----
+*Description:* 
+Resize the product matrix.
+
+=== Function math_iq.f_shift_left
+** *Line: 201 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift_left (m: t_prod_matrix; shift: integer) return t_prod_matrix;
+----
+*Description:* 
+Arithmetic left shift of the product matrix components.
+
+=== Function math_iq.f_shift_right
+** *Line: 204 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift_right (m: t_prod_matrix; shift: integer) return t_prod_matrix;
+----
+*Description:* 
+Arithmetic right shift of the product matrix components.
+
+=== Function math_iq.f_shift
+** *Line: 210 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift (a: t_prod_matrix; shift: integer) return t_prod_matrix;
+----
+*Description:* 
+Shift of the product matrix components.
+Positive values shift to left, negative to the right.
+
+=== Function math_iq.f_resize_lsb
+** *Line: 215 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_resize_lsb (arg : t_iq; length : natural) return t_iq;
+----
+*Description:* 
+Resize by changing the number of least significant bits
+
+=== Function math_iq.f_saturate
+** *Line: 219 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_saturate (
+    arg : t_iq;
+    sat_i: t_saturation;
+    sat_q: t_saturation) return t_iq;
+----
+*Description:* 
+Saturate *arg* to the maximum or minimum representable value depending on
+*saturation*
+
+=== Function math_iq.f_resize_sat
+** *Line: 225 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_resize_sat (arg : t_iq; length : natural) return t_iq;
+----
+*Description:* 
+Resize with saturation protection
+
+=== Procedure math_iq.prd_resize_sat
+** *Line: 229 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_resize_sat (
+    signal arg          : in t_iq;
+    constant length     : in natural;
+    signal result       : out t_iq;
+    signal sat_i        : out t_saturation;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in boolean := true
+  );
+----
+*Description:* 
+Resize with saturation protection and saturation flag
+Like the <<f_resize_sat>> function but also sets an overflow signal.
+
+=== Function math_iq.f_sum_ext
+** *Line: 243 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_sum_ext (a, b : t_iq) return t_iq;
+----
+*Description:* 
+Extended summation. Never saturates.
+Return a t_iq with length equal to
+----
+maximum(a'length, b'length) + 1
+----
+
+=== Function math_iq.f_diff_ext
+** *Line: 250 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_diff_ext (a, b : t_iq) return t_iq;
+----
+*Description:* 
+Extended difference. Never saturates.
+Return a t_iq with length equal to
+----
+maximum(a'length, b'length) + 1
+----
+
+=== Function math_iq.f_neg_ext
+** *Line: 257 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_neg_ext (a : t_iq) return t_iq;
+----
+*Description:* 
+Extended negation. Never saturates.
+Return a t_iq with length equal to
+----
+a'length + 1
+----
+
+=== Function math_iq.f_conj_ext
+** *Line: 264 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_conj_ext (a : t_iq) return t_iq;
+----
+*Description:* 
+Extended conjugate value. Never saturates.
+Return a t_iq with length equal to
+----
+a'length + 1
+----
+
+=== Function math_iq.f_sum_sat
+** *Line: 267 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_sum_sat (a, b : t_iq) return t_iq;
+----
+*Description:* 
+Saturated summation.
+
+=== Function math_iq.f_diff_sat
+** *Line: 270 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_diff_sat (a, b : t_iq) return t_iq;
+----
+*Description:* 
+Saturated difference.
+
+=== Function math_iq.f_neg_sat
+** *Line: 273 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_neg_sat (a : t_iq) return t_iq;
+----
+*Description:* 
+Saturated negation.
+
+=== Function math_iq.f_conj_sat
+** *Line: 276 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_conj_sat (a : t_iq) return t_iq;
+----
+*Description:* 
+Saturated conjugate value.
+
+=== Function math_iq.f_shift_left_sat
+** *Line: 279 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  function f_shift_left_sat (a : t_iq; shift : natural) return t_iq;
+----
+*Description:* 
+Saturated shift left.
+
+=== Procedure math_iq.prd_sum_sat
+** *Line: 283 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_sum_sat (
+    signal a, b         : in t_iq;
+    signal result       : out t_iq;
+    signal sat_i        : out t_saturation;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:* 
+Saturated summation. Like <<f_sum_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_iq.prd_diff_sat
+** *Line: 292 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_diff_sat (
+    signal a, b         : in t_iq;
+    signal result       : out t_iq;
+    signal sat_i        : out t_saturation;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in  boolean := true);
+----
+*Description:* 
+Saturated difference. Like <<f_diff_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_iq.prd_neg_sat
+** *Line: 301 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_neg_sat (
+    signal a            : in t_iq;
+    signal result       : out t_iq;
+    signal sat_i        : out t_saturation;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:* 
+Saturated negation. Like <<f_neg_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_iq.prd_conj_sat
+** *Line: 310 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_conj_sat (
+    signal a            : in t_iq;
+    signal result       : out t_iq;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:* 
+Saturated conjugate value. Like <<f_conj_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_iq.prd_shift_left_sat
+** *Line: 318 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  procedure prd_shift_left_sat (
+    signal a            : in t_iq;
+    constant shift      : in natural;
+    signal result       : out t_iq;
+    signal sat_i        : out t_saturation;
+    signal sat_q        : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:* 
+Saturated shift left. Like <<f_shift_left>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Type math_iq.t_1b_iq_vector
+** *Line: 328 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_1b_iq_vector is array (natural range<>) of t_iq(0 downto 0);
+----
+
+=== Type math_iq.t_2b_iq_vector
+** *Line: 330 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_2b_iq_vector is array (natural range<>) of t_iq(1 downto 0);
+----
+
+=== Type math_iq.t_3b_iq_vector
+** *Line: 332 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_3b_iq_vector is array (natural range<>) of t_iq(2 downto 0);
+----
+
+=== Type math_iq.t_4b_iq_vector
+** *Line: 334 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_4b_iq_vector is array (natural range<>) of t_iq(3 downto 0);
+----
+
+=== Type math_iq.t_5b_iq_vector
+** *Line: 336 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_5b_iq_vector is array (natural range<>) of t_iq(4 downto 0);
+----
+
+=== Type math_iq.t_6b_iq_vector
+** *Line: 338 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_6b_iq_vector is array (natural range<>) of t_iq(5 downto 0);
+----
+
+=== Type math_iq.t_7b_iq_vector
+** *Line: 340 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_7b_iq_vector is array (natural range<>) of t_iq(6 downto 0);
+----
+
+=== Type math_iq.t_8b_iq_vector
+** *Line: 342 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_8b_iq_vector is array (natural range<>) of t_iq(7 downto 0);
+----
+
+=== Type math_iq.t_9b_iq_vector
+** *Line: 344 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_9b_iq_vector is array (natural range<>) of t_iq(8 downto 0);
+----
+
+=== Type math_iq.t_10b_iq_vector
+** *Line: 346 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_10b_iq_vector is array (natural range<>) of t_iq(9 downto 0);
+----
+
+=== Type math_iq.t_11b_iq_vector
+** *Line: 348 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_11b_iq_vector is array (natural range<>) of t_iq(10 downto 0);
+----
+
+=== Type math_iq.t_12b_iq_vector
+** *Line: 350 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_12b_iq_vector is array (natural range<>) of t_iq(11 downto 0);
+----
+
+=== Type math_iq.t_13b_iq_vector
+** *Line: 352 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_13b_iq_vector is array (natural range<>) of t_iq(12 downto 0);
+----
+
+=== Type math_iq.t_14b_iq_vector
+** *Line: 354 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_14b_iq_vector is array (natural range<>) of t_iq(13 downto 0);
+----
+
+=== Type math_iq.t_15b_iq_vector
+** *Line: 356 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_15b_iq_vector is array (natural range<>) of t_iq(14 downto 0);
+----
+
+=== Type math_iq.t_16b_iq_vector
+** *Line: 358 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_16b_iq_vector is array (natural range<>) of t_iq(15 downto 0);
+----
+
+=== Type math_iq.t_17b_iq_vector
+** *Line: 360 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_17b_iq_vector is array (natural range<>) of t_iq(16 downto 0);
+----
+
+=== Type math_iq.t_18b_iq_vector
+** *Line: 362 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_18b_iq_vector is array (natural range<>) of t_iq(17 downto 0);
+----
+
+=== Type math_iq.t_19b_iq_vector
+** *Line: 364 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_19b_iq_vector is array (natural range<>) of t_iq(18 downto 0);
+----
+
+=== Type math_iq.t_20b_iq_vector
+** *Line: 366 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_20b_iq_vector is array (natural range<>) of t_iq(19 downto 0);
+----
+
+=== Type math_iq.t_21b_iq_vector
+** *Line: 368 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_21b_iq_vector is array (natural range<>) of t_iq(20 downto 0);
+----
+
+=== Type math_iq.t_22b_iq_vector
+** *Line: 370 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_22b_iq_vector is array (natural range<>) of t_iq(21 downto 0);
+----
+
+=== Type math_iq.t_23b_iq_vector
+** *Line: 372 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_23b_iq_vector is array (natural range<>) of t_iq(22 downto 0);
+----
+
+=== Type math_iq.t_24b_iq_vector
+** *Line: 374 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_24b_iq_vector is array (natural range<>) of t_iq(23 downto 0);
+----
+
+=== Type math_iq.t_25b_iq_vector
+** *Line: 376 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_25b_iq_vector is array (natural range<>) of t_iq(24 downto 0);
+----
+
+=== Type math_iq.t_26b_iq_vector
+** *Line: 378 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_26b_iq_vector is array (natural range<>) of t_iq(25 downto 0);
+----
+
+=== Type math_iq.t_27b_iq_vector
+** *Line: 380 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_27b_iq_vector is array (natural range<>) of t_iq(26 downto 0);
+----
+
+=== Type math_iq.t_28b_iq_vector
+** *Line: 382 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_28b_iq_vector is array (natural range<>) of t_iq(27 downto 0);
+----
+
+=== Type math_iq.t_29b_iq_vector
+** *Line: 384 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_29b_iq_vector is array (natural range<>) of t_iq(28 downto 0);
+----
+
+=== Type math_iq.t_30b_iq_vector
+** *Line: 386 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_30b_iq_vector is array (natural range<>) of t_iq(29 downto 0);
+----
+
+=== Type math_iq.t_31b_iq_vector
+** *Line: 388 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_31b_iq_vector is array (natural range<>) of t_iq(30 downto 0);
+----
+
+=== Type math_iq.t_32b_iq_vector
+** *Line: 390 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_32b_iq_vector is array (natural range<>) of t_iq(31 downto 0);
+----
+
+=== Type math_iq.t_33b_iq_vector
+** *Line: 392 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_33b_iq_vector is array (natural range<>) of t_iq(32 downto 0);
+----
+
+=== Type math_iq.t_34b_iq_vector
+** *Line: 394 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_34b_iq_vector is array (natural range<>) of t_iq(33 downto 0);
+----
+
+=== Type math_iq.t_35b_iq_vector
+** *Line: 396 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_35b_iq_vector is array (natural range<>) of t_iq(34 downto 0);
+----
+
+=== Type math_iq.t_36b_iq_vector
+** *Line: 398 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_36b_iq_vector is array (natural range<>) of t_iq(35 downto 0);
+----
+
+=== Type math_iq.t_37b_iq_vector
+** *Line: 400 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_37b_iq_vector is array (natural range<>) of t_iq(36 downto 0);
+----
+
+=== Type math_iq.t_38b_iq_vector
+** *Line: 402 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_38b_iq_vector is array (natural range<>) of t_iq(37 downto 0);
+----
+
+=== Type math_iq.t_39b_iq_vector
+** *Line: 404 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_39b_iq_vector is array (natural range<>) of t_iq(38 downto 0);
+----
+
+=== Type math_iq.t_40b_iq_vector
+** *Line: 406 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_40b_iq_vector is array (natural range<>) of t_iq(39 downto 0);
+----
+
+=== Type math_iq.t_48b_iq_vector
+** *Line: 408 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_48b_iq_vector is array (natural range<>) of t_iq(47 downto 0);
+----
+
+=== Type math_iq.t_56b_iq_vector
+** *Line: 410 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_56b_iq_vector is array (natural range<>) of t_iq(55 downto 0);
+----
+
+=== Type math_iq.t_64b_iq_vector
+** *Line: 412 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_64b_iq_vector is array (natural range<>) of t_iq(63 downto 0);
+----
+
+=== Type math_iq.t_72b_iq_vector
+** *Line: 414 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_72b_iq_vector is array (natural range<>) of t_iq(71 downto 0);
+----
+
+=== Type math_iq.t_80b_iq_vector
+** *Line: 416 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_80b_iq_vector is array (natural range<>) of t_iq(79 downto 0);
+----
+
+=== Type math_iq.t_88b_iq_vector
+** *Line: 418 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_88b_iq_vector is array (natural range<>) of t_iq(87 downto 0);
+----
+
+=== Type math_iq.t_96b_iq_vector
+** *Line: 420 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_96b_iq_vector is array (natural range<>) of t_iq(95 downto 0);
+----
+
+=== Type math_iq.t_104b_iq_vector
+** *Line: 422 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_104b_iq_vector is array (natural range<>) of t_iq(103 downto 0);
+----
+
+=== Type math_iq.t_112b_iq_vector
+** *Line: 424 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_112b_iq_vector is array (natural range<>) of t_iq(111 downto 0);
+----
+
+=== Type math_iq.t_120b_iq_vector
+** *Line: 426 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_120b_iq_vector is array (natural range<>) of t_iq(119 downto 0);
+----
+
+=== Type math_iq.t_128b_iq_vector
+** *Line: 428 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_128b_iq_vector is array (natural range<>) of t_iq(127 downto 0);
+----
+
+=== Type math_iq.t_136b_iq_vector
+** *Line: 430 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_136b_iq_vector is array (natural range<>) of t_iq(135 downto 0);
+----
+
+=== Type math_iq.t_144b_iq_vector
+** *Line: 432 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_144b_iq_vector is array (natural range<>) of t_iq(143 downto 0);
+----
+
+=== Type math_iq.t_152b_iq_vector
+** *Line: 434 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_152b_iq_vector is array (natural range<>) of t_iq(151 downto 0);
+----
+
+=== Type math_iq.t_160b_iq_vector
+** *Line: 436 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_160b_iq_vector is array (natural range<>) of t_iq(159 downto 0);
+----
+
+=== Type math_iq.t_168b_iq_vector
+** *Line: 438 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_168b_iq_vector is array (natural range<>) of t_iq(167 downto 0);
+----
+
+=== Type math_iq.t_176b_iq_vector
+** *Line: 440 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_176b_iq_vector is array (natural range<>) of t_iq(175 downto 0);
+----
+
+=== Type math_iq.t_184b_iq_vector
+** *Line: 442 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_184b_iq_vector is array (natural range<>) of t_iq(183 downto 0);
+----
+
+=== Type math_iq.t_192b_iq_vector
+** *Line: 444 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_192b_iq_vector is array (natural range<>) of t_iq(191 downto 0);
+----
+
+=== Type math_iq.t_200b_iq_vector
+** *Line: 446 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_200b_iq_vector is array (natural range<>) of t_iq(199 downto 0);
+----
+
+=== Type math_iq.t_208b_iq_vector
+** *Line: 448 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_208b_iq_vector is array (natural range<>) of t_iq(207 downto 0);
+----
+
+=== Type math_iq.t_216b_iq_vector
+** *Line: 450 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_216b_iq_vector is array (natural range<>) of t_iq(215 downto 0);
+----
+
+=== Type math_iq.t_224b_iq_vector
+** *Line: 452 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_224b_iq_vector is array (natural range<>) of t_iq(223 downto 0);
+----
+
+=== Type math_iq.t_232b_iq_vector
+** *Line: 454 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_232b_iq_vector is array (natural range<>) of t_iq(231 downto 0);
+----
+
+=== Type math_iq.t_240b_iq_vector
+** *Line: 456 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_240b_iq_vector is array (natural range<>) of t_iq(239 downto 0);
+----
+
+=== Type math_iq.t_248b_iq_vector
+** *Line: 458 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_248b_iq_vector is array (natural range<>) of t_iq(247 downto 0);
+----
+
+=== Type math_iq.t_256b_iq_vector
+** *Line: 460 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_256b_iq_vector is array (natural range<>) of t_iq(255 downto 0);
+----
+
+=== Type math_iq.t_512b_iq_vector
+** *Line: 462 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_512b_iq_vector is array (natural range<>) of t_iq(511 downto 0);
+----
+
+=== Type math_iq.t_1024b_iq_vector
+** *Line: 464 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+  type t_1024b_iq_vector is array (natural range<>) of t_iq(1023 downto 0);
+----
+
+== Package body
+** *Line: 468 of link:src/desy_vhdl/hdl/math/pkg_math_iq.vhd[src/desy_vhdl/hdl/math/pkg_math_iq.vhd]*
+[source,vhdl]
+----
+package body math_iq is
+----

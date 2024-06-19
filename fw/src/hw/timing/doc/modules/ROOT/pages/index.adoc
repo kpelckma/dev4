@@ -1,0 +1,21 @@
+= TIMING Module Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+
+toc::[]
+
+//:leveloffset: +1
+
+<<<
+include::intro.adoc[]
+<<<
+include::registers.adoc[]
+<<<
+include::known_issues.adoc[]
+<<<
+include::dependencies.adoc[]
+
+

@@ -1,0 +1,24 @@
+
+
+== Entity cdc_flag
+** *Line: 29 of link:cdc_flag.vhd[cdc_flag.vhd]*
+[source,vhdl]
+----
+entity cdc_flag is
+  generic (
+    G_WIDTH : natural
+  );
+  port (
+    pi_a_clk  : in    std_logic;
+    pi_b_clk  : in    std_logic;
+    pi_a_flag : in    std_logic;
+    po_b_flag : out   std_logic;
+    pi_a_data : in    std_logic_vector(G_WIDTH - 1 downto 0);
+    po_b_data : out   std_logic_vector(G_WIDTH - 1 downto 0)
+  );
+end entity cdc_flag;
+----
+*Description:* 
+Clock domain crossing. This entity moves a single cycle 'valid' flag from
+one clock domain to another. An optional data port synchronized with the
+flag is available.

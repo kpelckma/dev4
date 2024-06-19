@@ -1,0 +1,19 @@
+This module is responsible for generating trigger pulses / strobes for the application from various input sources. Each trigger channel can be sourced in four different ways.
+
+* Input clock of the TIMING module
+* Manual trigger from the PCIe register (eg. using QtHardMon)
+* External trigger sources (eg. Backplane MLVDS Lines or Harlink Connector on SIS8300L2 or Whiterabbit signal)
+* Loopback -> The users can route one of the generated trigger channels as an input source to any other trigger channel
+After the source is selected user can define a division value to reduce the frequency of the trigger channel
+
+Each trigger channel can be further delayed. Delay value corresponds to the number of clock cycles. Users can select either to use the normal trigger channel or the delayed version of it on run-time.
+
+Each generated channel can later be synchronized to the following sources: (Reset the counter value so the phase is fixed to a particular channel)
+
+* No sync (Free running counter)
+* One of the generated triggers (loopback)
+
+There are no synchronizers for the external trigger inputs for TIMING module. This means *external triggers must be already synchronized to application clock domain*. Each external trigger (also manual trigger) goes through edge detector to have reliable source.
+
+image::TIMING_block_diagram.svg[]
+

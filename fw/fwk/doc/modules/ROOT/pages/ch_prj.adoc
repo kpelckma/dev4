@@ -1,0 +1,160 @@
+[#ch_fwk_prj]
+= Project
+ifndef::imagesdir[:imagesdir: ../images]
+
+The project consist of all sources, configurations, documentation and tools required to produce a build.
+
+In git this is referred to as a _superproject_ which consist of submodules.
+
+== Folder Structure
+
+Each project under the framework has to follow the defined folder and tcl structure.
+
+The folder structure is presented in <<fig_fwk_prj_structure>>.
+
+[#fig_fwk_prj_structure]
+[title="Project Folder Structure"]
+image::prj_folder_str.svg[]
+{empty}
+
+.Folders Description
+{sp}
+[cols="12,88",caption=,frame=none,grid=none,stripes=none]
+|===
+|icon:folder[] **fwk** | firmware framework folder, FWK handles all the project creation, build process and documentation generation.
+|icon:folder[] **cfg** | contains project configuration files. Explained more in <<ch_fwk_prj_config>>
+|icon:folder[] **doc** | documentation of the project. See <<ch_doc.adoc#ch_fwk_doc, Documentation Section>>
+|icon:folder[] **prj** | Project environment. This is where Vivado/ISE will run.
+|icon:folder[] **src** | Sources of the project in a form of git submodules, more in <<ch_src_modules.adoc#ch_fwk_src_modules,Module Section>>
+|icon:folder[] **tcl** | project Tcl's, more in <<ch_prj_tcl.adoc#,Project Tcl>>
+|icon:folder[] **out** | Project build output files go in here. (.bit, .map, .xsa etc)
+|===
+
+[WARNING]
+prj/ and out/ folder do not need to be on the project repository. Make sure to add them into the .gitignore
+
+[#ch_fwk_prj_config]
+== Configuration
+
+Each project has to have configuration file with the main project properties set.
+There is one **default.cfg** configuration file which has to be placed in **cfg** folder.
+This file is loaded at the beginning of every framework task.
+
+The parameters values from the **default.cfg** file can be overwritten by any other configuration file.
+The additional configuration file is selected by the Makefile variable which might be set over command line argument,
+see section <<ch_fwk_prj_makefile>>.
+
+The additional configuration file has to placed in **cfg** folder and has to have configuration name:
+....
+<ProjectConf>.cfg
+....
+
+
+NOTE: All the mandatory as well as additional parameters defined in the configuration files are accessible in Makefile and all Tcl files.
+
+// .The list of mandatory FWK variables:
+// [horizontal]
+// ProjectName :: defines the project name, e.g. ProjectName=test_sis8300
+// BspName     :: defines the BSP name, e.g. sis8300l
+// BspConf     :: defines the BSP configuration,  e.g. default
+// BspTcl      :: defines the relative path to the bsp Tcl file, e.g. src/bsp/sis8300l/tcl/bsp.tcl
+// AppName     :: defines application name
+// AppConf     ::
+// AppTcl      ::
+// ToolType    :: defines tool that has to be used with current configuration
+
+.The list of mandatory FWK parameters:
+{sp}
+[cols="25s,75",caption=,frame=none,grid=none,stripes=none]
+|===
+|ProjectName | defines the project name, e.g. ProjectName=test_sis8300
+|ProjectConf | defines the project configuration name, this name is used to create project build name: `+{ProjectName}_{ProjectConf}+`
+|ProjectTcl  | defines the project Tcl file to be run as a first, relative path to project e.g. tcl/project.tcl
+|AddrType    | defines address space type that should be generated, e.g. AddrType=map
+|ToolType    | defines tool that has to be used with current configuration, e.g. ToolType=vivado
+|===
+
+
+NOTE: Parameters can have empty values
+
+In the configuration files, except the mandatory variables,
+there might be placed any other variables which are required by the project.
+
+IMPORTANT: Each variable has to follow UpperCamelCase syntax.
+
+.Default configuration file
+====
+.default.cfg
+[source,ini]
+----
+# project default configuration
+ProjectName=test_sis8325
+ProjectConf=default
+ProjectTcl=tcl/project.tcl
+AddrType=map
+ToolType=xise
+----
+====
+
+.Additional configuration file
+====
+Additional configuration can overwrite default parameters or add new ones.
+
+.simulattion.cfg
+[source,ini]
+----
+# Configuration for test
+ProjectConf=simulation
+CustomVar=value
+----
+
+`simulation` configuration will use all the default values but will change only `ProjectConf` variable and add a new `CustomVar`.
+====
+
+[#ch_fwk_prj_makefile]
+== Makefile
+
+Make is the main command execution automaton tool.
+In the project root there should be one Makefile placed that should link framework Makefile.
+
+.Makefile
+ include fwk/Makefile
+
+At the beginning Makefile loads project properties by loading configuration file **cfg/default.cfg** .
+This properties can be overwritten by additional configuration file.
+To specify additional configuration file **config.cfg** change cfg or cfgFile variable. Default cfg variable value is **default** and cfgFile **cfg/default.cfg**.
+
+ make <target> cfg=config
+ make <target> cfgFile=cfg/config.cfg
+
+Makefile consist of tool in-depended targets.
+Based on the ToolType configuration property Makefile targets tool depended targets.
+Tool target can also be targeted directly. All commands are presented in <<src_fwk_prj_makefile>>.
+
+//Antora cannot handle symlinks in realtive path above
+//----
+//include::../example/Makefile[tag=adocHelp]
+//----
+//include::../../../../Makefile[tag=adocHelp]
+
+[#src_fwk_prj_makefile]
+.Makefile Help
+[%hardbreaks]
+....
+Makefile for Firmware Framework projects.
+  make <target>
+  make <target> cfg=config
+  make <target> cfgFile=cfg/config.cfg
+
+  Target :
+    -- generic
+    make project            - generate project based on the configuration
+    make gui                - open generated project based on the configuration
+    make build              - build generated project based on the configuration
+    make clean              - cleans project build folder
+    make info               - prints configuration
+    -- Tool Depended
+    make <ToolType>         - generates Tool project
+    make <ToolType>_gui     - open generated project with Tool GUI
+    make <ToolType>_build   - build tool project (implementation + bit)
+....

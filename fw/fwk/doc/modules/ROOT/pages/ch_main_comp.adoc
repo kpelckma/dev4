@@ -1,0 +1,24 @@
+= FWK components
+
+In the firmware framework, there are three major components:
+
+1. Project
++
+The Project is where modules come together to produce an output.
+The project can realize a complete built of FPGA bit file or it can even be a simulation environment.
+It also contains necessary tcl scripts for project creation, simulation etc along with the documentation.
+In git this is a super project which consist of submodules.
+The project has defined structure which is described in <<ch_prj.adoc#ch_fwk_prj,Project Section>>.
++
+2. Sources Module
++
+A module is a block of logic which can be separated/abstracted from the rest of the project.
+It is the piece of code that can be turned into an IP-Core.
+It _can_ carry its own address space and can be inside different projects with many configurations.
+A module can be anything from Board Support Package (BSP), Application (App), a VHDL library and more.
+Modules have a defined folder structure which is described in <<ch_fwk_src_modules,Module Section>>
++
+3. Framework (FWK)
++
+It is a set of scripts and functions/procedures that combine all the input files needed to produce build.
+This documentation is under FWK but it is also explaining many other sub-components of the general framework

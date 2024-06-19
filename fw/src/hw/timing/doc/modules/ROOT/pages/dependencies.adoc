@@ -1,0 +1,9 @@
+== HDL Dependencies
+
+The Timing Module depends on the following packages: 
+
+* https://gitlab.msktools.desy.de/fpgafw/lib/desy_vhdl[DESY VDHL Library]
+
+Registers are generated using DesyRDL. (https://pypi.org/project/desyrdl/)
+
+

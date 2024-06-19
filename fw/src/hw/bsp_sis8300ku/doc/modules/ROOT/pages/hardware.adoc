@@ -1,0 +1,47 @@
+== Hardware Introduction
+
+The SIS8300-KU is a 10 channel 125 MS/s digitizer with 16-bit resolution according to the MTCA.4 standard.
+
+The central building block of the SIS8300-KU card is a Xilinx Kintex Ultrascale FPGA. It holds the 4 lane PCI Express interface and is in control of all active components.
+
+* MTCA.4 compliance
+* 4 lane PCI Express Gen3 Connectivity
+* 10 Channels 125 MS/s 16-bit ADC
+* 10 MS/s to 125 MS/s Per Channel Sampling Speed
+* AC and DC Input Stage
+* Internal, Front Panel, RTM and Backplane Clock Sources
+* Two 16-bit DACs for Fast Feedback Implementation
+* High Precision Clock Distribution Circuitry
+* Programmable Delay of Dual Channel Digitizer Groups
+* Gigabit Link Port Implementation to Backplane
+* Twin SFP+ Card Cage for High-Speed System Interconnects
+* XCKU040-1FFVA1156C Kintex Ultrascale FPGA
+* 2 GByte DDR4 Memory (flexible partitioning scheme)
+* Dual boot
+* MMC1.0 under DESY license LV91
+* White Rabbit (WR) Option
+* In Field Firmware Upgrade Support
+* Zone 3 class A1.0, A1.0C or A1.1CO compatible
+
+<<<
+
+== Overview of the AMC
+
+image::ku-bd.png[]
+
+<<<
+
+== AMC Clock Distribution
+
+=== ADC Clocking
+image::ku-clock-dist.png[]
+
+<<<
+
+=== DAC Clocking
+image::dac_clocking.png[]
+
+<<<
+
+=== MGT Clocking
+image::mgt_clocking.png[]

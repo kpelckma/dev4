@@ -1,0 +1,107 @@
+`include "timing.vh" //automatically created and added by fwk with conf variables such a C_VERSION ...
+
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+`ifndef C_EXT_TRG
+`define C_EXT_TRG 0x00000000
+`endif
+`ifndef C_OUT_TRG
+`define C_OUT_TRG 0x00000000
+`endif
+
+
+addrmap timing
+// #(
+//   longint unsigned C_EXT_TRG = 8,
+//   longint unsigned `C_OUT_TRG = 8)
+{
+
+  desc = "Address Map for the DESY Timing module";
+  desyrdl_generate_hdl = true;
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc = "Shows the Identification number for TIMING. TIMING configuration will be exposed here.";
+    default sw = r;
+		default hw = rw;
+    field {} data[32];
+  } ID @0x00; // Hardcode the ID and VERSION address to a specific place
+
+  reg {
+    desc = "Shows the Git Version of the TIMING module. (Dissected)";
+    default sw = r;
+		default hw = r;
+    field {} changes [8] =  `C_VERSION & 0x000000FF;
+    field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+    field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+    field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+
+  } VERSION @0x04 ; // Hardcode the ID and VERSION address to a specific place
+
+  reg {
+    desc = "Enables trigger channel output";
+    default sw = rw;
+		default hw = r;
+    field {} data[`C_OUT_TRG];
+  } ENABLE;
+
+  reg {
+    desc = "Select the source for trigger generation. These numbers are application dependent!";
+    default sw = rw;
+		default hw = r;
+    field {} data[8];
+  } SOURCE_SEL[`C_OUT_TRG];
+
+
+  reg {
+    desc = "Selects synchronization input for the particular trigger channel";
+    default sw = rw;
+		default hw = r;
+    field {} data[8];
+  } SYNC_SEL[`C_OUT_TRG];
+
+  reg {
+    desc = "Divider value for the particular trigger channel. eg. Write 1 to get division by 2";
+    default sw = rw;
+		default hw = r;
+    field {} data[32];
+  } DIVIDER_VALUE[`C_OUT_TRG];
+
+  reg {
+    desc = "Counter for each generated trigger channel ( (!) It counts even if the output is disabled (!) )";
+    default sw = r;
+		default hw = w;
+    field {} data[32];
+  } TRIGGER_CNT[`C_OUT_TRG];
+
+  reg {
+    desc = "Counter for each external trigger coming into the Timing Module ( (!) Gets effected by DIVIDER_VALUE (!) )";
+    default sw = r;
+		default hw = w;
+    field {} data[32];
+  } EXT_TRIGGER_CNT[`C_EXT_TRG];
+
+  reg {
+    desc = "Enables delaying a particular trigger output";
+    default sw = rw;
+		default hw = r;
+    field {} data[`C_OUT_TRG];
+  } DELAY_ENABLE;
+
+  reg {
+    desc = "Delay value for that particular trigger channel in clock cycles";
+    default sw = rw;
+		default hw = r;
+    field {} data[32];
+  } DELAY_VALUE[`C_OUT_TRG];
+
+  reg {
+    desc = "Manually triggering a particular trigger channel. Writing 1 to a particular channel will trigger that channel once. (If the divider is set to 0 and SOURCE_SEL = 1)";
+    default sw = rw;
+		default hw = r;
+    default swmod;
+    field {} data[1];
+  } MANUAL_TRG[`C_OUT_TRG];
+
+};

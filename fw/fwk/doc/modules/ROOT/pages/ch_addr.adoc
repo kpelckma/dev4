@@ -1,0 +1,168 @@
+= Address Space
+
+== Overview
+
+One task of fwk is to collect information about the address space of each
+module, to keep track of the hierarchy, and to generate an output file that
+software can use to know about each register and its address.
+
+Output generation is handled by DesyRDL which requires the complete address
+space to be described in SystemRDL 2.0. For a module that is not described by a
+`.rdl` file, fwk generates one or converts it from the foreign format.
+
+A module's address space that _is_ described by SystemRDL usually also wants
+DesyRDL to generate HDL code for the register implementation. This is also
+triggered by fwk.
+
+== Usage
+
+The `addr` task can be run by itself by calling `make map`, but it is also
+executed as part of the `create` and `build` tasks.
+
+== Integration with Tcl scripts
+
+fwk relies on the Tcl scripts of the project and each module to build up a tree
+of address space nodes, stored in a Tcl array. The `addAddressSpace` procedure
+is used for this purpose. Check also xref:ch_addr_tree.adoc[].
+
+One typical example is creating an array with a single entry, describing the
+module's address space by a `.rdl` file:
+
+.`mod_a/main.tcl`
+----
+proc setAddressSpace {} {
+  variable AddressSpace
+
+  addAddressSpace AddressSpace "mod_a" RDL {} ${::fwfwk::SrcPath}/mod_a/rdl/mod_a.rdl
+}
+----
+
+Note that the 'Identifier' argument `mod_a` has to match the name of the
+`addrmap` that is defined in the `.rdl` file.
+
+In a different example there might be a block design with a bus interconnect
+and two modules underneath, one described by an IP-XACT `.xml` file and one by
+a SystemRDL `.rdl` file. First, an array entry is created with
+`Type=INTERCONNECT`. By adding the two downstream nodes to that same
+`AddressSpace` array, it will be the 'Parent' of the two downstream nodes. The
+address offset of these nodes must be provided.
+
+.`mod_b/main.tcl`
+----
+proc setAddressSpace {} {
+  variable AddressSpace
+
+  addAddressSpace AddressSpace "mod_b"     INTERCONNECT {}           {}
+  addAddressSpace AddressSpace "axi_gpio"  IPX          {0x00000000} axi_gpio
+  addAddressSpace AddressSpace "ins_mod_c" RDL          {0x00010000} ../hdl/mod_c.rdl
+}
+----
+
+To create a full hierarchy within the project, the `AddressSpace` array must be
+integrated into a higher-level `AddressSpace`. This can be thought of as
+_instantiating_ it.
+
+By writing `variable AddressSpace` this array can be accessed across Tcl
+namespaces by using the namespace prefix, e.g.
+`::fwfwk::src::mod_b::AddressSpace`, or just `mod_b::AddressSpace` if `mod_b`
+is a child namespace of the current namespace.
+
+In the example below, even if 'app_top' is described by a SystemRDL file that
+already instantiates 'mod_a' and 'mod_b', it is still necessary to add them to
+the `AddressSpace` array to let fwk know about the hierarchy and pass `.rdl`
+files to DesyRDL in the correct order. The `Identifier` should match the
+instance name in the `app_top.rdl` file.
+
+Another feature in the example below is the specification of a DMA area that
+the module writes to, with its contents described by another SystemRDL file. It
+requires a separate array. Here it is called `AddressSpaceDMA`.
+
+.`app_top/main.tcl`
+----
+proc init {} {
+  addSrcModule mod_a $::fwfwk::SrcPath/mod_a/tcl/main.tcl
+  addSrcModule mod_b $::fwfwk::SrcPath/mod_b/tcl/main.tcl
+}
+
+proc setAddressSpace {} {
+  variable AddressSpace
+  variable AddressSpaceDMA
+
+  addAddressSpace AddressSpace    "app_top"   RDL   {} ../rdl/app_top.rdl
+  addAddressSpace AddressSpace    "ins_mod_a" ARRAY {} mod_a::AddressSpace
+  addAddressSpace AddressSpace    "ins_mod_b" ARRAY {} mod_b::AddressSpace
+
+  addAddressSpace AddressSpaceDMA "app_daq"   RDL   {} ../rdl/daq.rdl
+}
+----
+
+The top-level `AddressSpace` is set in the `project.tcl` file. When there are
+multiple access channels (e.g. PCIe memory-mapped, PCIe DMA, Zynq-7000 PS) then
+the 'AddressInfo' argument must provide it. For each access channel, one
+mapfile will be generated.
+
+.`project.tcl`
+----
+proc init {} {
+  addSrcModule app $::fwfwk::SrcPath/app_top/tcl/main.tcl
+  addSrcModule bsp $::fwfwk::SrcPath/bsp_fmc2zup/tcl/main.tcl
+}
+
+proc setAddressSpace {} {
+  addAddressSpace {::fwfwk::AddressSpace} "BSP" ARRAY {C0 0x00000000 8M} bsp::AddressSpace
+  addAddressSpace {::fwfwk::AddressSpace} "APP" ARRAY {C0 0x00800000 8M} app::AddressSpace
+
+  addAddressSpace {::fwfwk::AddressSpace} "DAQ" ARRAY {D0 0x80000000}    app::AddressSpaceDMA <.>
+}
+----
+<.> Here, `D0` means 'DMA channel 0' and gets translated to 'Channel 13' by fwk for the mapfile
+
+== Outcome
+
+Based on these example scripts, fwk would build the hierarchy of the address
+map as shown below. It would then copy or generate the SystemRDL files listed
+in <<rdlfiles>> into a temporary folder and pass them to DesyRDL in the given
+order.
+
+----
+Address Space Tree:
++-- llrf_scav_sel[] (llrf_scav_sel)                        0x00000000 0xffffffffffffffff 0
+  +-- BSP[] (bsp_fmc2zup)                                  0x00000000         0x007fffff C0
+  +-- APP[] (app_top)                                      0x00800000         0x007fffff C0
+    +-- ins_mod_a[] (mod_a)                                0x00800000         0x007fffff C0
+    +-- ins_mod_b[] (mod_b)                                0x00800000         0x007fffff C0 <.>
+      +-- axi_gio[] (axi_gpio)                             0x00800000         0x007fffff C0
+      +-- ins_mod_c[] (mod_c)                              0x00810000         0x007fffff C0
+  +-- DAQ[] (app_daq)                                      0x80000000 0xffffffffffffffff C13
+----
+<.> note how address and range are wrong, but don't matter, as SystemRDL will take care of this
+
+.Ordered list of SystemRDL files that will be passed to DesyRDL
+[#rdlfiles]
+|===
+|Position | Filename | Source
+
+|1 | ch0_mod_a.rdl | copy of RDL file
+|2 | ch0_axi_gpio.rdl | generated by fwk
+|3 | ch0_mod_c.rdl | copy of RDL file
+|4 | ch0_mod_b.rdl | generated by fwk
+|5 | ch0_app_top.rdl | copy of RDL file
+|6 | ch0_bsp.rdl | _definition not shown above_
+|7 | ch0_ch0_top.rdl | generated by fwk
+
+|1 | ch13_daq.rdl | copy of RDL file
+|2 | ch13_ch13_top.rdl | generated by fwk
+|===
+
+fwk will then call DesyRDL like this (path of temporary folder omitted):
+
+----
+# generate mapfiles
+desyrdl -o map/ -i ch0_mod_a.rdl ch0_axi_gpio.rdl ch0_mod_c.rdl ch0_mod_b.rdl ch0_app_top.rdl ch0_bsp.rdl ch0_ch0_top.rdl -f map
+desyrdl -o map/ -i ch13_daq.rdl ch13_ch13_top.rdl -f map
+
+# generate VHDL
+desyrdl -o vhdl/ -i ch0_mod_a.rdl ch0_axi_gpio.rdl ch0_mod_c.rdl ch0_mod_b.rdl ch0_app_top.rdl ch0_bsp.rdl ch0_ch0_top.rdl -f vhdl
+desyrdl -o vhdl/ -i ch13_daq.rdl ch13_ch13_top.rdl -f vhdl
+----
+

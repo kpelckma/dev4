@@ -1,0 +1,9 @@
+
+{%- for module,files in generated_files.vhdl_dict.items() %}
+variable {{module}}_Sources
+  {%- for file in files %}
+lappend {{module}}_Sources {{file}}
+  {%- endfor %}
+add_files ${{module}}_Sources
+set_property LIBRARY "{{module}}" [get_files ${{module}}_Sources]
+{% endfor %}

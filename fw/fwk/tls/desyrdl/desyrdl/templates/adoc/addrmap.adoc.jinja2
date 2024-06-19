@@ -1,0 +1,83 @@
+= {{inst_name}} address space
+
++++{{desc_html}}+++
+
+{% if n_reg_insts > 0 %}
+.Registers
+[.tab-addr-reg,cols="5,1,1,2,1,9"]
+|===
+|Name | N | bits | type | RW | Description
+{% for reg in reg_insts %}
+| {{"{:<40}".format(reg.inst_name)}} | {{"{:>4}".format(reg.elements)}} | {{"{:>4}".format(reg.width)}} | {{"{:>8}".format(reg.dtype)}} | {{reg.rw}} | +++{{reg.desc_html}}+++ +
+  {%- for field in reg.fields if reg.fields_count > 1 %}
+    _{{field.inst_name}}_ [{{field.high}}:{{field.low}}] sw:{{field.rw}} {{field.dtype}} : +++{{field.desc_html}}+++ +
+  {%- endfor %}
+{%- endfor %}
+|===
+{% endif %}
+
+{% if n_mem_insts > 0 %}
+.Memories
+[.tab-addr-reg,cols="5,1,1,2,1,9"]
+|===
+|Name | N | bits | type | RW | Description
+{% for mem in mem_insts %}
+  {%- if mem.dim == 1 %}
+| {{"{:<40}".format(mem.inst_name)}} | {{"{:>4}".format(mem.mementries)}} | {{"{:>4}".format(mem.memwidth)}} | {{mem.dtype}} | {{mem.rw}} | +++{{mem.desc_html}}+++ +
+  {%- else %}
+        {%- set name = mem.inst_name + "[" + "{}".format(mem.dim_m) + "]" %}
+| {{"{:<40}".format(name)}} | {{"{:>4}".format(mem.mementries)}} | {{"{:>4}".format(mem.memwidth)}} | {{mem.dtype}} | {{mem.rw}} | +++{{mem.desc_html}}+++ +
+{%- endif %}
+  {%- for reg in mem.reg_insts if mem.n_reg_insts > 1 %}
+    _{{reg.inst_name}}_ ({{reg.dtype}}): +++{{reg.desc_html}}+++ +
+  {%- endfor %}
+{%- endfor %}
+|===
+{%- endif %}
+
+{% if n_rgf_insts > 0 %}
+.Reg Files
+[.tab-addr-reg,cols="5,1,9"]
+|===
+| Name | Reg File Type | Description
+{%- for rgf in rgf_insts %}
+  {% if rgf.dim == 1 %}
+| {{"{:<40}".format(rgf.inst_name)}} | {{"{:<32}".format(rgf.type_name_org)}}| +++{{rgf.desc_html}}+++ +
+  {%- else %}{% set name = rgf.inst_name + "[" + "{}".format(rgf.dim_m) + "]" %}
+| {{"{:<40}".format(name)}} | {{"{:<40}".format(rgf.type_name_org)}} | +++{{rgf.desc_html}}+++ +
+{%- endif %}
+{%- endfor %}
+|===
+
+{%- for rgf_type  in rgf_types %}
+.*{{rgf_type.type_name_org}}* Reg File Registers
+[.tab-addr-rgf-reg,cols="5,1,1,2,1,9"]
+|===
+|Name | N | bits | type | RW | Description
+{% for reg in rgf_type.reg_insts %}
+| {{"{:<40}".format(reg.inst_name)}} | {{"{:>4}".format(reg.elements)}} | {{"{:>4}".format(reg.width)}} | {{"{:>8}".format(reg.dtype)}} | {{reg.rw}} | +++{{reg.desc_html}}+++ +
+  {%- for field in reg.fields if reg.fields_count > 1 %}
+    _{{field.inst_name}}_ [{{field.high}}:{{field.low}}] sw:{{field.rw}} {{field.dtype}} : +++{{field.desc_html}}+++ +
+  {%- endfor %}
+{%- endfor %}
+|===
+{%- endfor %}
+
+{%- endif %}
+
+{% if n_ext_insts > 0 %}
+.External address maps
+[.tab-addr-ext,cols="3,1,1,1,7"]
+|===
+|Name | size | address | interface | Description
+{% for ext in ext_insts %}
+  {%- if ext.dim == 1 %}
+| {{"{:<40}".format(ext.inst_name)}} | {{"{:>4}".format(ext.total_size)}} | {{"0x{:08x}".format(ext.absolute_address)}} | {{ext.interface}} | +++{{ext.desc_html}}+++ +
+  {%- else %}
+    {%- set name = ext.inst_name + "[" + "{}".format(ext.dim_m) + "]" %}
+| {{"{:<40}".format(name)}} | {{"{:>4}".format(ext.total_size)}} | {{"0x{:08x}".format(ext.absolute_address)}} | {{ext.interface}} | +++{{ext.desc_html}}+++ +
+{%- endif %}
+{%- endfor %}
+|===
+{%- endif %}
+

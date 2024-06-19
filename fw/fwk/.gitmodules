@@ -1,0 +1,4 @@
+[submodule "desyrdl"]
+	path = tls/desyrdl
+	url = ../tools/desyrdl.git
+        branch = main

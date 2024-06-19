@@ -1,0 +1,8 @@
+{#- -*- mode:jinja2; -*- #}
+{#- list of input template files and it output name #}
+{#- format: <template file> <output file string template> -#}
+{# pkg.vhd.in {{inst_name}}/pkg_{{type_name_org}}.vhd #}
+fwk_desyrdl_one_lib.tcl.jinja2 fwk_desyrdl_one_lib_ch{{access_channel}}.tcl
+fwk_desyrdl_multi_lib.tcl.jinja2 fwk_desyrdl_multi_lib_ch{{access_channel}}.tcl
+vivado_desyrdl_one_lib.tcl.jinja2   vivado_desyrdl_one_lib_ch{{access_channel}}.tcl
+vivado_desyrdl_multi_lib.tcl.jinja2 vivado_desyrdl_multi_lib_ch{{access_channel}}.tcl

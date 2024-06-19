@@ -1,0 +1,4 @@
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/tcl/fwk_desyrdl_one_lib_ch13.tcl
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/tcl/fwk_desyrdl_multi_lib_ch13.tcl
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/tcl/vivado_desyrdl_one_lib_ch13.tcl
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/tcl/vivado_desyrdl_multi_lib_ch13.tcl

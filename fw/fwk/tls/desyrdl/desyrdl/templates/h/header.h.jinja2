@@ -1,0 +1,160 @@
+#ifndef __desyrdl_ch{{access_channel}}__H__
+#define __desyrdl_ch{{access_channel}}__H__
+
+{#- ============================================================ #}
+{#- register macro #}
+{%- macro field_macro(parent_name, field) %}
+/*
+ * {{parent_name}} Field: {{field.inst_name}}
+ *
+ */
+#define {{parent_name}}_{{field.inst_name}}_UPPER_BIT   {{field.high}}
+#define {{parent_name}}_{{field.inst_name}}_LOWER_BIT   {{field.low}}
+#define {{parent_name}}_{{field.inst_name}}_WIDTH       {{field.width}}
+#define {{parent_name}}_{{field.inst_name}}_MASK        {{field.mask_hex}}
+#define {{parent_name}}_{{field.inst_name}}_DEFVAL      {{field.reset_hex}}
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- register macro #}
+{%- macro reg_macro(parent_name, reg) %}
+/*
+ * Module: {{parent_name}} Register: {{reg.inst_name}}
+ * {{reg.desc}}
+ */
+#define {{parent_name}}_{{reg.inst_name}}_LEN         {{"{:>11}".format(reg.elements)}}U
+#define {{parent_name}}_{{reg.inst_name}}_BASEADDR    {{"  0x{:>08X}".format(reg.absolute_address)}}
+#define {{parent_name}}_{{reg.inst_name}}_HIGHADDR    {{"  0x{:>08X}".format(reg.absolute_address_high)}}
+#define {{parent_name}}_{{reg.inst_name}}_DATA_WIDTH  {{"{:>12}".format(reg.width)}}
+#define {{parent_name}}_{{reg.inst_name}}_FRACBITS    {{"{:>12}".format(reg.fixedpoint)}}
+#define {{parent_name}}_{{reg.inst_name}}_IS_SIGNED   {{"{:>12}".format(reg.signed)}}
+#define {{parent_name}}_{{reg.inst_name}}_ACCESS_TYPE {{"{:>12}".format("\"" + reg.rw + "\"")}}
+#define {{parent_name}}_{{reg.inst_name}}_DEFVAL      {{"  0x{:>08X}".format(reg.reset)}}
+  {%- for field in reg.fields -%}
+{{field_macro(parent_name + "_" + reg.inst_name, field)}}
+  {%- endfor %}
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- addrmap macro #}
+{%- macro addrmap_macro(parent_name, addrmap) %}
+/*
+ * External addrmap instance: {{addrmap.inst_name}}
+ */
+#define {{parent_name}}_{{addrmap.inst_name}}_LEN         {{"{:>11}".format(addrmap.total_words)}}U
+#define {{parent_name}}_{{addrmap.inst_name}}_BASEADDR    {{"  0x{:>08X}".format(addrmap.absolute_address)}}
+#define {{parent_name}}_{{addrmap.inst_name}}_HIGHADDR    {{"  0x{:>08X}".format(addrmap.absolute_address_high)}}
+#define {{parent_name}}_{{addrmap.inst_name}}_DATA_WIDTH            32
+#define {{parent_name}}_{{addrmap.inst_name}}_FRACBITS               0
+#define {{parent_name}}_{{addrmap.inst_name}}_IS_SIGNED              0
+#define {{parent_name}}_{{addrmap.inst_name}}_ACCESS_TYPE         "RW"
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- Memory macro #}
+{%- macro mem_macro(parent_name, mem) %}
+/*
+ * Memory: {{mem.inst_name}}
+ * {{mem.desc}}
+ */
+#define {{parent_name}}_{{mem.inst_name}}_LEN         {{"{:>11}".format(mem.total_words)}}U
+#define {{parent_name}}_{{mem.inst_name}}_BASEADDR    {{"  0x{:>08X}".format(mem.absolute_address)}}
+#define {{parent_name}}_{{mem.inst_name}}_HIGHADDR    {{"  0x{:>08X}".format(mem.absolute_address_high)}}
+#define {{parent_name}}_{{mem.inst_name}}_DATA_WIDTH  {{"{:>12}".format(mem.width)}}
+#define {{parent_name}}_{{mem.inst_name}}_FRACBITS    {{"{:>12}".format(mem.fixedpoint)}}
+#define {{parent_name}}_{{mem.inst_name}}_IS_SIGNED   {{"{:>12}".format(mem.signed)}}
+#define {{parent_name}}_{{mem.inst_name}}_ACCESS_TYPE {{"{:>12}".format("\"" + mem.rw + "\"")}}
+  {%- if mem.dim  == 1 -%}
+    {%- for reg in mem.reg_insts -%}
+{{reg_macro(path, reg)}}
+    {%- endfor %}
+  {%- elif mem.dim == 2 %}
+    {%- for idx_m in range(mem.dim_m) -%}
+    {%- set path = parent_name + "_" + mem.inst_name + "__" + "{}".format(idx_m) %}
+/*
+ * Memory: {{mem.inst_name}}  [{{idx_m}}]
+ * {{mem.desc}}
+ */
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_LEN         {{"{:>11}".format(mem.mementries)}}U
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_BASEADDR    {{"  0x{:>08X}".format(mem.absolute_address)}}
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_HIGHADDR    {{"  0x{:>08X}".format(mem.array_stride)}}
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_DATA_WIDTH  {{"{:>12}".format(mem.width)}}
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_FRACBITS    {{"{:>12}".format(mem.fixedpoint)}}
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_IS_SIGNED   {{"{:>12}".format(mem.signed)}}
+#define {{parent_name}}_{{mem.inst_name}}__{{"{}".format(idx_m)}}_ACCESS_TYPE {{"{:>12}".format("\"" + mem.rw + "\"")}}
+      {%- for reg in mem.reg_insts -%}
+{{reg_macro(path, reg)}}
+      {%- endfor %}
+    {%- endfor %}
+  {%- endif %}
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- Regfile macro #}
+{%- macro rgf_macro(parent_name, rgf) %}
+  {%- if rgf.dim  == 1 -%}
+  {%- set path = parent_name + "_" + rgf.inst_name  %}
+/*
+ * RegFile: {{rgf.inst_name}}
+ * {{rgf.desc}}
+ */
+#define {{parent_name}}_{{rgf.inst_name}}_LEN         {{"{:>11}".format(rgf.total_words)}}U
+#define {{parent_name}}_{{rgf.inst_name}}_BASEADDR    {{"  0x{:>08X}".format(rgf.absolute_address)}}
+#define {{parent_name}}_{{rgf.inst_name}}_HIGHADDR    {{"  0x{:>08X}".format(rgf.absolute_address_high)}}
+#define {{parent_name}}_{{rgf.inst_name}}_DATA_WIDTH  {{"{:>12}".format(rgf.width)}}
+#define {{parent_name}}_{{rgf.inst_name}}_FRACBITS    {{"{:>12}".format(rgf.fixedpoint)}}
+#define {{parent_name}}_{{rgf.inst_name}}_IS_SIGNED   {{"{:>12}".format(rgf.signed)}}
+#define {{parent_name}}_{{rgf.inst_name}}_ACCESS_TYPE {{"{:>12}".format("\"" + rgf.rw + "\"")}}
+    {%- for reg in rgf.reg_insts -%}
+{{reg_macro(path, reg)}}
+    {%- endfor %}
+  {%- elif rgf.dim == 2 %}
+    {%- for idx_m in range(rgf.dim_m) -%}
+    {%- set path = parent_name + "_" + rgf.inst_name + "__" + "{}".format(idx_m) %}
+/*
+ * RegFile: {{rgf.inst_name}} [{{idx_m}}]
+ * {{rgf.desc}}
+ */
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_LEN         {{"{:>11.0f}".format(rgf.total_words/rgf.dim_m)}}U
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_BASEADDR    {{"  0x{:>08X}".format(rgf.absolute_address)}}
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_HIGHADDR    {{"  0x{:>08X}".format(rgf.array_stride)}}
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_DATA_WIDTH  {{"{:>12}".format(rgf.width)}}
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_FRACBITS    {{"{:>12}".format(rgf.fixedpoint)}}
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_IS_SIGNED   {{"{:>12}".format(rgf.signed)}}
+#define {{parent_name}}_{{rgf.inst_name}}__{{"{}".format(idx_m)}}_ACCESS_TYPE {{"{:>12}".format("\"" + rgf.rw + "\"")}}
+      {%- for reg in rgf.reg_insts -%}
+{{reg_macro(path, reg)}}
+      {%- endfor %}
+    {%- endfor %}
+  {%- endif %}
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- Iterate over items nad execute macro dedicated for node type #}
+{%- macro items(parent_path, insts) %}
+  {%- for inst in insts %}
+    {%- if inst.node_type == "REG" -%}
+{{reg_macro(parent_path, inst)}}
+    {%- elif inst.node_type == "MEM" -%}
+{{mem_macro(parent_path, inst)}}
+    {%- elif inst.node_type == "REGFILE" -%}
+{{rgf_macro(parent_path, inst)}}
+    {%- elif inst.node_type == "ADDRMAP" -%}
+{{addrmap_macro(parent_path, inst)}}
+    {%- endif %}
+  {%- endfor %}
+{%- endmacro -%}
+
+{#- ============================================================ #}
+{#- TOP : iterat over address map list #}
+{%- for addrmap in addrmaps | reverse %}
+  {%- if addrmap.dim  == 1 -%}
+{{ items(addrmap.inst_name, addrmap.insts) }}
+  {%- elif addrmap.dim == 2 %}
+    {%- for idx_m in range(addrmap.dim_m) -%}
+{{ items(addrmap.inst_name + "__" + "{}".format(idx_m), addrmap.insts) }}
+    {%- endfor %}
+  {%- endif %}
+{%- endfor %}
+
+#endif /**/

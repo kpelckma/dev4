@@ -1,0 +1,21 @@
+= FPGA Firmware Framework Documentation
+ifndef::imagesdir[:imagesdir: ../images]
+
+image:fwk_logo.svg[]
+
+Welcome to the FPGA firmware framework documentation page.
+
+This documentation provides the information about the framework used in DESY for FPGA firmware development.
+The documentation is divided into a few main modules:
+
+xref:ch_intro.adoc[Firmware Framework]::
+The main firmware framework project.
+
+Firmware Framework tutorial::
+Tutorial on how to use FPGA firmware framework with a quick start project.
+
+FPGA firmware structure::
+Gives the information about the general FPGA firmware structure.
+
+Firmware documentation structure::
+Structure of documentation used in the project

@@ -1,0 +1,5 @@
+== Known Issues
+
+Each region is currently using the application clock. There is a plan for the future to make each region have its own clock domain.
+
+After trigger comes to DAQ module, sampling starts 2 clock cycles later. This might be problematic for applications that need continuous data over longer periods. This is likely solved if you are using Continous Mode.

@@ -1,0 +1,77 @@
+= Project Tcl
+
+This is the main project Tcl. It is sourced at the beginning as a Project module under `::fwfwk::src` namespace.
+
+Project Tcl file is defined in the configuration file. By default `project.tcl` under `./tcl/` is used.
+
+IMPORTANT: Project Tcl should contain defined procedures which are called by the `fwk` dependenty on the task run. +
+Required procedures are listed in <<procedures>> section.
+
+In principle project Tcl is treated the same way as module Tcl except it is executed as the fist one.
+
+== Procedures
+
+`init {}`::
+
+The `init` procedure from this file is run as a first one.
+The ``init` procedure should include `addSrcModule` with main project modules like bsp and application.
+This is also the place for all the configuration variables definitions with it default values assigned. 
+// [source,tcl]
+// ----
+// addSrcModule bsp "src/bsp/sis8325l/tcl/bsp.tcl"
+// ----
+
+`setSources {}`::
+It is executed during the project creation and build.
+The main suppose is to set modules Tcl variables with the sources.
+It should not contain tool depended procedures.
+
+IMPORTANT: Sources path should be in relation to the tcl file path. Most often this will be `../hdl/source.vhd` +
+As well `fwk` variables with full path can be used: `${::fwfwk::SrcPath}/path/source.vhd` +
+
+`setAddressSpace {}`::
+The `setAddressSpace` procedure should add address space elements to top project address space structure.
+The addAddressSpace procedure should be used.
+
+`doOnCreate {}`::
+This procedure is executed during the project creation. It can contain all the tool depended procedures.
+
+`doOnBuild {}`::
+This procedure is executed during the project build process: synthesis + implementation.
+It is executed as the first one before synthesis.
+It can contain all the tool depended procedures.
+
+
+== Example
+
+../tcl/project.tcl
+[source,tcl]
+----
+# ==============================================================================
+proc init {} {
+  addSrcModule bsp ${::fwfwk::SrcPath}/bsp_name/tcl/main.tcl
+}
+
+# ==============================================================================
+proc setSources {} {
+  variable Vhdl
+  lappend Vhdl "../src/local/hdl/component_a.vhd"
+  lappend Vhdl "../src/local/hdl/component_b.vhd"
+  lappend Vhdl "../src/local/hdl/pkg_config.vhd"
+}
+
+# ==============================================================================
+proc setAddressSpace {} {
+  addAddressSpace ::fwfwk::AddressSpace BOARD ARRAY 0x00000000 bsp::AddressSpace
+}
+
+# ==============================================================================
+proc doOnCreate {} {
+  variable Vhdl
+  addSources Vhdl -lib work
+}
+
+# ==============================================================================
+proc doOnBuild {} {
+}
+----

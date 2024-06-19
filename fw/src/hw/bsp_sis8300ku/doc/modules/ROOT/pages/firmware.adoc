@@ -1,0 +1,49 @@
+== Firmware Introduction
+
+This BSP uses two main components. 
+
+1. Block Design 
+2. BSP Logic Section
+
+
+== Block Design 
+
+image::ku-block-design.png[]
+
+The block design carries PCIe Endpoint IP (xDMA) and DDR4 IP along with AXi interconnects that interfaces with AXI.4 Buses to outside of BSP.
+
+
+
+=== AXI.4 Structure for the BSP 
+
+BSP essentially handles all AXI traffic distribution to and from application. Inside the Block Design of BSP, AXI traffic is split as shown on the diagram below.
+
+image::axi_diagram.svg[]
+
+
+
+== BSP Logic Section 
+
+This section of the code handles everything else other than block design of the board. This includes, ADC, DAC, AMC Clocking structures. 
+
+=== Interrupt Handling
+
+The application can send 16 different PCIe MSI interrupts `pcie_irq_req` towards root-complex using the payload interface. (see `t_payload_o` record inside `hdl/pkg_sis8300ku_payload.vhd`.)
+
+WARNING: Interrupt Acknowledgement from xDMA IP is not passed to the application.
+
+These interrupt signals get synchronized to bsp_clk domain (xDMA User Clock) inside the BSP section with rising edge detection logic and elongation of flags to make sure BSP Clock and still capture high frequency App Clock scenario. If Interrupt Req line stays high -> no IRQ requests will be passed on the xDMA IP)
+
+The BSP logic makes sure that 'Processed' interrupt requests (irq_req_proc) stay high until xDMA driver understands which event file to active. When the next IRQ Req rising edge occurs, it pulls the processed IRQ lane to low and then High again. 
+
+Below diagram shows how BSP section processes the IRQ Req before it gets passed on the xDMA IP inside the block diagram (BD).
+
+image::irq_wave.svg[]
+
+== Clock and reset tree
+
+AXI Clock and reset coming out of XDMA IP is used inside the BSP Logic Section. Block design section provides AXI.4 Lite bus synchronized to application clock domain and the entire application runs on this clock. 
+
+== LED Mapping
+
+image::front_panel_led.svg[]

@@ -1,0 +1,91 @@
+== LMK04906 User Manual
+
+This section guides users to configure the on-board PLL in order to produce the necessary clocks available.
+
+This tutorial will have 2 different configuration examples:
+
+1. Distributing the external clock
+2. Generating defined clock from the reference input of the DS8VM1
+
+For both of the examples above python scripts is provided on this Wiki page. These scripts can be used directly to configure the DS8VM1 together with SIS8300L2 Board.
+
+LMK04906 PLL configuration parameteres can be generated using the CodeLoader software provided by Texas Instruments.
+
+Depending on the configuration, there are two registers on DS8VM1 address space that needs to have correct values. These registers effect the switches on DS8VM1 which are highlighted on LMK04906 PLL Structure Image.
+
+First register is named WORD_VCO_MUX. This register selects input for CLKin_1. When this register gets 1, PLL gets external SMA clock input port as CLKin_1. When it is zero CLKin_1 pin will get external VCO output.
+
+Second register is named WORD_SW_VCTL. When this register gets the value 1, reference signal from the front panel of DS8VM1 will be redirected to OSCin pin of the PLL.
+
+
+
+[cols="4,3,3"]
+|===
+|Configuration |WORD_VCO_MUX |WORD_SW_VCTL
+
+|Clock Distribution
+|1
+|Don't Care
+
+|Clock Generation from External Reference (Internal VCO)
+|Don't Care 
+|1
+
+|Clock Generation from External Reference (External VCO)
+|0
+|1
+
+|===
+
+Below you can see how register changes the LMK04906 PLL surrondings.
+
+image::LMK04906.jpg[]
+
+
+After these registers are set next step is to generate the necessary register values for the PLL. This is done through CodeLoader software.
+
+=== Clock Distribution Mode
+
+In this mode none of the PLLs inside LMK04906 is used. Instead, the PLL chip distributes the clock input to its clock output ports.
+
+image::clock_distribution.jpg[]
+
+
+For this mode CodeLoader Software parameters are shown below. Most important parts are shown with red square. Mode Selection is selected to be Clock Distribution and OSCin port is powered down (crucial) (PD_OSCin = checked)
+
+image::Clock_dist_bits_pins.jpg[]
+
+The rest of the configuration deals with the output type of the clocks which is selected to be (LVPECL 2000mVpp) From the panel there is also a option to further divide the clock with the Clock Divider parameter.
+CodeLoader will show different frequency as output hence it can be ignored at this stage.
+
+image::Clock_dist_clock_outputs.jpg[]
+
+
+After this stage registers can be exported into txt file. After parsing, each registers should be written to register WORD_PLL_DATA with 0.1 ms delay in between each write-cycle.
+
+=== Generating Clock from the Reference Input of the RTM
+
+In this example, 78 MHz clock signal will be generated using the 260 MHz external reference signal. For this example PLL2 with internal VCO will be used. When single PLL mode is selected PLL1 will be powered down. PLL2 can either use its internal clock which has a range of 2370 MHz to 2600 MHz
+
+image::SinglePLLMode.jpg[]
+
+PD_OSCin must be unchecked since reference will use that pin to connect to PLL2. OSC_in FREQ is selected to be >255 to 400 MHz since reference signal will be 260 MHz. When the PLL2 is locked LMK04906 will give indication to the front panel of DS8VM1 using the LED. In order to use this feature IO Control section on CodeLoader must be set according to the picture below. Another useful feature of this PLL is the holdover functionality. This ensures the continuity of clock signals in the event of reference signal loss. Feature is enabled from this panel and parameters for DAC are shown on the picture below.
+
+
+
+image::78MHz_clock_gen_bits_pins.png[]
+
+
+Next step is to configure the PLL2 parameters. For this Clock Design Tool software from Texas Instruments can be used to generate the parameters. For this application PLL2 configuration is shown below. Phase detector should be negative. When PLL2 phase detector frequency is greater than 100 MHz, the PLL2_FAST_PDF option should be checked on Bits/Pins section to ensure proper operation of device.
+
+
+
+image::78MHz_clock_gen_pll2_config.jpg[]
+
+After PLL2 configuration, next step is to adjust the clock dividers to get the 78MHz.
+
+image::clockoutputs.png[]
+
+Just like on clock distribution example, next step is to export the registers from CodeLoader software and write each 32 bits registers into WORD_PLL_DATA with 0.1 ms delay between each write-cycle.
+
+

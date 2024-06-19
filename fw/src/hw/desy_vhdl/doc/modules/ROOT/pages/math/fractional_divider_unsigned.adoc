@@ -1,0 +1,36 @@
+
+
+== Entity fractional_divider_unsigned
+** *Line: 37 of link:fractional_divider_unsigned.vhd[fractional_divider_unsigned.vhd]*
+[source,vhdl]
+----
+entity fractional_divider_unsigned is
+  generic (
+    G_INPUT_LENGTH     : natural;
+    G_OUTPUT_LENGTH    : natural;
+    G_SEPARATE_COMPARE : boolean := false
+  );
+  port (
+    pi_clk         : in    std_logic;
+    pi_rst         : in    std_logic;
+    pi_stb         : in    std_logic;
+    po_rdy         : out   std_logic;
+    pi_numerator   : in    unsigned(G_INPUT_LENGTH - 1 downto 0);
+    pi_denominator : in    unsigned(G_INPUT_LENGTH - 1 downto 0);
+    po_vld         : out   std_logic;
+    po_saturated   : out   std_logic;
+    po_quotient    : out   unsigned(G_OUTPUT_LENGTH - 1 downto 0)
+  );
+end entity fractional_divider_unsigned;
+----
+*Description:* 
+Fractional divider for unsigned types. The quotient is computed in an +
+iterative way using the pencil-paper algorithm. The assumed range for the +
+numerator, denominator and quotient is `[0, 1)`.
+The number of cycles the divider +
+takes to complete one iteration is equal to `g_output_length+1` when +
+`G_SEPARATE_COMPARE` is `false` or `g_output_length*2+1` otherwise.
+`G_SEPARATE_COMPARE` adds an additional stage to improve the max design +
+frequency.
+If `numerator >= denominator` po_saturated is equal to `ST_SAT_OVERFLOWN` and the output is +
+invalid.

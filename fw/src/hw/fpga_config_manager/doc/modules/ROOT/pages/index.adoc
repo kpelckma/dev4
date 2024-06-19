@@ -1,0 +1,26 @@
+= FPGA Configuration Manager (FCM) Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+
+image::fcm_logo.png[width=30%, align=center]
+
+Welcome to the start page of the FPGA Configuration Manager (FCM) Module documentation. This documentation page includes information about the firwmare implementation and its address space.
+
+It's main usage is to program the FPGA using AXI.4 Lite register access. It manages this by writing the bit file into the EEPROM of the AMC board. This is possible using STARTUP primitive. FCM is also capable of triggering the reprogramming of the FPGA with the new contents of the EEPROM. This reprogramming command is processed by the ICAP primitive. 
+
+This component also has ability to detech Single Even Upsets (SEU) and even correct it to a certain point.
+
+Here are some useful links:
+
+* xref:firmware.adoc[Information about the Firmware Implemenation]
+* xref:registers.adoc[Register Descriptions]
+
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+Using the side-bar, you can navigate to each section to learn more about this project.
+

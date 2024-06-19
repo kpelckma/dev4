@@ -1,0 +1,19 @@
+
+
+== Entity cdc_synch
+** *Line: 24 of link:cdc_synch.vhd[cdc_synch.vhd]*
+[source,vhdl]
+----
+entity cdc_synch is
+  generic (
+    G_WIDTH : natural
+  );
+  port (
+    pi_b_clk : in    std_logic;                              -- destination clock domain B
+    pi_a_cdc : in    std_logic_vector(G_WIDTH - 1 downto 0); -- data in CD A
+    po_b_cdc : out   std_logic_vector(G_WIDTH - 1 downto 0)  -- data in CD B
+  );
+end entity cdc_synch;
+----
+*Description:* 
+Clock domain crossing. Moves a data vector from one clock domain to another.

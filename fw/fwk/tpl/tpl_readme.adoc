@@ -1,0 +1,31 @@
+= Description
+
+== Detailed Documentation
+
+Detailed documentation can be found in **link:./doc/main.adoc[doc]**
+
+== Use
+
+This project follows Firmware Framework (fwk) structure.
+
+This repository should be added as a submodule to the superproject under src/ location.
+
+----
+git submodule add -b master <REPO> <src/PATH>
+----
+
+// You can use framework script, which will also add all dependencies.
+
+// ----
+// ./fwk/scr/add_module.sh <REPO> <src/PATH> master
+// ----
+
+// # Dependencies
+
+// [format=csv,width="100%",options="header"]
+// |====================================
+// Local Path, Repo, Version/Branch
+// include::dependencies[]
+// |====================================
+
+

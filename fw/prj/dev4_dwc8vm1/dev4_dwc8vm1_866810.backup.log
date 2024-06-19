@@ -1,0 +1,352 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Sep 18 12:45:22 2023
+# Process ID: 866810
+# Current directory: /home/kristiaanpelckmans/Downloads/dev4/fw
+# Command line: vivado -mode tcl -source ./fwk/src/main.tcl -notrace -journal prj/dev4_dwc8vm1/dev4_dwc8vm1.jou -log prj/dev4_dwc8vm1/dev4_dwc8vm1.log -tclargs init create -c cfg/dwc8vm1.cfg -t vivado --exit --colorterm 1
+# Log file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.log
+# Journal file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.jou
+#-----------------------------------------------------------
+source ./fwk/src/main.tcl -notrace
+[1;34m
+--------------------------------------------------------------------------------[0m[m[0m
+[1;34m-- running firmware framework main tcl script                 & MSK DESY &    --[0m[m[0m
+[1;34m--------------------------------------------------------------------------------
+[0m[m[0m
+[1;38;5;8m# INFO: [0m Absolute path of the firmware framework project:
+[::fwfwk::ProjectPath] /home/kristiaanpelckmans/Downloads/dev4/fw
+[1;38;5;8m# INFO: [0m main.tcl [args]: init create -c cfg/dwc8vm1.cfg -t vivado --exit
+[1;38;5;8m# INFO: [0m Getting default project configuration from: default.cfg
+[1;38;5;8m# INFO: [0m Getting project configuration from: /home/kristiaanpelckmans/Downloads/dev4/fw/cfg/dwc8vm1.cfg
+[1;38;5;8m# INFO: [0m Sourcing  fwfwk_vivado.tcl
+[1;36m-------------------------------------[0m[m[0m
+[0;36mLoaded Configuration:[0m[m[0m
+[1;36m-------------------------------------[0m[m[0m
+[0;37mProjectName[0m[m : dev4 [0m
+[0;37mProjectConf[0m[m : dwc8vm1 [0m
+[0;37mProjectTcl[0m[m  : tcl/project.tcl [0m
+[0;37mToolType[0m[m    : vivado[0m
+[0;37m.....................................[0m[m[0m
+[1;37mProject Version : 2.1.0-1-g86b83613-workstation[0m[m[0m
+[1;36m-------------------------------------[0m[m[0m
+[1;36m         Git Submodules[0m[m[0m
+[1;36m-------------------------------------[0m[m[0m
+Module path                    Version                  on branch               
+...................................................................
+fwk                            0.10.0-1-g0d973f3        ()                      
+src/hw/bsp_sis8300ku           0.0.0-42-g0dd6fb94       ()                      
+src/hw/daq                     1.1.0-16-geccdff6-dirty  ()                      
+src/hw/desy_vhdl               0.0.0-212-g0af06b9a      ()                      
+src/hw/fpga_config_manager     2.1.0-4-g0b9b99c         ()                      
+src/hw/rtm_ds8vm1              1.1.1-9-gf9b1ab0         ()                      
+src/hw/rtm_dwc8vm1             2.0.0-4-g6915dc1         ()                      
+src/hw/timing                  2.0.2-1-gaf63197         ()                      
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+[1;38;5;6m
+== INIT ==[0m
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src ... 
+::fwfwk::src::init
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::bsp ... 
+::fwfwk::src::bsp::init
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::bsp::fpga_config_manager ... 
+::fwfwk::src::bsp::fpga_config_manager::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::bsp::fpga_config_manager
+........................................
+[1;38;5;8m# INFO: [0m parsing vhdl configuration file ../hdl/pkg_bsp_config_default.vhd into ::fwfwk::src::bsp::BspConfig
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::bsp
+........................................
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::app ... 
+::fwfwk::src::app::init
+[1;38;5;8m# INFO: [0m parsing vhdl configuration file ../hdl/pkg_app_config_conf_2.vhd into ::fwfwk::src::app::AppConfig
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::app::daq ... 
+::fwfwk::src::app::daq::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::app::daq
+........................................
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::app::mimo ... 
+::fwfwk::src::app::mimo::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::app::mimo
+........................................
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::app::timing ... 
+::fwfwk::src::app::timing::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::app::timing
+........................................
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::app::rtm_dwc8vm1 ... 
+::fwfwk::src::app::rtm_dwc8vm1::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::app::rtm_dwc8vm1
+........................................
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::app
+........................................
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src
+........................................
+----------------------------------------------------
+Sourcess Tree:
+ +- src                     
+   +- app                     
+     +- daq                     
+     +- mimo                    
+     +- rtm_dwc8vm1             
+     +- timing                  
+   +- bsp                     
+     +- fpga_config_manager     
+----------------------------------------------------
+
+[1;38;5;6m== CREATE ==[0m
+[1;38;5;8m# INFO: [0m Creating ( dev4_dwc8vm1 ) vivado project ...
+[1;38;5;8m# INFO: [0m in /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1
+create_project: Time (s): cpu = 00:00:02 ; elapsed = 00:00:10 . Memory (MB): peak = 2332.844 ; gain = 1.965 ; free physical = 107088 ; free virtual = 123454
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::rtm_dwc8vm1::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::timing::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::mimo::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::daq::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::fpga_config_manager::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::setPrjProperties
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::setPrjProperties
+
+[1;38;5;6m== GEN/ADD ADDRESS SPACE ==[0m
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::rtm_dwc8vm1::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::timing::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::mimo::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::daq::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::fpga_config_manager::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::setAddressSpace
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::setAddressSpace
+----------------------------------------------------
+Address Space Tree:
++-- dev4[] (dev4)                                          0x00000000         0xffffffff 0
+  +-- BSP[] (TOP)                                          0x00000000         0x007fffff C0
+    +-- BSP[] (sis8300ku_bsp_logic)                        0x00000000         0x007fffff C0
+      +-- FCM[] (fpga_config_manager)                      0x00010000         0x0000ffff C0
+  +-- APP[] (app)                                          0x00800000         0x007fffff C0
+    +-- TIMING[] (timing)                                  0x00800000         0x007fffff C0
+    +-- DAQ[] (daq)                                        0x00800000         0x007fffff C0
+    +-- RTM[] (rtm)                                        0x00800000         0x007fffff C0
+  +-- BSP[] (TOP)                                          0x00000000         0x007fffff C13
+    +-- BSP[] (sis8300ku_bsp_logic)                        0x00000000         0x007fffff C13
+      +-- FCM[] (fpga_config_manager)                      0x00010000         0x0000ffff C13
+  +-- APP[] (app)                                          0x00800000         0x007fffff C13
+    +-- TIMING[] (timing)                                  0x00800000         0x007fffff C13
+    +-- DAQ[] (daq)                                        0x00800000         0x007fffff C13
+    +-- RTM[] (rtm)                                        0x00800000         0x007fffff C13
+  +-- DAQBUF[] (app_daq)                                   0x80000000         0x7fffffff C13
+----------------------------------------------------
+Generating Rdl files:
+[1;38;5;8m# INFO: [0m Cleaning /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl
+Parsing 1: ch0_top : []  TOP: @0
+Parsing 2: TOP : []  TOP: @0
+Parsing 3: sis8300ku_bsp_logic : []  RDL: @0
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/sis8300ku_bsp_logic.vh
+Parsing 4: fpga_config_manager : []  RDL: @65536
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/fpga_config_manager.vh
+Parsing 5: app : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/app.vh
+Parsing 6: timing : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/timing.vh
+Parsing 7: daq : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/daq.vh
+Parsing 8: rtm : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/rtm.vh
+Parsing 1: ch13_top : []  TOP: @0
+Parsing 9: TOP : []  TOP: @0
+Parsing 10: sis8300ku_bsp_logic : []  RDL: @0
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/sis8300ku_bsp_logic.vh
+Parsing 11: fpga_config_manager : []  RDL: @65536
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/fpga_config_manager.vh
+Parsing 12: app : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/app.vh
+Parsing 13: timing : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/timing.vh
+Parsing 14: daq : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/daq.vh
+Parsing 15: rtm : []  RDL: @8388608
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/rtm.vh
+Parsing 16: app_daq : []  RDL: @2147483648
+Writing configuration constants to /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/app_daq.vh
+
+List of .rdl files in project:
+  access channel 0:
+    nodeId = 1, parent = 0, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_ch0_top.rdl
+    nodeId = 2, parent = 1, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_TOP.rdl
+    nodeId = 3, parent = 2, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_sis8300ku_bsp_logic.rdl
+    nodeId = 4, parent = 3, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_fpga_config_manager.rdl
+    nodeId = 5, parent = 1, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_app.rdl
+    nodeId = 6, parent = 5, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_timing.rdl
+    nodeId = 7, parent = 5, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_daq.rdl
+    nodeId = 8, parent = 5, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch0_rtm.rdl
+  access channel 13:
+    nodeId = 1, parent = 0, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_ch13_top.rdl
+    nodeId = 9, parent = 1, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_TOP.rdl
+    nodeId = 10, parent = 9, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_sis8300ku_bsp_logic.rdl
+    nodeId = 11, parent = 10, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_fpga_config_manager.rdl
+    nodeId = 12, parent = 1, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_app.rdl
+    nodeId = 13, parent = 12, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_timing.rdl
+    nodeId = 14, parent = 12, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_daq.rdl
+    nodeId = 15, parent = 12, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_rtm.rdl
+    nodeId = 16, parent = 1, filename = prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/rdl/ch13_app_daq.rdl
+----------------------------------------------------
+[1;38;5;8m# INFO: [0m Cleaning /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl map
+----------------------------------------------------
+[1;38;5;8m# INFO: [0m DesyRdl generating vhdl map files in out path: 
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl
+--DesyRdl--ch0>
+/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl
+--DesyRdl--ch13>
+----------------------------------------------------
+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+Creating mapp file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation.mapp
+Creating mapp file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation_ch0.mapp
+Creating mapp file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation_ch13.mapp
+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+Creating mapt file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation.mapt
+Creating mapt file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation_ch0.mapt
+Creating mapt file: /home/kristiaanpelckmans/Downloads/dev4/fw/out/dev4_dwc8vm1/dev4_dwc8vm1_2.1.0-1-g86b83613-workstation_ch13.mapt
+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+Adding address space vhdl files to project
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::desyrdlch0 ... 
+::fwfwk::src::desyrdlch0::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::desyrdlch0
+........................................
+Adding address space vhdl files to project
+----------------------------------------
+[1;38;5;8m# INFO: [0m Creating namespace ::fwfwk::src::desyrdlch13 ... 
+::fwfwk::src::desyrdlch13::init
+[1;38;5;8m# INFO: [0m Created namespace ::fwfwk::src::desyrdlch13
+........................................
+
+[1;38;5;6m== SET SOURCES ==[0m
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::desyrdlch13::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::desyrdlch0::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::rtm_dwc8vm1::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::timing::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::mimo::setSources
+[1;38;5;8m# INFO: [0m Created version file: VHDL ../hdl/pkg_version_mimo.vhd
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::daq::setSources
+[1;38;5;8m# INFO: [0m Created version file: VHDL ../hdl/pkg_version_daq.vhd
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::fpga_config_manager::setSources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::setSources
+C_APP_FREQ = 125000000 (Hz)
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::setSources
+
+[1;38;5;6m== DO ON CREATE ==[0m
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::desyrdlch13::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::desyrdlch13::Sources
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::desyrdlch0::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::desyrdlch0::Sources
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/desyrdl/pkg_desyrdl_common.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/FCM/pkg_fpga_config_manager.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/FCM/fpga_config_manager_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/FCM/fpga_config_manager.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_DIV/pkg_spi_ad9510.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_DIV/spi_ad9510_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_DIV/spi_ad9510.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_ADC/pkg_spi_ad9268.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_ADC/spi_ad9268_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/AREA_SPI_ADC/spi_ad9268.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/BSP/pkg_sis8300ku_bsp_logic.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/BSP/sis8300ku_bsp_logic_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/BSP/sis8300ku_bsp_logic.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/TIMING/pkg_timing.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/TIMING/timing_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/TIMING/timing.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/DAQ/pkg_daq.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/DAQ/daq_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/DAQ/daq.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/RTM/pkg_rtm.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/RTM/rtm_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/RTM/rtm.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/APP/pkg_app.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/APP/app_decoder_axi4l.vhd.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.desyrdl/vhdl/APP/app.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::rtm_dwc8vm1::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::rtm_dwc8vm1::Vhdl
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::rtm_dwc8vm1::Vhdl_desy
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::timing::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::timing::Sources
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_types.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_numarray.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::mimo::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::mimo::Vhdl
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::daq::doOnCreate
+[1;38;5;8m# INFO: [0m Created version file: VHDL ../hdl/pkg_version_daq.vhd
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::daq::Vhdl
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::daq::Vhdl_desy
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_types.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/misc/trigger_delay.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::app::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::Vhdl
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::Xdc
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::app::Vhdl_desy
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_types.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_numarray.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/memory/ram/dual_port_memory.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::fpga_config_manager::doOnCreate
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::bsp::fpga_config_manager::Sources
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/memory/ram/dual_port_memory.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::bsp::doOnCreate
+[1;38;5;8m# INFO: [0m Setting FPGA Ordering Code: xcku040-ffva1156-1-c
+[1;38;5;8m# INFO: [0m FPGA Family: Kintex Ultrascale
+[1;38;5;8m# INFO: [0m Number of logic cells: 40k
+[1;38;5;8m# INFO: [0m Package: ffva1156
+[1;38;5;8m# INFO: [0m Speed Grade: -1
+[1;38;5;8m# INFO: [0m Temperature Grade: -C (Commercial)
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::bsp::Vhdl_desy
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_axi.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_axi_cfg.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_types.vhd' cannot be added to the project because it already exists in the project, skipping this file
+WARNING: [filemgmt 56-12] File '/home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/desy_vhdl/hdl/common/pkg_common_numarray.vhd' cannot be added to the project because it already exists in the project, skipping this file
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::bsp::Vhdl
+[1;38;5;8m# INFO: [0m executing ::fwfwk::addSources in vivado with ::fwfwk::src::bsp::Xdc
+[1;38;5;8m# INFO: [0m Creating the block desing that carries the PCIe and MIG
+Wrote  : </home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sis8300ku_bsp_system.bd> 
+INFO: [Device 21-403] Loading part xcku040-ffva1156-1-c
+xit::create_sub_core: Time (s): cpu = 00:00:09 ; elapsed = 00:00:15 . Memory (MB): peak = 2518.293 ; gain = 121.531 ; free physical = 106432 ; free virtual = 122802
+create_bd_cell: Time (s): cpu = 00:00:19 ; elapsed = 00:00:26 . Memory (MB): peak = 2543.379 ; gain = 146.617 ; free physical = 106386 ; free virtual = 122769
+WARNING: [BD 5-670] It is required to provide a frequency value for a user created input clock port. Please use the <-freq_hz $freq_val> argument of the create_bd_port command. ie create_bd_port -dir I -type clk -freq_hz 100000000 clkin
+WARNING: [BD 5-670] It is required to provide a frequency value for a user created input clock port. Please use the <-freq_hz $freq_val> argument of the create_bd_port command. ie create_bd_port -dir I -type clk -freq_hz 100000000 clkin
+WARNING: [BD 41-394] Exec TCL: all interface pins/ports are already connected to interface net '/pcie/axi_interconnect_dma_M00_AXI'
+
+# Generating DDR4 IP core...
+create_bd_cell: Time (s): cpu = 00:00:17 ; elapsed = 00:00:28 . Memory (MB): peak = 2766.504 ; gain = 202.008 ; free physical = 106184 ; free virtual = 122509
+WARNING: [BD 5-670] It is required to provide a frequency value for a user created input clock port. Please use the <-freq_hz $freq_val> argument of the create_bd_port command. ie create_bd_port -dir I -type clk -freq_hz 100000000 clkin
+Slave segment '/p_m_axi4l_bsp/Reg' is being assigned into address space '/pcie/xdma_0/M_AXI_LITE' at <0x0000_0000 [ 4M ]>.
+Slave segment '/p_m_axi4l_app/Reg' is being assigned into address space '/pcie/xdma_0/M_AXI_LITE' at <0x0080_0000 [ 8M ]>.
+Slave segment '/p_m_axi4l_bsp/Reg' is being assigned into address space '/pcie/xdma_0/M_AXI' at <0x0000_0000 [ 4M ]>.
+Slave segment '/p_m_axi4l_app/Reg' is being assigned into address space '/pcie/xdma_0/M_AXI' at <0x0080_0000 [ 8M ]>.
+Slave segment '/ddr/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK' is being assigned into address space '/pcie/xdma_0/M_AXI' at <0x8000_0000 [ 2G ]>.
+Slave segment '/ddr/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK' is being assigned into address space '/p_s_axi4_ddr' at <0x8000_0000 [ 2G ]>.
+Wrote  : </home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sis8300ku_bsp_system.bd> 
+WARNING: [BD 41-721] Attempt to set value '0' on disabled parameter 'HAS_LOCK' of cell '/m00_exit_pipeline/m00_exit' is ignored
+WARNING: [BD 41-721] Attempt to set value '0' on disabled parameter 'HAS_LOCK' of cell '/m01_exit_pipeline/m01_exit' is ignored
+validate_bd_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 2900.348 ; gain = 124.938 ; free physical = 106014 ; free virtual = 122352
+INFO: [BD 41-1662] The design 'sis8300ku_bsp_system.bd' is already validated. Therefore parameter propagation will not be re-run.
+Wrote  : </home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sis8300ku_bsp_system.bd> 
+VHDL Output written to : /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/synth/sis8300ku_bsp_system.vhd
+VHDL Output written to : /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sim/sis8300ku_bsp_system.vhd
+VHDL Output written to : /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/hdl/sis8300ku_bsp_system_wrapper.vhd
+WARNING: [Vivado 12-3482] The generated wrapper file has already been imported into the project, the imported file is:
+'/home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/imports/hdl/sis8300ku_bsp_system_wrapper.vhd'
+CRITICAL WARNING: [filemgmt 20-1702] Unable to set property on the file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/synth/sis8300ku_bsp_system.vhd
+File is managed as part of sub-design (IP, Block Design, DSP Design, etc.) file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sis8300ku_bsp_system.bd
+CRITICAL WARNING: [filemgmt 20-1702] Unable to set property on the file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sim/sis8300ku_bsp_system.vhd
+File is managed as part of sub-design (IP, Block Design, DSP Design, etc.) file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.srcs/sources_1/bd/sis8300ku_bsp_system/sis8300ku_bsp_system.bd
+[1;38;5;8m# INFO: [0m executing ::fwfwk::src::doOnCreate
+-------------------------------------------------
+
+[1;32m# INFO: Project creation completed (successfully).
+[0m
+Exiting tool...
+INFO: [Common 17-206] Exiting Vivado at Mon Sep 18 12:47:17 2023...

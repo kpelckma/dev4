@@ -1,0 +1,158 @@
+`include "fpga_config_manager.vh" //automatically created and added by fwk with conf variables such a C_VERSION ...
+
+/* default values of defined variables */
+`ifndef C_ID
+`define C_ID 0x01F6A00F
+`endif
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+/*
+  module a address space
+  NOTE:
+  fixed addresses to keep compatibility with an old software which has fixed addresses
+*/
+addrmap fpga_config_manager {
+
+  desyrdl_interface = "AXI4L";
+
+  external mem {
+    desc = "Write to EEPROM buffer. Programmer script uses this buffer to write to EEPROM. EEPROM commands and data.";
+    mementries = 1024;
+    memwidth = 32;
+    sw = rw;
+  } WRITE_BUF @0x0;
+
+  external mem {
+    desc = "Read from EEPROM buffer. Programmer script uses this buffer to read from EEPROM. EEPROM commands and data.";
+    mementries = 1024;
+    memwidth = 32;
+    sw = rw;
+  } READ_BUF @0x1000;
+
+  reg {
+    desc = "Clock divider value for SPI interface. Default = 10";
+		default sw = rw;
+		default hw = r;
+    field {} data[15:0] = 0x0A;
+  } SPI_DIVIDER @0x2000 ;
+
+  reg {
+    desc = "Bytes to write to EEPROM from WRITE_BUF";
+    default sw = rw;
+		default hw = r;
+    field {} data[15:0] ;
+  } BYTES_TO_WRITE @0x200c ;
+
+  reg {
+    desc = "Bytes to read from EEPROM to READ_BUF";
+    default sw = rw;
+		default hw = r;
+    field {} data[15:0];
+  } BYTES_TO_READ @0x2010;
+
+  reg {
+    desc = "Control and status of the FSM. Used for handshaking with programmer software.";
+    default sw = rw;
+		default hw = rw;
+    default we;
+    default swmod;
+    field {} data[7:0];
+  } CONTROL @0x2014;
+
+  reg {
+    desc = "JTAG lane Test Clock. Used by software JTAG player.";
+    default sw = rw;
+		default hw = r;
+    field {} data[1] ;
+  } JTAG_TCK @0x2018 ;
+
+  reg {
+    desc = "JTAG lane Test Mode Select. Used by software JTAG player.";
+    default sw = rw;
+		default hw = r;
+    field {} data[1] ;
+  } JTAG_TMS @0x201c ;
+
+  reg {
+    desc = "JTAG lane Test Data In. Used by software JTAG player.";
+    default sw = rw;
+		default hw = r;
+    field {} data[1] ;
+  } JTAG_TDI @0x2020 ;
+
+  reg {
+    desc = "JTAG lane Test Data Out. Used by software JTAG player.";
+    default sw = r;
+		default hw = rw;
+    field {} data[1] ;
+  } JTAG_TDO @0x2024 ;
+
+  reg {
+    desc = "Magic number for proepr module detection.";
+    default sw = r;
+		default hw = rw;
+    field {} data[31:0] ;
+  } MAGIC @0x2038 ;
+
+  reg {
+    desc = "Trigger FPGA to boot from selected revision (REV_SEL). Reboot is triggered by writing 0x2eb0070";
+    default sw = rw;
+		default hw = r;
+    field {} data[31:0] ;
+  } REV_SWITCH @0x203c ;
+
+  reg {
+    desc = "In multiboot select revision to boot from.";
+    default sw = rw;
+		default hw = r;
+    field {} data[2] ;
+  } REV_SEL @0x2040 ;
+
+  reg {
+    desc = "FPGA configuration check CRC error. Provided by FRAME_ECC primitive.";
+    default sw = r;
+		default hw = rw;
+    field {} data[1] ;
+  } CRC_ERROR @0x2044 ;
+
+  reg {
+    desc = "FPGA configuration check CRC errors counter.";
+    default sw = r;
+		default hw = rw;
+    field {counter;} data[31:0] ;
+  } CRC_ERROR_CNT @0x2048 ;
+
+  reg {
+    desc = "FPGA configuration check ECC errors counter.";
+    default sw = r;
+		default hw = rw;
+    field {counter;} data[31:0] ;
+  } ECC_ERROR_CNT @0x204c ;
+
+  reg {
+    desc = "FPGA configuration check ECC syndrome. Provided by FRAME_ECC primitive.";
+    default sw = r;
+		default hw = rw;
+    field {} data[12:0] ;
+  } ECC_SYNDROME @0x2060 ;
+
+  reg {
+    desc="Module Identyfication Number";
+		default sw = r;
+		default hw = r;
+		field {} data[32] = `C_ID;
+  } ID @0x2070;
+
+  reg {
+    desc="Module Version Number";
+		default sw = r;
+		default hw = r;
+		field {} changes [8] =  `C_VERSION & 0x000000FF;
+		field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+		field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+		field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+    } VERSION @0x2074;
+
+};

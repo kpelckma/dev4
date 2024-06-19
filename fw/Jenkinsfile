@@ -1,0 +1,6 @@
+@Library('fwk')_
+
+buildPrj(config:[
+        [name:'dwc8vm1', env:'vivado-2020.2'],
+        [name:'ds8vm1', env:'vivado-2020.2']]
+        )

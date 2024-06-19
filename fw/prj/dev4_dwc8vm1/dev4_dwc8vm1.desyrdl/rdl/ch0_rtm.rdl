@@ -1,0 +1,182 @@
+`include "rtm.vh"
+
+// default defines if not defined in rtm_dwc8vm1.vh
+`ifndef C_ID
+`define C_ID 0x5000d851
+`endif
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+// address map
+addrmap rtm {
+  name="DRTM-DWC8VM1";
+  desc = "RTM DWC8VM1 module";
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc="Module Identification Number";
+    default sw = r;
+    default hw = r;
+    field {} data[32] = `C_ID;
+  } ID @0x00;
+
+  reg {
+    desc="Module Version Number";
+    default sw = r;
+    default hw = r;
+    field {} changes [8] =  `C_VERSION & 0x000000FF;
+    field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+    field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+    field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+  } VERSION @0x04;
+
+	reg {
+    desc = "Handles interlock on the RTM side. Connected to RF gate. Value:[br]
+    0 - Block drive (RF gate open)[br]
+    1 - Drive will be allowed (RF gate closed)";
+    default sw        = rw;
+    default hw        = r;
+    desyrdl_data_type = "uint";
+    field {} data[1];
+  } RF_PERMIT;
+
+  reg {
+    desc = "Select attenuator to be set by ATT_VAL register. 1 bit per attenuator.[br]
+    bit[0:7]: attenuator on ADC channel 0 to 7[br]
+    bit[8]: vector modulator output attenuator.[br]
+    e.g. to selct attenuators on ch 1 and 5 set value = 2^1 + 2^5 = 34";
+    default sw        = rw;
+    default hw        = r;
+    desyrdl_data_type = "uint";
+    field {} data[9];
+  } ATT_SEL;
+
+  reg {
+    desc = "Attenuator value to set for HMC624LP4 chip.[br]
+    Atteunation = (63 - value) / 2 dBm. [br]
+    Min attenuation 0 dBm: value = 63, max attenuation 31.5 dBm: value = 0 .";
+    default sw        = rw;
+    default hw        = r;
+    default swmod;
+    desyrdl_data_type = "uint";
+    field {} data[6];
+  } ATT_VAL;
+
+  reg {
+    desc = "Shows if there is I2C Communication with any attenuators. When it is 1 there is an on-going i2c transaction. Wait until 0 before issuing ATT_VAL change.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[1];
+  } ATT_STATUS;
+
+  reg {
+    desc = "LO Power Detector AD8363 Vout digitized by LTC2493 ADC (I2C Address: 0x43). RAW ADC value.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "int";
+    field {} data[25];
+  } ADC_A;
+
+  reg {
+    desc = "LO Power Detector AD8363 Temperature digitized by LTC2493 ADC (I2C Address: 0x43). RAW ADC value.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "int";
+    field {} data[25];
+  } ADC_B;
+
+  reg {
+    desc = "Reference Power Detector AD8363 Vout digitized by LTC2493 ADC (I2C Address: 0x43). RAW ADC value.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "int";
+    field {} data[25];
+  } ADC_C;
+
+  reg {
+    desc = "Reference Power Detector AD8363 Temperature digitized by LTC2493 ADC (I2C Address: 0x43). RAW ADC value.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "int";
+    field {} data[25];
+  } ADC_D;
+
+  reg {
+    desc = "Enable periodical ADC LTC2493 readout at 1 Hz";
+    default sw        = rw;
+    default hw        = r;
+    desyrdl_data_type = "uint";
+    field {} data[4];
+  } ADC_READ_ENA;
+
+  reg {
+    desc = "Shows if there is I2C Communication with LTC2493 ADC. When it is 1 on one of 1 bit there is an on-going i2c transaction.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[4];
+  } ADC_STATUS;
+
+  reg {
+    desc = "Set both DACs for common mode voltave for the Vector Modulator. Writes to both In-phase and Quadrature=phase biasing of Vector Modulator. Common value = 850";
+    default sw        = rw;
+    default hw        = r;        
+    default swmod;
+    desyrdl_data_type = "uint";
+    field {} data[12];
+  } DACAB;
+
+  reg {
+    desc = "Shows if there is on-going I2C communication with DAC. When it is 1 there is an on-going i2c transaction with DAC.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[4];
+  } DAC_STATUS;
+
+  reg {
+    desc = "Like DACAB register just allows to set the common mode voltave for the Vector Modulator seaprately for In-phase and Quadrature.[br]
+    reg[0]: In-phase channel[br]
+    reg[1]: Quadrature channel";
+    default sw        = rw;
+    default hw        = r;
+    default swmod;
+    desyrdl_data_type = "uint";
+    field {} data[12];
+  } DAC[2];
+
+  reg {
+    desc = "Monitoring the External Interlock coming from the Front Panel of the RTM. Value:[br]
+      1 - interlock is preventing the drive[br]
+      0 - drive is permitted.";
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[1];
+  } EXT_INTERLOCK;
+
+  reg {
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[14];
+  } HYT271_TEMP;
+
+  reg {
+    default sw        = r;
+    default hw        = w;
+    desyrdl_data_type = "uint";
+    field {} data[14];
+  } HYT271_HUMI;
+
+  reg {
+    default sw        = rw;
+    default hw        = r;
+    desyrdl_data_type = "uint";
+    field {} data[1];
+  } HYT271_READ_ENA;
+
+
+};

@@ -1,0 +1,32 @@
+`include "mimo.vh" //automatically created and added by fwk with conf variables such a C_VERSION ...
+
+/* default values of defined constants */
+
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+
+addrmap mimo {
+
+  desc = "Address Map for the MIMO module";
+  desyrdl_generate_hdl = true;
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc = "Shows the Identification number for the MIMO module.";
+    default sw = r;
+    default hw = rw;
+    field {} data[32];
+  } ID @0x00 ; // Hardcode the ID and VERSION address to a specific place
+
+
+  reg {
+    desc = "Enables the MIMO controller to start sending AXI.4 Packages";
+    default sw = rw;
+    default hw = r;
+    field {} data[1];
+  } ENABLE;
+
+
+};

@@ -1,0 +1,21 @@
+== Hardware Overview
+
+image::dwc8vm1_bd.png[]
+
+Each intermediate frequency output of the downconversion is available differential at the RTM Zone 3 connector. The differential up-converter baseband drive signals (In-phase and Quadrature) have to be provided through the RTM Zone 3 connector. The signals can be supported by Class A1.1 compatible AMC digitizer board. The DRTM-DWC8VM1 offers switchable front-end power level attenuators for an accurate full-scale operation of AMC digitizers. The unit supports LO, ADC-clock, and reference input signals externally from the front panel as well as internally from an RFbackplane. The module offers on board power level monitors and user I2C interface for general purpose. In addition the board provides two broadband DC input channels to the AMC digitizers.
+
+* Double width MTCA.4 Rear-transition module (RTM) Class A1.1 compatible 
+* 8 channel high frequency down-conversion from 700MHz to 4.0GHz Intermediate frequency  range: 5-100MHz Short-term AM, PM stability <0.005%, <10fs
+* 2 analog DC channels (DC..600MHz)
+* 1 channel high frequency up-conversion from 700MHz to 6.0GHz Modulation bandwidth: DC-50MHz
+* Adjustable high-frequency input and output attenuators
+* Local oscillator, ADC-Clock, and Reference from front panel or RF-backplane
+* On board features:
+** Power level monitors
+** User I2C support
+** RoHS compliant
+** Assembly Options:
+*** RF-backplane support
+*** Channel isolation enhancement
+*** Extended frequency range
+

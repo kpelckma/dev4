@@ -1,0 +1,6 @@
+name: desy_vhdl
+title: desy_vhdl Library Documentation
+version: ~
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

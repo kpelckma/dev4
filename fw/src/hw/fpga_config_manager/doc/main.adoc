@@ -1,0 +1,7 @@
+// Sourcing the images
+:imagesdir: modules/ROOT/images
+
+include::modules/ROOT/pages/index.adoc[Welcome Page]
+include::modules/ROOT/pages/firmware.adoc[Firmware Implementation]
+include::modules/ROOT/pages/registers.adoc[Register Documentation]
+

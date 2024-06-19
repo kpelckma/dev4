@@ -1,0 +1,243 @@
+== Register Descriptions
+
+[cols="6,3,3,3,9"]
+|===
+|Name |Register Width |Number of Elements | RO/RW | Description
+
+|ID
+|32
+|1
+|RO
+|Hard-coded to x"000d5801".
+
+|VERSION
+|32
+|1
+|RO
+|Show the git version of the module with separate eight bit wide fields arranged according to Semantic versioning.
+
+|NAME
+|32
+|1
+|RO
+|Magic Number to indicate the RTM name to software
+
+|RF_PERMIT
+|1
+|1
+|RW
+|Handles interlock on the RTM side. Connected to RF gate. Value +
+  0 - Block drive (RF gate open) +  
+  1 - Drive will be allowed (RF gate closed) 
+
+|ATT_SEL
+|8
+|1
+|RW
+|Select attenuator to be set by ATT_VAL register. 1 bit per attenuator. +
+bit[0:7]: attenuator on ADC channel 0 to 7 + 
+bit[8]: vector modulator output attenuator. +
+e.g. to selct attenuators on ch 1 and 5 set value = 2^1 + 2^5 = 34 
+
+|ATT_VAL
+|6
+|1
+|RW
+|Attenuation strength for the HMC624LP4 chip. +
+Writing the integer value 0 will give highest attenuation(31.5dB) 
+Writing the integer value 63 will give lowest attenuation(0 dB)
+The chip has a attenuation step of 0.5dB
+
+|ATT_BUSY
+|1
+|1
+|RO
+|Shows if there is I2C Communication with any attenuators. When it is 1 there is an on-going i2c transaction. 
+
+|REF_POWER
+|25 (Signed)
+|1
+|RO
+|Reference input power value digitized by LTC2493 ADC (I2C Address :34h)
+
+
+|REF_TEMP
+|25 (Signed)
+|1
+|RO
+|Reference temperature value digitized by LTC2493 ADC (I2C Address :34h)
+
+|REF_ADC_BUSY
+|4
+|1
+|RO
+|Shows if there is on-going I2C communication with ADC
+
+|DAC_VM_COM_MODE_I
+|16
+|1
+|RW
+|In-Phase biasing for the Vector Modulator (TRF370417IRGET)
+
+
+|DAC_VM_COM_MODE_Q
+|16
+|1
+|RW
+|Quadrature-Phase biasing for the Vector Modulator (TRF370417IRGET)
+
+
+|DAC_VM_BUSY
+|32
+|3
+|RO
+|Shows if LTC2607 is busy with I2C transaction
+
+
+|WORD_PLL_DATA
+|32
+|1
+|RW
+|Data to be sent to PLL
+
+
+|WORD_PLL_STATUS
+|1
+|1
+|RO
+|Shows if there is an on-going communication with the PLL
+
+
+|PLL_OSC_SEL
+|16
+|3
+|RO
+|Choose Single PLL (internal or external VCO) or double PLL configuration for the LMK04906 +
+Set 1 for internal VCO selection +
+Warning: This feature is only available on board revision 1.2 and down. v.1.3 does not have it
+
+
+|REFERENCE_DIV
+|2
+|1
+|RW
+|Reference RF Divider. +
+b00 -> Divide by 1 +
+b01 -> Divide by 2 +
+b10 -> Divide by 3 +
+b11 -> Divide by 4 +
+
+|PLL_CLK_IN_SEL
+|1
+|1
+|RW
+|Choose what goes into the FBCLKIN port of the PLL +
+0 -> Loopback the CPOUT port of the PLL +
+1 -> Use Front Panel SMA or RF Backplane CLK Input (Assembly option) +
+Warning: This feature is only available on board revision 1.2 and down. v.1.3 does not have it
+
+
+|RTM_STATUS
+|8
+|1
+|RO
+|Provides various monitoring signals on RTM +
+[0] => PLL Lock Detection +
+[1] => PLL Holdover Active +
+[2] => PLL CLKin1 Loss of Signal +
+[3] => PLL CLKin0 (TCLKA) Loss of Signal +
+[4] => Unused +
+[5] => VM Gate Monitor 1-> RF is allowed 0-> RF NOT Allowed +
+[6] => AMC Interlock Monitor 0-> AMC is letting drive 1-> AMC is not letting drive +
+[7] => Unused +
+
+
+|TEMP_A
+|25
+|1
+|RO
+|Temperature reading from on-board thermistor digitized by an ADC (Ch0 minus Ch1 value) +
+I2C address of the ADC: 16h (Care! On schematics it is written wrong). + Temperature calculation formula is explained below.
+
+|TEMP_B
+|25 (Signed)
+|1
+|RO
+|Temperature reading from on-board thermistor digitized by an ADC (Ch2 minus Ch3 value) +
+I2C address of the ADC: 16h (Care! On schematics it is written wrong). +
+Temperature calculation formula is explained below.
+
+|TEMP_C
+|12 (Signed)
+|1
+|RO
+|Temperature reading from on-board 12-bit Temperature Sensor (MAX6626) +
+I2C address: 48h. Temperature calculation formula is explained below.
+
+|TEMP_D
+|12 (Signed)
+|1
+|RO
+|Temperature reading from on-board 12-bit Temperature Sensor (MAX6626) +
+I2C address: 49h. Temperature calculation formula is explained below.
+
+
+|TEMP_E
+|12 (Signed)
+|1
+|RO
+|Temperature reading from on-board 12-bit Temperature Sensor (MAX6626) +
+I2C address: 4Ah. Temperature calculation formula is explained below.
+
+
+|EXT_INTERLOCK
+|1
+|1
+|RO
+|Monitoring the External Interlock coming from the Front Panel of the RTM +
+If it is 1 that means interlock is preventing the drive +
+If it is 0 that means drive is permitted.+ +
+
+
+|CLK_RST_SELECT
+|1
+|1
+|RW
+| Select reset type for the PLL and the Reference Divider (Synch or Async) +
+0 => Selection from WORD_CLK_RST_SOURCE(Synched with TCLK from Backplane) +
+1 => Selection from WORD_CLK_RST_SOURCE (Async) +
+
+|CLK_RST_SOURCE
+|1
+|1
+|RW
+| Select Reset Source +
+0 => AMC Reset from Z3 +
+1 => Reset Input from Front Panel of DS8VM1 +
+
+|CLK_RST_ENABLE
+|1
+|1
+|RW
+|Enable Reset logic for the reference divider and the PLL
+
+|SYNC_CLK_SELECT
+|1
+|1
+|RW
+| ?
+
+|===
+
+
+=== Temperature Calculation for WORD_TEMP_A and B 
+
+....
+V = WORD_TEMP_A*3.3/2**24, R(V) = 10e3*(1.65-V)/(1.65+V), T(R) = 25*4000/(4000+25*log(R/10e3) degC
+....
+
+=== Temperature Calculation for WORD_TEMP_C,D and E 
+
+....
+T = WORD_TEMP_C/D/E * 0.0625 C degrees
+....

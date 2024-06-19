@@ -1,0 +1,166 @@
+`include "app.vh"
+
+// default defines if not defined in app.vh
+`ifndef C_ID
+`define C_ID 0x00000000
+`endif
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+addrmap app {
+  name="Application Address Space";
+  desc = "Registers on application";
+
+  desyrdl_generate_hdl = true;
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc="Module Identification Number";
+    default sw = r;
+    default hw = r;
+    field {} data[32] = `C_ID;
+  } ID @0x00;
+
+  reg {
+    desc="Module Version Number";
+    default sw = r;
+    default hw = r;
+    field {} changes [8] =  `C_VERSION & 0x000000FF;
+    field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+    field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+    field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+  } VERSION @0x04;
+
+  reg {
+    desc  = "Interrupt Ack Counter";
+    default sw    = r;
+    default hw    = rw;
+    field {} data[32];
+  } IRQ_ACK_CNT[`C_IRQ_CHANNEL_CNT];
+
+  reg {
+    desc  = "Scratch register";
+    default sw    = r;
+    default hw    = rw;
+    field {} data[1];
+  } SCRATCH[10];
+
+  reg {
+    desc  = "ADC Over Range Indicator (Latched to the DAQ Trigger so Software can see it)";
+    default sw    = r;
+    default hw    = rw;
+    field {} data[1];
+  } ADC_OV_LATCHED[10];
+
+  reg {
+    desc  = "Counter of the trigger events seen at ch.5";
+    default sw    = r;
+    default hw    = rw;
+    field {} data[16];
+  } CNT_EVENTS[10];
+
+  reg {
+    desc  = "on/off switch for feedback. If ='0', then only the feedforward table is put on the drive.";
+    default sw    = rw;
+    default hw    = r;
+    field {} data;
+  } FB_SWITCH;
+
+  reg {
+    desc  = "MLVDS input to the FPGA";
+    default sw    = r;
+    default hw    = w;
+    field {} data[8];
+  } MLVDS_I;
+
+  reg {
+    desc  = "MLVDS output from the FPGA";
+    default sw    = rw;
+    default hw    = r;
+    field {} data[8];
+  } MLVDS_O;
+
+  reg {
+    desc  = "MLVDS Output Enable";
+    field {
+      sw    = rw;
+      hw    = r;
+    } data[8];
+  } MLVDS_OE;
+
+
+  reg {
+    desc  = "Time of available DAQ signal";
+    field {
+      sw    = r;
+      hw    = rw;
+    } data[32];
+  } TIMESTAMP;
+
+  reg {
+    desc  = "3 Signals received from the RJ45s on the frontplate of the SIS8300ku boards";
+    default sw    = r;
+    default hw    = rw;
+    field {} data[16];
+  } CNT_RJ45[3];
+
+  reg {
+    desc  = "adjust (rotate) the REF signal injected (ch.7)";
+    default sw    = rw;
+    default hw    = r;
+    field {} data[16];
+  } ROTATION;
+
+
+  reg {
+    desc  = "Changes how DPM memory pointer reacts when trigger comes
+             0 -> Free running pointer
+             1 -> Memory pointer goes back to 0 when DAQ trigger asserted" ;
+    default sw    = rw;
+    default hw    = r;
+    field {} data[1];
+  } DPM_MODE;
+
+
+  external mem {
+    mementries = 1024;
+    memwidth = 32;
+    desyrdl_data_type = "int" ;
+    sw = rw;
+  } REF_I;
+
+  external mem {
+    mementries = 1024;
+    memwidth = 32 ;
+    desyrdl_data_type = "int" ;
+    sw = rw ;
+  } REF_Q;
+
+  external mem {
+    mementries = 1024;
+    memwidth = 32;
+    desyrdl_data_type = "int" ;
+    sw = rw;
+  } FFD_I;
+
+  external mem {
+    mementries = 1024;
+    memwidth = 32 ;
+    desyrdl_data_type = "int" ;
+    sw = rw ;
+  } FFD_Q;
+
+  // Instantiate the modules that are connected to application address space
+
+  // Syntax:
+  // Type Name  Name that appears on the map file
+  timing        TIMING; // @16*1024;
+  daq           DAQ;
+  mimo          MIMO;
+
+  // For the DWC8VM1 or DS8VM1 we will use generic type name called 'rtm' 
+  // This way we can avoid syntax errors on the app_top.vhd 
+  rtm RTM;
+
+};

@@ -1,0 +1,62 @@
+// good to know: default regwidth is 32
+
+mem ctable {
+	mementries = 4096; // REGAE 250 MHz
+	memwidth = 32;
+};
+
+addrmap llrf_fd_top {
+	name = "Address map of the higher-level component, maybe LLRF Field Detection";
+  desyrdl_interface = "AXI4L";
+
+  // <type name> [parameters] <instance name>;
+	iq_slide #(.FD_CHANNELS(5)) iq;
+
+	external ctable ctables[4];
+
+	reg {
+		default sw = r;
+		default hw = na;
+		field {} data[32] = 0x00444444;
+	} WORD_FIRMWARE;
+
+	reg {
+		default sw = r;
+		default hw = na;
+		field {} data[32] = 0x00010001;
+	} WORD_REVISION;
+
+	reg {
+		default sw = r;
+		default hw = w;
+		field {} data[5];
+	} WORD_AMP_LIMIT_ACTIVE;
+
+	reg {
+		default sw = r;
+		default hw = w;
+		field {} data[5];
+	} WORD_AMP_LIMIT_PRE_ACTIVE;
+
+	reg {
+		default sw = r;
+		default hw = w;
+		field {} data[5];
+	} WORD_AMP_LIMIT_TRG_ACTIVE;
+
+	reg {
+		default sw = rw;
+		default hw = r;
+		field {} enable0;
+		field {} enable1;
+		field {} enable2;
+	} WORD_ENABLE;
+
+	// do we want to support this?
+	reg {
+		field {sw=r  ; hw=rw;} status[31:28];
+		field {sw=rw ; hw=r ;} ctrl[27:24];
+		field {sw=rw ; hw=rw;} beef[23:20];
+		field {sw=r  ; hw=rw; we;} count[15:0];
+	} WORD_TEST;
+};

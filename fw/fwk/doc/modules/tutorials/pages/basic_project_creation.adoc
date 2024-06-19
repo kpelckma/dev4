@@ -1,0 +1,321 @@
+= Basic Tutorial
+:navtitle: Basic Tutorial
+
+== Project Creation
+
+This basic tutorial covers the general process to create a FPGA Firmware project by using the FWK. The FWK comes along with one shell script to initialize the project structure itself and a scecond to create a new module with the required folder structure. +
+To demonstrate the multi-repository workflow the dey_vhdl library will be included as a git-submodule. +
+It shows where to set the tool and how to create a empty project. It illustrate the difference of adding source files by the usage of tools GUI and the intended adaptation of the project.tcl and then main.tcl file . +
+After creation of a top entity a library component will be instanciate. The main emhasis is the source file assignment to the default work design library and individual design library. Namely the default tool library (for Vivado xil_default) and the MSK FPGA Firmware library desy. +
+
+.Creating a FPGA Firmware Project
+First we create a folder and initialize it as a git-repository. The FWK needs always to be added as a git-submodule. Open the terminal and type each command. 
+[source,shell]
+----
+mkdir demo
+cd demo
+git init -b main
+git submodule add -b main https://gitlab.desy.de/fpgafw/fwk.git
+git submodule update --init
+----
+When we look now into the project folder we will see the fwk repository and the .git file.
+
+.Initializing the FPGA Firmware Project
+The FWK expects a strict folder structure. Therefore it provides a project initialization shell script, which creates that and also provides pre-edited files. +
+Open the terminal and run the command from the project folder. +
+[source,shell]
+----
+./fwk/scr/init_fwfwk_prj.sh demo
+----
+When we look into the project folder again we find a bunch of folders. Three of them are of special interests for this tutorial. First the configuration folder (cfg), the source folder (src) and the tool command language folder (tcl).
+
+.Editing the Default Configuration File default.cfg 
+The cfg folder contains after project initialization the default.cfg file. Open the default.cfg file. It is already pre-edited with our project name, configuration as default and also the standard file path to the project.tcl file. The variable AddrType targets the address generation, which is not focused in this tutorial and therefore remains open. +
+// image default.cfg.png
+Edit the lines as listed below. +
+[source,text]
+----
+AddrType=
+ToolType=vivado
+----
+By assigning ToolType with vivado we define, that the FWK uses the Xilinx Vivado XTCL Shell commands under the hood. +
+
+.Creating and Initializing a Costoum Module Folder
+Now we will create our own module. As mentioned the FWK expects a strict folder structure, which effects the module location and its orginization as well. All modules should be placed inside the src-folder. With the module initialization shell script we create the module structure at the right place. +
+In this tutorial we choose the name app_demo for our module. Open the terminal and run the command from the project folder. Make sure you are providing the correct path and the name of our module. +
+[source,shell]
+----
+./fwk/scr/init_module.sh ./src/app_demo
+----
+Confirm the initialization by pressing enter. +
+Let us investigate the created folder inside the source folder. The empty hdl folder is dedicate for our HDL design files. Inside the tcl folder a pre-edited main.tcl file was placed. We will come back to it when describing the dependencies of our module from other source files.
+
+.Including the MSK Firmware Library as  a Module
+The MSK FPGA Firmware GitLab repsoitory provides a library with generic components, type difinitions, a set of functions and procedures as well as other useful HDL design implementation. In this tutorial we want to use the clock frequency generator component. For this we first need to add the git-repository to our project repository as a submodule. Open the terminal and run the command from the project folder. Again, make sure you are providing the correct path to the source folder and the name of the submodule. In this case desy_vhdl. +
+[source,shell]
+----
+git submodule add -b main https://gitlab.desy.de/fpgafw/lib/desy_vhdl.git ./src/desy_vhdl
+----
+A bunch of folders were added to our repository. The base module structure is still the same. There is the hdl folder, with grouped HDL design files. The main difference to other submodules is the missing tcl folder and main.tcl file. The reason for this is, that none of the components have dependencies to each other and can be instanciate directley inside any created module. +
+
+.Using FWK commands and Tool GUI
+We prepared the folder structure. The design file of our own module app_demo is missing. We will create it by using the tools GUI. +
+You may need to source tool settings before. Source them by pointing to your local installation folder. +
+[source,shell]
+----
+source /opt/XilinX/Vivado/2020.2/settings64.sh
+----
+.FWKs make project command 
+The _make project_ command will source the project.tcl in the tool specific TCL shell. Since we did not edit the file, the command will just create a empty Vivado project with the given name defined in the configuration file. Run the command from project folder +
+[source,shell]
+----
+make project
+----
+On terminal you 
+
+== Using Vivado GUI
+* run make command from project folder demo
+[source,shel]
+----
+make gui
+----
+
+.Setup project via GUI
+* add source file 
+* browse to src/desy_vhdl/hldl/misc/clock/ and select clock_freq.vdh
+* do *not* check copy *nor* scan
+* create source file "app_top" under src/app_demo/hdl 
+* close gui
+
+* *SCOPE*: source will be removed from list after project re-creation
+
+== Editing Project TCL file
+
+* open project.tcl 
+* edit ini{} procedure
+[source,text]
+----
+addSrcModule app $::fwfwk::/app_demo/tcl/tcl.main
+----
+* run make command from project folder demo
+[source,shel]
+----
+make project
+make gui
+----
+
+* *SCOPE*: source file still not included -> main.tcl must be edited too
+
+
+== Editing Main TCL file
+
+* browse to src/app_demo/tcl/ and select main.tcl
+* edit setSources{}
+[source,text]
+----
+variable Vhdl
+lappend ../hdl/app_top.vhd
+----
+* edit doOnCreate{}
+[source,text]
+----
+variable Vhdl
+addSources Vhdl
+----
+* run make command from project folder demo
+[source,shel]
+----
+make project
+make gui
+----
+* *SCOPE*: app_top included but no clock_freq.vhd
+
+
+== Including and Instanciate Library Module in Application
+
+* browse to src/app_demo/hdl/ and select app_top.vhd
+* copy and paste into app_top.vhd
+[source,text]
+----
+---------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+library desy;
+use desy.common_types.all;
+
+entity app_top is
+    Port ( pi_clock : in STD_LOGIC);
+end app_top;
+
+architecture Behavioral of app_top is
+
+constant C_CLOCK_COUNT : natural := 1;
+signal clock_vect  :  std_logic_vector(C_CLOCK_COUNT-1 downto 0);
+signal clock_freq  :  t_32b_slv_vector(C_CLOCK_COUNT-1 downto 0);
+
+begin
+
+ins_clk_freq : entity desy.clock_freq
+  generic map(
+    G_CLOCK_FREQ  => 125000000, --! reference clock frequency in Hz
+    G_CLOCK_COUNT => C_CLOCK_COUNT          --! number of clocks to measure
+  )
+  port map(
+    pi_clock        => pi_clock,
+    pi_reset        => '0',
+    --! vector of clocks to be measured
+    pi_clock_vect   => clock_vect,
+    --! clock frequencies in Hz
+    po_clock_freq   => clock_freq
+  );
+  
+end Behavioral;
+-----------------------------
+----
+* SCOPE: use clause of desy library and desys common types definition
+
+== Updating Main TCL file
+
+* browse to src/app_demo/tcl/ and select main.tcl
+* edit and extend setSources{}
+[source,text]
+----
+variable Vhdl
+variable Vhdl_desy
+
+lappend ../hdl/app_top.vhd
+lappend Vhdl_desy $::fwfwk::SrcPath/desy_vhdl/hdl/misc/clock/clock_freq.vhd
+lappend Vhdl_desy $::fwfwk::SrcPath/desy_vhdl/hdl/common/pkg_common_types.vhd
+----
+
+* edit doOnCreate{}
+[source,text]
+----
+variable Vhdl
+variable Vhdl_desy
+
+addSources Vhdl
+addSources Vhdl_desy -lib desy
+----
+* run make command from project folder demo
+[source,shel]
+----
+make project
+make gui
+----
+
+* *SCOPE*: creating two libries default (xil_default, work) and desy
+
+
+== Generating Register Description File
+
+* create rdl folder inside src/app_demo/ folder
+* run command from project folder demo
+[source,shel]
+----
+mkdir src/app_demo/rdl
+----
+* create empty app.rdl file using tool vim
+* run command from project folder demo
+[source,shel]
+----
+vim src/app_demo/rdl/app.rdl
+----
+* type following to save and close vim
+[source,text]
+----
+:wq
+[source,shel]
+----
+* browse to src/app_demo/rdl/ and select app.rdl
+* copy and paste into app.rdl
+[source,text]
+----
+// ----------------------------------
+`include "app.vh"
+
+// default defines if not defined in app.vh
+`ifndef C_ID
+`define C_ID 0x000000AB
+`endif
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+addrmap app {
+  name="Application Address Space";
+  desc = "Registers on application";
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc="Module Identification Number";
+    default sw = r;
+    default hw = r;
+    field {} data[32] = `C_ID;
+  } ID @0x00;
+
+  reg {
+    desc="Module Version Number";
+    default sw = r;
+    default hw = r;
+    field {} changes [8] =  `C_VERSION & 0x000000FF;
+    field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+    field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+    field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+  } VERSION @0x04;
+
+};
+// ----------------------------------
+----
+
+== Updating Project and Main TCL file for Register Geration
+
+* browse to tcl/ and select project.tcl 
+* edit ini{}
+[source,text]
+----
+set ::fwfwk::addr::TypesToGen {vhdl map}
+set ::fwfwk::addr::TypesToAdd {vhdl}
+----
+* edit setAddressSpace {}
+[source,text]
+----
+addAddressSpace ::fwfwk::AddressSpace "APP" ARRAY {} app::AddressSpace
+----
+* browse to src/app_demo/tcl/ and select main.tcl 
+* edit setAddressSpace {}
+[source,text]
+----
+variable AddressSpace
+addAddressSpace AddressSpace "app" RDL {} ../rdl/app.rdl
+----
+* run make command from project folder demo
+[source,shel]
+----
+make project
+----
+* *SCOPE*: error thrown due to missing DesyRDL compiler
+
+== Generating Register Address Space by using DesyRDL
+
+* run make command from project folder demo
+[source,shel]
+----
+make env 
+----
+* *SCOPE*: DesyRDL ready to use from Framework but missing source files -> dependincies
+
+* run git command from project folder demo
+[source,shel]
+----
+git submodule update --init --recursive
+----
+* *SCOPE*: DesyRDL dependencies now included
+
+* run make command from project folder demo
+[source,shel]
+----
+make project
+----
+* browse to out/demo_default/ and investigate Address Map file

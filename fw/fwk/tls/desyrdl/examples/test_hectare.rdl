@@ -1,0 +1,72 @@
+`include "test_hectare.vh"
+
+// declare another addrmap type before instantiating it
+addrmap nextlevel {
+  desyrdl_interface = "AXI4L";
+  reg {
+    field {
+      desc = "whatever status" ;
+      sw = r ;
+      hw = rw ;
+      we ; // TODO make hw=r and no we once the WIRE type of register is done
+    } data[32] = 32'h1234b70b;
+  } status ;
+} ;
+
+addrmap something_downstream {
+  reg {
+    field {
+      desc = "some static sw-accessible data" ;
+      sw = r ;
+      hw = rw ;
+      we ; // TODO make hw=r and no we once the WIRE type of register is done
+    } data[32] = 32'h7000BEEF;
+  } ds_reg @0x100 ;
+
+  nextlevel i_nextlevel;
+} ;
+
+addrmap test_hectare {
+  addressing = regalign; // this is the default
+
+  desyrdl_interface = "AXI4L";
+  desyrdl_access_channel = 0;
+
+  reg {
+    field {sw=rw; hw=r; swmod; } data[31:0];
+  } hectare;
+
+  reg {
+    field {counter; } count[31:0];
+  } hcounter;
+
+  reg {
+    field {sw=r; hw=rw; } data[31:0];
+  } iitoh;
+
+  reg {
+    field {
+      desc = "Some set point, maybe? A number that is set by the software." ;
+      sw = rw ;
+      hw = r ;
+      desyrdl_data_type = "signed16";
+    } hello[18] ;
+  } foo2 ;
+
+  external mem {
+    memwidth = 32;
+    mementries = `C_COOLMEM_ENTRIES;
+  } coolmem;
+  coolmem->desyrdl_interface = "DPM";
+
+  external spi_ad9510 spi_ad9510_a @0x10000;
+  spi_ad9510_a->desyrdl_interface = "AXI4L";
+
+  // test_hectare.sv holds size and address information for downstream IBUS
+  // modules
+  external generic_ibus #(.SIZE(`C_SIZE_LLRF_CTABLES)) llrf_ctables @`C_ADDR_LLRF_CTABLES;
+
+  something_downstream i_ds;
+  i_ds->desyrdl_interface = "AXI4L";
+
+};

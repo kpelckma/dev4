@@ -1,0 +1,56 @@
+`include "app_daq.vh"
+`include "daq.vh"
+
+`define DAQ0_WIDTH 16
+`define DAQ1_WIDTH 16
+
+`ifndef C_DAQ0_BUF0_OFFSET
+`define C_DAQ0_BUF0_OFFSET 0
+`endif
+
+`ifndef C_DAQ0_BUF1_OFFSET
+`define C_DAQ0_BUF1_OFFSET 1048576
+`endif
+
+addrmap app_daq {
+
+  // desyrdl_generate_hdl is false because this rdl file only describes how DDR memory is used
+  // We do not need decoder logic here. This is only for server to understand 
+  // how to demux the whole DDR region.
+  desyrdl_generate_hdl = false;
+
+  mem daq_ctrl {
+    mementries = `C_DAQ0_MAX_SAMPLES*8;
+    memwidth   = `C_CHANNEL_WIDTH_BYTES*8 ;
+    sw = r;
+    default sw = r;
+    default regwidth   = `DAQ0_WIDTH;
+    default fieldwidth = `DAQ0_WIDTH;
+    default desyrdl_data_type = "int" ;
+
+    reg  { field {} data ; } SEQUENCE_0 ;
+    reg  { field {} data ; } SEQUENCE_1 ;
+    reg  { field {} data ; } SEQUENCE_2 ;
+    reg  { field {} data ; } SEQUENCE_3 ;
+    reg  { field {} data ; } SEQUENCE_4 ;
+    reg  { field {} data ; } SEQUENCE_5 ;
+    reg  { field {} data ; } SEQUENCE_6 ;
+    reg  { field {} data ; } SEQUENCE_7 ;
+    reg  { field {} data ; } SEQUENCE_8 ;
+    reg  { field {} data ; } SEQUENCE_9 ;
+    reg  { field {} data ; } SEQUENCE_10 ;
+    reg  { field {} data ; } SEQUENCE_11 ;
+    reg  { field {} data ; } SEQUENCE_12 ;
+    reg  { field {} data ; } SEQUENCE_13 ;
+    reg  { field {} data ; } SEQUENCE_14 ;
+    reg  { field {} data ; } SEQUENCE_15 ;
+
+  };
+
+  // Instantiate the DAQ0 BUF0 and DAQ0 BUF1 regions
+  // We are using 'Definitive' instantiation here.
+  external daq_ctrl MEM_MULTIPLEXED_DAQ_CTRL_BUF0 @`C_DAQ0_BUF0_OFFSET;
+  external daq_ctrl MEM_MULTIPLEXED_DAQ_CTRL_BUF1 @`C_DAQ0_BUF1_OFFSET;
+
+};
+

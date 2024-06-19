@@ -1,0 +1,3 @@
+:toc:
+
+include::pkg_common_logic_utils.adoc[]

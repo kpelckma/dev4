@@ -1,0 +1,52 @@
+= LTC2945 FPGA Firmware Implementation
+
+ifndef::imagesdir[:imagesdir: ../images]
+:stem: asciimath
+
+== General
+
+Linear Technologies LTC2495 is a rail-to-rail system monitor that measures current, voltage, and power https://www.analog.com/en/products/ltc2945.html[*^{counter:link}^*]. +
+
+_FPGA FW IC-Configuration_:
+
+* Current Measurement Resolution: 12 bit
+* Voltage Measurement Resolution: 12 bit
+
+_FPGA FW supported I2C-Features_:
+
+* Continious Read
+* Bus release meanwhile ADC conversion time
+
+== Prerequest for Design Integration
+
+The FW Design of LTC2945 is ready to use together with the FW entity ENT_I2C_CONTROLLER. The LTC2945 component should be connected to the controller component. The controller converts the IC specific read and write commands to drive and scope the external LTC2945 device. Two iobuf primitives are required aditionally. See image below.
+
+image::I2C_integration.png[]
+
+== FPGA Firmware Design
+
+This Firmware design implementation of LTC2945 operates as a I2C subordinate device. It is a costimized statemachine for continious read communication. 
+
+_Biref description_:
+
+* Trigger starts a sampling process
+** There is no termination condition apart from reset
+** Data valid indicating that current and voltage been read
+* Conversion time 5 ms
+
+== Design Implementation 
+
+image::ltc2945_fsm.svg[]
+
+== Conversion Formula
+
+:stem: asciimath
+
+[stem]
+
+++++
+ "Current in A" = "po_current"/2^12 * 102.4/40
+
+ "Voltage in V" = "po_voltage" / 2^16 * 102.4
+
+++++

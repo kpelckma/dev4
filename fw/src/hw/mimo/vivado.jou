@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Wed Jul 26 20:28:34 2023
+# Process ID: 2082590
+# Current directory: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo
+# Command line: vivado
+# Log file: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo/vivado.log
+# Journal file: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+wait_on_run impl_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+wait_on_run impl_1

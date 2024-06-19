@@ -1,0 +1,21 @@
+= License and Copyrights
+
+== License
+
+
+Use of the Firmware Framework is granted under the terms of the link:https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 License]
+
+== Copyrights
+
+
+Copyright 2019-present by DESY and the individual contributors to fwk.
+
+The main author: Lukasz Butkowski <lukasz.butkowski@desy.de>
+
+Main contributors: +
+Michael Büchler <michael.buechler@desy.de> +
+Andrea Bellandi <andrea.bellandi@desy.de> +
+Cagil Guemues <cagil.guemues@desy.de> +
+Burak Dursun <burak.dursun@desy.de> +
+Katharina Schulz <katharina.schulz@desy.de> +
+Seyednima Omidsajedi <nima.sajedi@desy.de>

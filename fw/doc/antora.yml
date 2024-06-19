@@ -1,0 +1,6 @@
+name: sis8300ku_example_design
+title: SIS8300-KU Example Design Documentation
+version: main
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

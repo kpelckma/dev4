@@ -1,0 +1,1 @@
+include::doc/modules/ROOT/pages/README.adoc[]

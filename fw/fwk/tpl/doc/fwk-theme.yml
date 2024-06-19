@@ -1,0 +1,14 @@
+extends: default
+footer:
+  recto:
+    center:
+      font-color: #999999
+      content: '{projectname} - {projectconf} - {projectversion}'
+    right:
+      content: '{page-number}'
+  verso:
+    center:
+      font-color: #999999
+      content: '{projectname} - {projectconf} - {projectversion}'
+    left:
+      content: '{page-number}'

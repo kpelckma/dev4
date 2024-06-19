@@ -1,0 +1,101 @@
+= Module Tcl
+
+This is the main module Tcl.
+It is sourced under `::fwfwk::src::<ModuleName>` namespace when added with the  `addSrcModule {}` procedure.
+
+IMPORTANT: Module Tcl should contain defined procedures which are called by the `fwk` dependently on the task run. +
+Required procedures are listed in <<procedures>> section.
+
+Each procedure inside the module Tcl is included to the module namespace.
+Also each variable created inside module Tcl is available under module namespace.
+
+ ::fwfwk::src::<moduleNamespaceName>::<procedureName>
+ ::fwfwk::src::<moduleNamespaceName>::<VariableName>
+
+== Procedures
+
+`init {}`::
+
+The `init` procedure from this file is run as a first one.
+The ``init` procedure should include `addSrcModule` with main project modules like bsp and application.
+This is also the place for all the configuration variables definitions with it default values assigned. 
+
+`setSources {}`::
+It is executed during the project creation and build.
+The main suppose is to set modules Tcl variables with the sources.
+It should not contain tool depended procedures.
+
+IMPORTANT: Sources path should be in relation to the tcl file path. Most often this will be `../hdl/source.vhd` +
+As well `fwk` variables with full path can be used: `${::fwfwk::SrcPath}/path/source.vhd` +
+
+
+`setAddressSpace {}`::
+The `setAddressSpace` procedure should add address space elements to top project address space structure.
+The addAddressSpace procedure should be used.
+
+`doOnCreate {}`::
+This procedure is executed during the project creation. It can contain all the tool depended procedures.
+
+`doOnBuild {}`::
+This procedure is executed during the project build process: synthesis + implementation.
+It is executed as the first one before synthesis.
+It can contain all the tool depended procedures.
+
+
+Additionally all the main framework procedures are aliased to be available inside modules with namespace argument pointing to current namespace.
+
+Instead of full syntax:
+
+ ::fwfwk::addModule ::fwfwk::src::app modulename src/mod/modulename/tcl/main.tcl
+
+or
+
+ ::fwfwk::addModule [namespace current] modulename src/mod/modulename/tcl/main.tcl
+
+You can run:
+
+  addModule modulename src/mod/modulename/tcl/main.tcl
+
+== Example
+
+.[ModuleSrcPath]/tcl/main.tcl
+[source,tcl]
+----
+# ==============================================================================
+proc init {} {
+  variable Mode "A"
+  addSrcModule bsp ${::fwfwk::SrcPath}/sub_module/tcl/main.tcl
+}
+
+# ==============================================================================
+proc setSources {} {
+  variable Vhdl
+  variable Mode
+
+  if { $Mode == "A" } {
+    lappend Vhdl ../hdl/component_a.vhd
+  } else {
+    lappend Vhdl ../hdl/component_b.vhd
+  }
+  genModVerFile VHDL ../hdl/pkg_module_name_version.vhd
+
+  lappend Vhdl ../hdl/pkg_module_name_version.vhd
+  lappend Vhdl ../hdl/pkg_config.vhd
+}
+
+# ==============================================================================
+proc setAddressSpace {} {
+  variable AddressSpace
+  addAddressSpace AddressSpace "" IBUS 0x00000000 ../hdl/pkg_address_space_module.vhd
+}
+
+# ==============================================================================
+proc doOnCreate {} {
+  variable Vhdl
+  addSources Vhdl -lib work
+}
+
+# ==============================================================================
+proc doOnBuild {} {
+}
+----

@@ -1,0 +1,90 @@
+// Sourcing the images
+
+:imagesdir: modules/ROOT/images
+
+include::modules/ROOT/pages/index.adoc[]
+
+<<<
+
+include::modules/ROOT/pages/prerequisites.adoc[]
+
+<<<
+
+include::modules/ROOT/pages/quick_start.adoc[]
+
+<<<
+
+include::modules/ROOT/pages/firmware.adoc[]
+
+<<<
+
+
+== Module Documentations
+
+=== BSP-SIS8300KU
+
+:imagesdir: ../src/hw/bsp_sis8300ku/doc/modules/ROOT/images
+include::../src/hw/bsp_sis8300ku/doc/modules/ROOT/pages/hardware.adoc[leveloffset=2]
+<<<
+include::../src/hw/bsp_sis8300ku/doc/modules/ROOT/pages/firmware.adoc[leveloffset=2]
+<<<
+
+=== DAQ
+
+:imagesdir: ../src/hw/daq/doc/modules/ROOT/images
+include::../src/hw/daq/doc/modules/ROOT/pages/firmware.adoc[leveloffset=2]
+<<<
+include::../src/hw/daq/doc/modules/ROOT/pages/continous_mode.adoc[leveloffset=2]
+<<<
+
+=== Timing
+
+:imagesdir: ../src/hw/timing/doc/modules/ROOT/images
+include::../src/hw/timing/doc/modules/ROOT/pages/intro.adoc[leveloffset=2]
+
+<<<
+
+=== RTM_DS8VM1
+
+:imagesdir: ../src/hw/rtm_ds8vm1/doc/modules/ROOT/images
+include::../src/hw/rtm_ds8vm1/doc/modules/ROOT/pages/hardware.adoc[leveloffset=2]
+<<<
+include::../src/hw/rtm_ds8vm1/doc/modules/ROOT/pages/pll_config.adoc[leveloffset=2]
+<<<
+
+=== RTM_DWC8VM1
+
+:imagesdir: ../src/hw/rtm_dwc8vm1/doc/modules/ROOT/images
+include::../src/hw/rtm_dwc8vm1/doc/modules/ROOT/pages/hardware.adoc[leveloffset=2]
+
+<<<
+
+
+=== FPGA Config Manager (FCM)
+
+:imagesdir: ../src/hw/fpga_config_manager/doc/modules/ROOT/images
+include::../src/hw/fpga_config_manager/doc/modules/ROOT/pages/index.adoc[leveloffset=2]
+
+
+include::../src/hw/fpga_config_manager/doc/modules/ROOT/pages/firmware.adoc[leveloffset=2]
+
+<<<
+
+include::modules/addressmap_{projectconf}/pages/addressmap.adoc[leveloffset=1]
+
+<<<
+
+== Framework Documentation
+
+:imagesdir: ../fwk/doc/modules/ROOT/images
+include::../fwk/doc/modules/ROOT/pages/ch_fwk.adoc[leveloffset=2]
+include::../fwk/doc/modules/ROOT/pages/ch_main_comp.adoc[leveloffset=2]
+include::../fwk/doc/modules/ROOT/pages/ch_src_modules.adoc[leveloffset=2]
+include::../fwk/doc/modules/ROOT/pages/ch_mod_tcl.adoc[leveloffset=2]
+include::../fwk/doc/modules/ROOT/pages/ch_prj.adoc[leveloffset=2]
+include::../fwk/doc/modules/ROOT/pages/ch_prj_tcl.adoc[leveloffset=2]
+
+
+
+
+

@@ -1,0 +1,136 @@
+// sub module - memory over axi4l interface
+addrmap submodule_a {
+  desyrdl_interface = "AXI4L";
+  external mem {
+    memwidth = 32;
+    mementries = 64;
+    } MEM;
+} ;
+
+/*
+ module a address space
+ */
+addrmap module_a {
+  name = "Example module A address space";
+  desc = "Example provides all suported constructs by DesyRDL tool";
+  desyrdl_interface = "AXI4L";
+
+  reg { //constant in user logic
+    desc = "Identification number" ;
+		default sw = r;
+		default hw = rw;
+		field {} data[32] ;
+	} ID @0x00;
+
+	reg { //constant in RDL with 4 fields
+		default sw = r;
+		default hw = r;
+		field {} changes [8] = 0x00;
+		field {} patch [8] = 0x01;
+		field {} minor [8] = 0x01;
+		field {} major [8] = 0x00;
+	} VERSION @0x04;
+
+	reg { // user register, like IBUS WORD_USER, default value 0xA at address 0x10
+		default sw = rw;
+		default hw = r;
+		field {} data[32] = 0x0000000A;
+	} USER @0x10;
+
+	reg { // test register, sw and hw can read, we flag needed to trigger write from hw
+		default sw = rw;
+		default hw = rw;
+    default we = true;
+		field {} data[32] = 0x0000000B;
+	} TEST ;
+
+	reg { // test register, sw and hw can read, we flag needed to trigger write from hw
+		default sw = rw;
+		default hw = r;
+		field {} data[32] = 0x0000001B;
+	} TABLE [12] ;
+
+  reg { // wire 2D register, this is like EXTERNAL IBUS
+    name="clock frequencies";
+		default sw = r;
+		default hw = w;
+		field {} data[32] ;
+  } CLK_FREQ [4] ;
+
+	reg COEF { // definition of register with no instantion, type only, fixed type: 1.1.16
+    name = "coeffitient";
+		default sw = rw;
+		default hw = r;
+    desyrdl_data_type = "fixed16"; // by default all are uint, types: int, uint, fixed<#>, ufixed<#>, float
+		field {} coef[18] ;
+	};
+
+  COEF SSP_A[2][2]; // instantiate 3D 2x2 table of coefficients
+
+	reg INFO { //define type of register and instantiate the same time 2D table
+		default sw = rw;
+		default hw = r;
+		field {} data[32];
+	} INFO[2] ;
+
+  INFO INFO_NEW[4]; // new 4D table of INFO register
+  INFO_NEW.data->reset = 32'd10; // change default value of data filed of INFO register type
+
+  reg { // counter register, sw and hw can read
+		default sw = r;
+		default hw = r;
+    default hwclr = true; // clear signal
+		field {counter;} cnt_a[16]; // default inc counter with incrvalue=1
+		field {
+      counter;
+      incrwidth=4;
+    } cnt_b[16]; //dynamic value, if incrwidth > 0 then use field signal of width incrwidth
+	} COUNTER ;
+
+  external mem { // memory, always external for HW implementation
+    memwidth = 32;
+    mementries = 64;
+  } MEM_TEST1;
+
+  external mem {
+    memwidth = 18;
+    mementries = 128;
+    desyrdl_data_type = "fixed16";
+  } MEM_TEST2;
+
+  external mem {
+    memwidth = 18;
+    mementries = 128;
+    desyrdl_interface = "AXI4L";
+    desyrdl_data_type = "fixed16";
+  } MEM_TEST_V[2];
+
+  external module_b MODB_0 ;
+  external module_b MODB_1 ;
+  external module_b MODB[2] ;
+
+  // sub registers
+  regfile subcore {
+
+    alignment = 4;
+
+    reg {
+      desc  = "";
+      default sw    = rw ;
+      default hw    = r ;
+      field {} data[32] ;
+    } CORE_CONTROL;
+
+    reg {
+      desc  = ""  ;
+      default sw    = r ;
+      default hw    = w ;
+      field {} data[32] ;
+    } CORE_STATUS;
+  };
+  // 2d module
+  subcore CORE_0;
+  subcore CORE[2];
+
+};
+

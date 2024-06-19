@@ -1,0 +1,7 @@
+variable DesyRdlSources
+{%- for file in generated_files.vhdl %}
+lappend DesyRdlSources {{file}}
+{%- endfor %}
+
+add_files $DesyRdlSources
+set_property LIBRARY "desyrdl" [get_files $DesyRdlSources]

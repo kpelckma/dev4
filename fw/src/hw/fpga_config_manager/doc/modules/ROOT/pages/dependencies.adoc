@@ -1,0 +1,7 @@
+== HDL Dependencies
+
+This module depends on the following modules and/or libraries:
+
+* https://gitlab.msktools.desy.de/fpgafw/lib/desy_vhdl[DESY VDHL Library]
+
+Registers are generated using https://pypi.org/project/desyrdl[DesyRDL]

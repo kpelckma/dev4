@@ -1,0 +1,6 @@
+name: rtm_dwc8vm1
+title: DRTM-DWC8VM1 Documentation
+version: main
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

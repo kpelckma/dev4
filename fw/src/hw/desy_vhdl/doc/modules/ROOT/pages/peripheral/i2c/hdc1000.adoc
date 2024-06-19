@@ -1,0 +1,48 @@
+= HDC1000 FPGA Firmware Implementation
+
+ifndef::imagesdir[:imagesdir: ../images]
+:stem: asciimath
+
+== General
+
+Texas Instruments HDC1000 is a low Power digital Humidity Sensor with Integrated Temperature Sensor and I2C Interface https://www.ti.com/product/HDC1000[*^{counter:link}^*]. +
+
+_FPGA FW HDC-Configuration_:
+
+* Temperature and Humidity are acquired in one sequence
+* Temperature Measurement Resolution: 14 bit 
+* Humidity Measurement Resolution: 14 bit 
+
+CAUTION: Device Measurement Configuration is fix set to C_CONFIG_DATA = x"1000"
+
+== Prerequest for Design Integration
+
+The FW Design of HDC1000 is ready to use together with the FW entity ENT_I2C_CONTROLLER. The HDC1000 component should be connected to the controller component. The controller converts the IC specific read and write commands to drive and scope the external HDC1000 device. Two iobuf primitives are required aditionally. See image below.
+
+image::I2C_integration.png[]
+
+== FPGA Firmware Design
+
+This Firmware design implementation of HDC1000 operates as a I2C subordinate device. It is a costimized statemachine for continious read communication. 
+
+_Biref description_:
+
+* Trigger starts a sampling process
+** There is no termination condition apart from reset
+** Data valid indicating that Temperature and Humidity been read
+* Conversion time 14 ms ( ~ RH 6.5 ms + TEMP 6.35 ms)
+
+== Design Implementation 
+
+image::hdc1000_fsm.svg[]
+
+== Conversion Formula
+
+:stem: asciimath
+
+[stem]
+++++
+ "Temperature in °C" = "po_temperature"/2^16 * 165 - 40
+
+ "Humidity in %RH" = "po_humidity" / 2^16 * 100 
+++++

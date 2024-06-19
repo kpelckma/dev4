@@ -1,0 +1,140 @@
+== Register Descriptions
+
+[cols="6,3,3,3,9"]
+|===
+|Name |Register Width |Number of Elements | RO/RW | Description
+
+
+|ID
+|32
+|1
+|RO
+|Hard-coded to x"5000D851"
+
+
+|VERSION
+|32
+|1
+|RO
+|Shows the revision number.
+
+|RF_PERMIT
+|1
+|1
+|RW
+|Handles interlock on the RTM side. 1 -> Drive will be allowed
+
+|ATT_SEL
+|9
+|1
+|RW
+|Select attenuator to be set by ATT_VAL register. 1 bit per attenuator +
+bit[0:7]: attenuator on ADC channel 0 to 7  +
+bit[8]: vector modulator output attenuator +
+e.g. to selct attenuators on ch 1 and 5 set value = 2^1 + 2^5 = 34 +
+
+|WORD_ATT_VAL
+|6
+|1
+|RW
+|Attenuator value to set for HMC624LP4 chip +
+Attenuation = (63 - value) / 2 dBm. +
+Min attenuation 0 dBm: value = 63, max attenuation 31.5 dBm: value = 0 
+
+|ATT_STATUS
+|1
+|1
+|RO
+|Shows if there is I2C Communication with any attenuators. When it is 1 there is an on-going i2c transaction.
+
+|ADC_A
+|25 (Signed)
+|1
+|RO
+|LO Power Voltage digitized by LTC2493 (I2C Address: 0x43)
+
+|ADC_B
+|25 (Signed)
+|1
+|RO
+|LO Channel Temperature
+
+|ADC_C
+|25 (Signed)
+|1
+|RO
+|Reference Channel Power digitized by LTC2403 (I2C Address: 0x43)
+
+|ADC_D
+|25 (Signed)
+|1
+|RO
+|Reference Channel temperature digitized by LTC2403 (I2C Address: 0x43)
+
+
+|ADC_STATUS
+|4
+|1
+|RO
+|Shows if there is on-going I2C communication with ADC
+
+
+|ADC_READ_ENA
+|4
+|1
+|RW
+|Enables periodical reading of ADC values
+
+|DACAB
+|12
+|1
+|RW
+|Set both DACs for common mode voltave for the Vector Modulator. Writes to both In-phase and Quadrature=phase biasing of Vector Modulator. Typical value should be = 850
+
+
+|DAC_STATUS
+|32
+|3
+|RO
+|Counts the number of bursts sent to AXI.4 Slave
+
+
+|WORD_DAC
+|12
+|2
+|RO
+|Like the DACAB register just allows to set the common mode voltage for the Vector Modulator seaprately for In-phase and Quadrature.+
+reg[0]: In-phase channel  +
+reg[1]: Quadrature channel +
+
+
+|EXT_INTERLOCK
+|1
+|1
+|RO
+|Monitoring the External Interlock coming from the Front Panel of the RTM +
+If it is 1 that means interlock is preventing the drive +
+If it is 0 that means drive is permitted. + 
+
+
+|HYT271_TEMP
+|14
+|1
+|RO
+|Temperature readout from the HYT271 chip
+
+
+|HYT271_HUMI
+|14
+|1
+|RO
+|Humidity readout from the HYT271 chip
+
+
+|HYT271_READ_ENA
+|14
+|1
+|RO
+|Enables the periodical readout from the HYT271 chip
+
+|===

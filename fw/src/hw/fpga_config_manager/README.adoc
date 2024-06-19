@@ -1,0 +1,26 @@
+== FPGA Configuration Manager Module README
+
+:imagesdir: doc/modules/ROOT/images
+
+image::fcm_logo.png[width=30%, align=center]
+
+FPGA Configuration Manager (FCM) module is responsible from handling main configuration primitives of Xilinx FPGA such as:
+
+* ICAP
+* STARTUP
+* FRAME_ECC
+
+It's main usage is to program the FPGA using PCIe register access. It manages this by writing the bit file into the EEPROM of the AMC board. This is possible using STARTUP primitive.
+
+It can later trigger programming of the FPGA using ICAP pritimitive.
+
+This component also has ability to detech Single Even Upsets (SEU) and even correct it to a certain point.
+
+image::fcm_bd.png[width=70%, align=center]
+
+
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+

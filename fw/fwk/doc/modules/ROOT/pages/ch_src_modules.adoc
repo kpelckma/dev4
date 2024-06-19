@@ -1,0 +1,76 @@
+[#ch_fwk_src_modules]
+= Sources Module
+ifndef::imagesdir[:imagesdir: ../images]
+
+The sources in the framework are organized in the form of modules.
+There are a few types of modules explained in <<ch_fwk_src_mod_typ>>.
+
+[IMPORTANT]
+Each module should follow specific folder and tcl script structure explained in <<ch_fwk_src_mod_str>>. If for some reason this cannot be satisfied, the module can be integrated into the framework using externals.
+
+// TODO: Add 'externals' page.
+
+[#ch_fwk_src_mod_str]
+== Folder Structure
+Each module should follow a bare minimum <<fig_fwk_mod_structure,folder structure>> in order to work seamlessly with FWK. 
+
+[#fig_fwk_mod_structure]
+[title="Module Folder Structure"]
+image::mod_folder_str.svg[]
+{empty}
+
+
+.Folders Description
+{sp}
+[cols="12,88",caption=,frame=none,grid=none,stripes=none]
+|===
+| **doc** | documentation of the module. Explained in  <<ch_doc.adoc#ch_fwk_doc, Documentation Section>>
+| **hdl** | contains all the module HDL sources: VHDL, Verilog, SV
+| **sim** | contains all files required for the module simulation: test benches, scripts, test data
+| **tcl** | location of the Tcl files required by the framework or by the module generation. More in <<ch_mod_tcl.adoc#,Module Tcl>>
+| **cstr** | Constraints Folder (Optional)
+| **...** | additional folders, depending on the type of module
+|===
+
+[NOTE]
+Additional folders inside the module folder should have short names (Possibly three letters)
+
+[#ch_fwk_src_mod_typ]
+== Types of Modules
+
+Modules can come in many different shapes and sizes. Below are some of the most common types of modules available across the framework. Keep in mind that these are just categorizing the modules. In terms of folder and tcl structure they are identical.
+
+[WARNING]
+Modules should have proper pre-fix in front of their names. (Both in VHDL and file name)
+
+[cols="12,88",caption=,frame=none,grid=none,stripes=none]
+|===
+| **bsp**
+| BSP (Board Support Package), +
+provides all the necessary sub-modules which realizes critical board components such as PCIe, DDR, I2C and SPI devices etc.It has a prefix *bsp-*. Eg; bsp-damc-fmc2zup
+
+| **app**
+| Hardware independent application logic, +
+It can be tied to many BSPs using different payloads. It has a prefix *app-*. Eg; app-single-cavity-regulation
+
+| **lib**
+| Library is used as 'VHDL Library' inside any module. For more information visit here. It has a prefix *lib-*. Eg; lib-dsp
+
+// TODO: Add Library explanation. Categorize them
+
+| **rtm**
+| MicroTCA.4 specific Rear-Transition Module. It can be considered as BSP for the RTM Board. It is usually belongs to the application since RTMs are selected according to the application.
+It has the prefix *rtm-*. Eg; rtm-drtm-ds8vm1
+
+| **fmc**
+| FPGA Mezzanine Cards. It can be considered as BSP for the FMC Board. It is usually belongs to the application since FMCs are selected according to the application.
+It has the prefix *fmc-*. Eg; fmc-dfmc-unio
+
+| **ext**
+| External module is something which is not tied to MicroTCA Environment+
+It has the prefix *ext-*. Eg; ext-pz16m
+
+| none
+| Miscellaneous. If the module doesn't belong to any other category it does not need to have any prefix.
+
+|===

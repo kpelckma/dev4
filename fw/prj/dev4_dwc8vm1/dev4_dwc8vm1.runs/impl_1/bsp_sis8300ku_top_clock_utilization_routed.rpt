@@ -1,0 +1,976 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2020.1 (lin64) Build 2902540 Wed May 27 19:54:35 MDT 2020
+| Date              : Mon Sep 25 13:35:32 2023
+| Host              : workstation running 64-bit unknown
+| Command           : report_clock_utilization -file bsp_sis8300ku_top_clock_utilization_routed.rpt
+| Design            : bsp_sis8300ku_top
+| Device            : xcku040-ffva1156
+| Speed File        : -1  PRODUCTION 1.25 12-04-2018
+| Temperature Grade : C
+| Design State      : Routed
+----------------------------------------------------------------------------------------------------
+
+Clock Utilization Report
+
+Table of Contents
+-----------------
+1. Clock Primitive Utilization
+2. Global Clock Resources
+3. Global Clock Source Details
+4. Local Clock Details
+5. Clock Regions : Clock Primitives
+6. Clock Regions : Load Primitives
+7. Clock Regions : Global Clock Summary
+8. Clock Regions : Routing Resource Utilization
+9. Device Cell Placement Summary for Global Clock g0
+10. Device Cell Placement Summary for Global Clock g1
+11. Device Cell Placement Summary for Global Clock g2
+12. Device Cell Placement Summary for Global Clock g3
+13. Device Cell Placement Summary for Global Clock g4
+14. Device Cell Placement Summary for Global Clock g5
+15. Device Cell Placement Summary for Global Clock g6
+16. Device Cell Placement Summary for Global Clock g7
+17. Device Cell Placement Summary for Global Clock g8
+18. Device Cell Placement Summary for Global Clock g9
+19. Device Cell Placement Summary for Global Clock g10
+20. Device Cell Placement Summary for Global Clock g11
+21. Device Cell Placement Summary for Global Clock g12
+22. Device Cell Placement Summary for Global Clock g13
+23. Device Cell Placement Summary for Global Clock g14
+24. Device Cell Placement Summary for Global Clock g15
+25. Device Cell Placement Summary for Global Clock g16
+26. Clock Region Cell Placement per Global Clock: Region X0Y0
+27. Clock Region Cell Placement per Global Clock: Region X1Y0
+28. Clock Region Cell Placement per Global Clock: Region X0Y1
+29. Clock Region Cell Placement per Global Clock: Region X1Y1
+30. Clock Region Cell Placement per Global Clock: Region X2Y1
+31. Clock Region Cell Placement per Global Clock: Region X3Y1
+32. Clock Region Cell Placement per Global Clock: Region X0Y2
+33. Clock Region Cell Placement per Global Clock: Region X1Y2
+34. Clock Region Cell Placement per Global Clock: Region X2Y2
+35. Clock Region Cell Placement per Global Clock: Region X3Y2
+36. Clock Region Cell Placement per Global Clock: Region X0Y3
+37. Clock Region Cell Placement per Global Clock: Region X1Y3
+38. Clock Region Cell Placement per Global Clock: Region X2Y3
+39. Clock Region Cell Placement per Global Clock: Region X3Y3
+40. Clock Region Cell Placement per Global Clock: Region X0Y4
+41. Clock Region Cell Placement per Global Clock: Region X1Y4
+42. Clock Region Cell Placement per Global Clock: Region X2Y4
+43. Clock Region Cell Placement per Global Clock: Region X3Y4
+
+1. Clock Primitive Utilization
+------------------------------
+
++------------+------+-----------+-----+--------------+--------+
+| Type       | Used | Available | LOC | Clock Region | Pblock |
++------------+------+-----------+-----+--------------+--------+
+| BUFGCE     |   12 |       240 |   0 |            0 |      0 |
+| BUFGCE_DIV |    0 |        40 |   0 |            0 |      0 |
+| BUFGCTRL   |    0 |        80 |   0 |            0 |      0 |
+| BUFG_GT    |    5 |       120 |   0 |            0 |      0 |
+| MMCM       |    3 |        10 |   1 |            0 |      0 |
+| PLL        |    3 |        20 |   0 |            0 |      3 |
++------------+------+-----------+-----+--------------+--------+
+
+
+2. Global Clock Resources
+-------------------------
+
++-----------+-----------+-----------------+------------+---------------+--------------+------+-------------------+-------------------+-------------+-----------------+--------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Source Id | Driver Type/Pin | Constraint | Site          | Clock Region | Root | Clock Delay Group | Load Clock Region | Clock Loads | Non-Clock Loads | Clock Period | Clock                                                                                      | Driver Pin                                                                                                                                                         | Net                                                                                                                                                          |
++-----------+-----------+-----------------+------------+---------------+--------------+------+-------------------+-------------------+-------------+-----------------+--------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | src0      | BUFG_GT/O       | None       | BUFG_GT_X0Y95 | X3Y3         | X2Y2 |                   |                13 |       37731 |               0 |        8.000 | axi4_aclk                                                                                  | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/bufg_gt_userclk/O | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g1        | src0      | BUFG_GT/O       | None       | BUFG_GT_X0Y92 | X3Y3         | X2Y2 |                   |                 1 |        1051 |               0 |        4.000 | txoutclk_out[3]                                                                            | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/bufg_gt_pclk/O    | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_PCLK    |
+| g2        | src0      | BUFG_GT/O       | None       | BUFG_GT_X0Y86 | X3Y3         | X2Y2 |                   |                 1 |          33 |               0 |        4.000 | txoutclk_out[3]                                                                            | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/bufg_gt_coreclk/O | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_CORECLK |
+| g3        | src0      | BUFG_GT/O       | None       | BUFG_GT_X0Y74 | X3Y3         | X3Y3 |                   |                 1 |           1 |               0 |        8.000 | mcap_clk                                                                                   | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/bufg_mcap_clk/O             | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/MCAPCLK               |
+| g4        | src1      | BUFGCE/O        | None       | BUFGCE_X0Y37  | X0Y1         | X1Y1 |                   |                 6 |       26226 |               3 |        5.000 | mmcm_clkout0                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/u_bufg_divClk/O                                                      | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0                                           |
+| g5        | src2      | BUFGCE/O        | None       | BUFGCE_X0Y88  | X0Y3         | X1Y2 |                   |                 9 |        6029 |               0 |        8.000 | APP_CLK                                                                                    | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkout1_buf/O                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g6        | src1      | BUFGCE/O        | None       | BUFGCE_X0Y36  | X0Y1         | X1Y1 |                   |                 3 |        1619 |               0 |       10.000 | mmcm_clkout6                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/u_bufg_riuClk/O                                                      | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk                                                     |
+| g7        | src1      | BUFGCE/O        | None       | BUFGCE_X0Y26  | X0Y1         | X0Y1 |                   |                 2 |         536 |               0 |       20.000 | mmcm_clkout5                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/u_bufg_dbg_clk/O                                                     | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/dbg_clk                                                        |
+| g8        | src3      | BUFGCE/O        | None       | BUFGCE_X0Y8   | X0Y0         | X0Y0 |                   |                 2 |         460 |               0 |       33.000 | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.u_bufg_icon_tck/O                                                                                               | dbg_hub/inst/BSCANID.u_xsdbm_id/itck_i                                                                                                                       |
+| g9        | src4      | BUFG_GT/O       | None       | BUFG_GT_X0Y75 | X3Y3         | X3Y3 |                   |                 1 |         145 |               0 |       10.000 | PCIE_REF_CLK                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/bufg_gt_sysclk/O                                                            | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/ext_ch_gt_drpclk                                                      |
+| g10       | src2      | BUFGCE/O        | None       | BUFGCE_X0Y80  | X0Y3         | X0Y3 |                   |                 2 |          73 |               0 |        4.000 | APP_2X_CLK                                                                                 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkout2_buf/O                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_2x                                                                                               |
+| g11       | src5      | BUFGCE/O        | None       | BUFGCE_X0Y97  | X0Y4         | X2Y2 |                   |                 1 |          65 |               0 |              |                                                                                            | gen_clk_counters[3].l_data_rdy_q_reg[2]_i_1/O                                                                                                                      | dac_fb_clk                                                                                                                                                   |
+| g12       | src6      | BUFGCE/O        | None       | BUFGCE_X0Y72  | X0Y3         | X1Y2 |                   |                 2 |          65 |               1 |        8.000 | CLK_DIV0_CLK05                                                                             | ins_sis8300ku_bsp_logic_top/blk_clock.ins_bufg_ext_clk/O                                                                                                           | ins_sis8300ku_bsp_logic_top/ad9510_clk05                                                                                                                     |
+| g13       | src7      | BUFGCE/O        | None       | BUFGCE_X0Y27  | X0Y1         | X0Y1 |                   |                 3 |          17 |               2 |        8.000 | 125MHZ_SYS_CLK                                                                             | sys_125_clk_BUFGCE_inst/O                                                                                                                                          | sys_125_clk_BUFGCE                                                                                                                                           |
+| g14       | src8      | BUFGCE/O        | None       | BUFGCE_X0Y52  | X0Y2         | X0Y2 |                   |                 3 |           6 |               0 |        5.000 | payload_i[bsp_domain_clock][1]                                                             | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFG_inst/O                                                                                             | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFGCE                                                                                            |
+| g15       | src8      | BUFGCE/O        | None       | BUFGCE_X0Y50  | X0Y2         | X0Y2 | n/a               |                 1 |           0 |               1 |        8.000 | mmcm0_clkout2                                                                              | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/ins_clk_app_buf/O                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_app_clk                                                                                                    |
+| g16       | src2      | BUFGCE/O        | None       | BUFGCE_X0Y87  | X0Y3         | X1Y2 | n/a               |                 1 |           0 |               1 |        8.000 | clkfbout                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfb_buf/O                                                                                                     | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout_buf                                                                                              |
++-----------+-----------+-----------------+------------+---------------+--------------+------+-------------------+-------------------+-------------+-----------------+--------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+
+
+3. Global Clock Source Details
+------------------------------
+
++-----------+----------------+------------------------+---------------------+---------------------+--------------+-------------+-----------------+---------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Source Id | Global Id      | Driver Type/Pin        | Constraint          | Site                | Clock Region | Clock Loads | Non-Clock Loads | Source Clock Period | Source Clock                                                                               | Driver Pin                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Net                                                                                                                                                                                                                                                                                                                                                                                                                           |
++-----------+----------------+------------------------+---------------------+---------------------+--------------+-------------+-----------------+---------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| src0      | g0, g1, g2, g3 | GTHE3_CHANNEL/TXOUTCLK | GTHE3_CHANNEL_X0Y15 | GTHE3_CHANNEL_X0Y15 | X3Y3         |           5 |               0 |               4.000 | txoutclk_out[3]                                                                            | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/gt_wizard.gtwizard_top_i/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_i/inst/gen_gtwizard_gthe3_top.sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_gtwizard_gthe3_inst/gen_gtwizard_gthe3.gen_channel_container[3].gen_enabled_channel.gthe3_channel_wrapper_inst/channel_inst/gthe3_channel_gen.gen_gthe3_channel_inst[3].GTHE3_CHANNEL_PRIM_INST/TXOUTCLK | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/gt_wizard.gtwizard_top_i/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_i/inst/gen_gtwizard_gthe3_top.sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_gtwizard_gthe3_inst/gen_gtwizard_gthe3.gen_channel_container[3].gen_enabled_channel.gthe3_channel_wrapper_inst/channel_inst/txoutclk_out[3] |
+| src1      | g4             | MMCME3_ADV/CLKOUT0     | MMCME3_ADV_X0Y1     | MMCME3_ADV_X0Y1     | X0Y1         |           1 |               0 |               5.000 | mmcm_clkout0                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/gen_mmcme3.u_mmcme_adv_inst/CLKOUT0                                                                                                                                                                                                                                                                                                                                                          | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/mmcm_clkout0                                                                                                                                                                                                                                                                                                                    |
+| src1      | g7             | MMCME3_ADV/CLKOUT5     | MMCME3_ADV_X0Y1     | MMCME3_ADV_X0Y1     | X0Y1         |           1 |               0 |              20.000 | mmcm_clkout5                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/gen_mmcme3.u_mmcme_adv_inst/CLKOUT5                                                                                                                                                                                                                                                                                                                                                          | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/mmcm_clkout5                                                                                                                                                                                                                                                                                                                    |
+| src1      | g6             | MMCME3_ADV/CLKOUT6     | MMCME3_ADV_X0Y1     | MMCME3_ADV_X0Y1     | X0Y1         |           1 |               0 |              10.000 | mmcm_clkout6                                                                               | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/gen_mmcme3.u_mmcme_adv_inst/CLKOUT6                                                                                                                                                                                                                                                                                                                                                          | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/mmcm_clkout6                                                                                                                                                                                                                                                                                                                    |
+| src2      | g16            | MMCME3_ADV/CLKFBOUT    | None                | MMCME3_ADV_X0Y3     | X0Y3         |           1 |               0 |               8.000 | clkfbout                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/inst_mmcm_adv/CLKFBOUT                                                                                                                                                                                                                                                                                                                                                                                                                  | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout                                                                                                                                                                                                                                                                                                                                                                   |
+| src2      | g5             | MMCME3_ADV/CLKOUT0     | None                | MMCME3_ADV_X0Y3     | X0Y3         |           1 |               0 |               8.000 | APP_CLK                                                                                    | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/inst_mmcm_adv/CLKOUT0                                                                                                                                                                                                                                                                                                                                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkout0                                                                                                                                                                                                                                                                                                                                                                    |
+| src2      | g10            | MMCME3_ADV/CLKOUT1     | None                | MMCME3_ADV_X0Y3     | X0Y3         |           1 |               0 |               4.000 | APP_2X_CLK                                                                                 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/inst_mmcm_adv/CLKOUT1                                                                                                                                                                                                                                                                                                                                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkout1                                                                                                                                                                                                                                                                                                                                                                    |
+| src3      | g8             | BSCANE2/TCK            | None                | CONFIG_SITE_X0Y0    | X3Y1         |           1 |               0 |              33.000 | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK                                                                                                                                                                                                                                                                                                                                                                                                 | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/tck_bs                                                                                                                                                                                                                                                                                                                                                          |
+| src4      | g9             | IBUFDS_GTE3/ODIV2      | GTHE3_COMMON_X0Y3   | GTHE3_COMMON_X0Y3   | X3Y3         |           2 |               0 |              10.000 | PCIE_REF_CLK                                                                               | ins_pcie_ibufds_gte3/ODIV2                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | pcie_sys_clk                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| src5      | g11            | IBUFCTRL/O             | IOB_X0Y229          | IOB_X0Y229          | X0Y4         |           1 |               0 |                     |                                                                                            | ins_sis8300ku_bsp_logic_top/blk_dac.ins_dac_clk_fb_buf/IBUFCTRL_INST/O                                                                                                                                                                                                                                                                                                                                                                                                                     | ins_sis8300ku_bsp_logic_top/blk_dac.ins_dac_clk_fb_buf/O                                                                                                                                                                                                                                                                                                                                                                      |
+| src6      | g12            | IBUFCTRL/O             | IOB_X0Y184          | IOB_X0Y184          | X0Y3         |           1 |               0 |               8.000 | CLK_DIV0_CLK05                                                                             | ins_sis8300ku_bsp_logic_top/blk_clock.ins_ext_clk05_diff/IBUFCTRL_INST/O                                                                                                                                                                                                                                                                                                                                                                                                                   | ins_sis8300ku_bsp_logic_top/blk_clock.ins_ext_clk05_diff/O                                                                                                                                                                                                                                                                                                                                                                    |
+| src7      | g13            | IBUFCTRL/O             | IOB_X0Y73           | IOB_X0Y73           | X0Y1         |           1 |               0 |               8.000 | 125MHZ_SYS_CLK                                                                             | ins_sysclk_buf/IBUFCTRL_INST/O                                                                                                                                                                                                                                                                                                                                                                                                                                                             | ins_sysclk_buf/O                                                                                                                                                                                                                                                                                                                                                                                                              |
+| src8      | g15            | MMCME3_ADV/CLKOUT2     | None                | MMCME3_ADV_X0Y2     | X0Y2         |           1 |               0 |               8.000 | mmcm0_clkout2                                                                              | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/inst_mmcme3_base/CLKOUT2                                                                                                                                                                                                                                                                                                                                                                                                                    | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/mmcm0_clkout2                                                                                                                                                                                                                                                                                                                                                                  |
+| src8      | g14            | MMCME3_ADV/CLKOUT0     | None                | MMCME3_ADV_X0Y2     | X0Y2         |           1 |               0 |               5.000 | payload_i[bsp_domain_clock][1]                                                             | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/inst_mmcme3_base/CLKOUT0                                                                                                                                                                                                                                                                                                                                                                                                                    | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk                                                                                                                                                                                                                                                                                                                                                                    |
++-----------+----------------+------------------------+---------------------+---------------------+--------------+-------------+-----------------+---------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+
+
+4. Local Clock Details
+----------------------
+
++----------+-----------------+------------+--------------------+--------------+-------------+-----------------+--------------+-------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| Local Id | Driver Type/Pin | Constraint | Site/BEL           | Clock Region | Clock Loads | Non-Clock Loads | Clock Period | Clock | Driver Pin                                                                                            | Net                                                                                 |
++----------+-----------------+------------+--------------------+--------------+-------------+-----------------+--------------+-------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------||
+| 0        | FDRE/Q          | None       | SLICE_X88Y115/DFF2 | X3Y1         |           1 |               8 |              |       | ins_sis8300ku_bsp_logic_top/ins_config_manager/ins_icap/inst_icap_boot_fsm/gen_div_clk.icap_clk_reg/Q | ins_sis8300ku_bsp_logic_top/ins_config_manager/ins_icap/inst_icap_boot_fsm/icap_clk - Static -
++----------+-----------------+------------+--------------------+--------------+-------------+-----------------+--------------+-------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------||
+* Local Clocks in this context represents only clocks driven by non-global buffers
+** Clock Loads column represents the clock pin loads (pin count)
+*** Non-Clock Loads column represents the non-clock pin loads (pin count)
+
+
+5. Clock Regions : Clock Primitives
+-----------------------------------
+
++-------------------+---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+|                   |  Global Clock |     BUFGCE    |   BUFGCE_DIV  |    BUFGCTRL   |    BUFG_GT    |      MMCM     |      PLL      |
++-------------------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| Clock Region Name | Used  | Avail | Used  | Avail | Used  | Avail | Used  | Avail | Used  | Avail | Used  | Avail | Used  | Avail |
++-------------------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| X0Y0              |     6 |    24 |     1 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X1Y0              |     2 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |
+| X2Y0              |     0 |    24 |     0 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X3Y0              |     0 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |    24 |     0 |     0 |     0 |     0 |
+| X0Y1              |     7 |    24 |     4 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     1 |     1 |     0 |     2 |
+| X1Y1              |     4 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |
+| X2Y1              |     6 |    24 |     0 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X3Y1              |     1 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |    24 |     0 |     0 |     0 |     0 |
+| X0Y2              |     7 |    24 |     2 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     1 |     1 |     0 |     2 |
+| X1Y2              |     6 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |
+| X2Y2              |     7 |    24 |     0 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X3Y2              |     1 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |    24 |     0 |     0 |     0 |     0 |
+| X0Y3              |    11 |    24 |     4 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     1 |     1 |     0 |     2 |
+| X1Y3              |     5 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |
+| X2Y3              |     6 |    24 |     0 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X3Y3              |     5 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     5 |    24 |     0 |     0 |     0 |     0 |
+| X0Y4              |     2 |    24 |     1 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X1Y4              |     1 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |
+| X2Y4              |     3 |    24 |     0 |    24 |     0 |     4 |     0 |     8 |     0 |     0 |     0 |     1 |     0 |     2 |
+| X3Y4              |     1 |    24 |     0 |     0 |     0 |     0 |     0 |     0 |     0 |    24 |     0 |     0 |     0 |     0 |
++-------------------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+* Global Clock column represents track count; while other columns represents cell counts
+
+
+6. Clock Regions : Load Primitives
+----------------------------------
+
++-------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+
+|                   |   Global Clock   |        FF        |      LUTRAM      |  Block RAM (18K) |        DSP       |        GT        |      HARD IP     |
++-------------------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+
+| Clock Region Name | Used   | Avail   | Used   | Avail   | Used   | Avail   | Used   | Avail   | Used   | Avail   | Used   | Avail   | Used   | Avail   |
++-------------------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+
+| X0Y0              |      6 |      24 |   4181 |   23040 |     23 |    5760 |     26 |      72 |      1 |      96 |      0 |       0 |      0 |       0 |
+| X1Y0              |      2 |      24 |      0 |   24000 |      0 |    6240 |      0 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X2Y0              |      0 |      24 |      0 |   25920 |      0 |    7200 |      0 |      48 |      0 |     144 |      0 |       0 |      0 |       0 |
+| X3Y0              |      0 |      24 |      0 |   24000 |      0 |    3360 |      0 |      48 |      0 |      48 |      0 |       4 |      0 |       1 |
+| X0Y1              |      7 |      24 |   9182 |   23040 |    594 |    5760 |     25 |      72 |      2 |      96 |      0 |       0 |      0 |       0 |
+| X1Y1              |      4 |      24 |   4741 |   24000 |     18 |    6240 |      2 |      72 |      2 |      96 |      0 |       0 |      0 |       0 |
+| X2Y1              |      6 |      24 |   7788 |   25920 |      8 |    7200 |      0 |      48 |      0 |     144 |      0 |       0 |      0 |       0 |
+| X3Y1              |      1 |      24 |    349 |   24000 |      0 |    3360 |      0 |      48 |      0 |      48 |      0 |       4 |      0 |       0 |
+| X0Y2              |      7 |      24 |   8242 |   23040 |    102 |    5760 |      2 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X1Y2              |      6 |      24 |  10515 |   24000 |    310 |    6240 |      9 |      72 |      4 |      96 |      0 |       0 |      0 |       0 |
+| X2Y2              |      7 |      24 |   9560 |   25920 |     28 |    7200 |      4 |      48 |      0 |     144 |      0 |       0 |      0 |       0 |
+| X3Y2              |      1 |      24 |    385 |   24000 |      0 |    3360 |      0 |      48 |      0 |      48 |      0 |       4 |      0 |       0 |
+| X0Y3              |     11 |      24 |      2 |   23040 |      0 |    5760 |      0 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X1Y3              |      5 |      24 |   1040 |   24000 |      4 |    6240 |      0 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X2Y3              |      6 |      24 |   4825 |   25920 |      2 |    7200 |      2 |      48 |      0 |     144 |      0 |       0 |      0 |       0 |
+| X3Y3              |      5 |      24 |   5607 |   24000 |      4 |    3360 |     34 |      48 |      0 |      48 |      4 |       4 |      1 |       1 |
+| X0Y4              |      2 |      24 |      5 |   23040 |      0 |    5760 |      0 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X1Y4              |      1 |      24 |      0 |   24000 |      0 |    6240 |      0 |      72 |      0 |      96 |      0 |       0 |      0 |       0 |
+| X2Y4              |      3 |      24 |   2634 |   25920 |      0 |    7200 |     12 |      48 |      0 |     144 |      0 |       0 |      0 |       0 |
+| X3Y4              |      1 |      24 |   2265 |   24000 |      0 |    3360 |      0 |      48 |      0 |      48 |      0 |       4 |      0 |       1 |
++-------------------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+--------+---------+
+* Global Clock column represents track count; while other columns represents cell counts
+
+
+7. Clock Regions : Global Clock Summary
+---------------------------------------
+
+All Modules
++----+----+----+----+----+
+|    | X0 | X1 | X2 | X3 |
++----+----+----+----+----+
+| Y4 |  2 |  2 |  3 |  1 |
+| Y3 |  7 |  5 |  5 |  5 |
+| Y2 |  7 |  7 |  6 |  1 |
+| Y1 |  5 |  4 |  3 |  1 |
+| Y0 |  5 |  2 |  0 |  0 |
++----+----+----+----+----+
+
+
+8. Clock Regions : Routing Resource Utilization
+-----------------------------------------------
+
+All Modules
++-------------------+----------------------+----------------------+----------------------+----------------------+
+|                   |        HROUTES       |        HDISTRS       |        VROUTES       |        VDISTRS       |
++-------------------+------+-------+-------+------+-------+-------+------+-------+-------+------+-------+-------+
+| Clock Region Name | Used | Avail | Util% | Used | Avail | Util% | Used | Avail | Util% | Used | Avail | Util% |
++-------------------+------+-------+-------+------+-------+-------+------+-------+-------+------+-------+-------+
+| X0Y0              |    0 |    24 |  0.00 |    6 |    24 | 25.00 |    0 |    24 |  0.00 |    3 |    24 | 12.50 |
+| X1Y0              |    0 |    24 |  0.00 |    2 |    24 |  8.33 |    0 |    24 |  0.00 |    2 |    24 |  8.33 |
+| X2Y0              |    0 |    24 |  0.00 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X3Y0              |    0 |    24 |  0.00 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X0Y1              |    4 |    24 | 16.67 |    7 |    24 | 29.17 |    0 |    24 |  0.00 |    2 |    24 |  8.33 |
+| X1Y1              |    4 |    24 | 16.67 |    4 |    24 | 16.67 |    0 |    24 |  0.00 |    3 |    24 | 12.50 |
+| X2Y1              |    0 |    24 |  0.00 |    6 |    24 | 25.00 |    0 |    24 |  0.00 |    1 |    24 |  4.17 |
+| X3Y1              |    0 |    24 |  0.00 |    1 |    24 |  4.17 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X0Y2              |    0 |    24 |  0.00 |    7 |    24 | 29.17 |    0 |    24 |  0.00 |    2 |    24 |  8.33 |
+| X1Y2              |    0 |    24 |  0.00 |    6 |    24 | 25.00 |    3 |    24 | 12.50 |    3 |    24 | 12.50 |
+| X2Y2              |    0 |    24 |  0.00 |    7 |    24 | 29.17 |    4 |    24 | 16.67 |    4 |    24 | 16.67 |
+| X3Y2              |    0 |    24 |  0.00 |    1 |    24 |  4.17 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X0Y3              |    6 |    24 | 25.00 |   11 |    24 | 45.83 |    0 |    24 |  0.00 |    1 |    24 |  4.17 |
+| X1Y3              |    5 |    24 | 20.83 |    5 |    24 | 20.83 |    3 |    24 | 12.50 |    1 |    24 |  4.17 |
+| X2Y3              |    3 |    24 | 12.50 |    6 |    24 | 25.00 |    4 |    24 | 16.67 |    1 |    24 |  4.17 |
+| X3Y3              |    6 |    24 | 25.00 |    5 |    24 | 20.83 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X0Y4              |    2 |    24 |  8.33 |    2 |    24 |  8.33 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X1Y4              |    2 |    24 |  8.33 |    1 |    24 |  4.17 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
+| X2Y4              |    2 |    24 |  8.33 |    3 |    24 | 12.50 |    1 |    24 |  4.17 |    0 |    24 |  0.00 |
+| X3Y4              |    0 |    24 |  0.00 |    1 |    24 |  4.17 |    0 |    24 |  0.00 |    0 |    24 |  0.00 |
++-------------------+------+-------+-------+------+-------+-------+------+-------+-------+------+-------+-------+
+
+
+9. Device Cell Placement Summary for Global Clock g0
+----------------------------------------------------
+
++-----------+-----------------+-------------------+-----------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock     | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                                                                          |
++-----------+-----------------+-------------------+-----------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | BUFG_GT/O       | X3Y3              | axi4_aclk |       8.000 | {0.000 4.000} | X2Y2     |       37027 |        0 |              1 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
++-----------+-----------------+-------------------+-----------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----+-------+----------+-----------+
+|    | X0 | X1    | X2       | X3        |
++----+----+-------+----------+-----------+
+| Y4 |  0 |     0 |     2663 |      2265 |
+| Y3 |  9 |   843 |     4838 |  (D) 4450 |
+| Y2 |  2 |  4309 | (R) 8356 |       385 |
+| Y1 |  0 |  2474 |     6085 |       349 |
+| Y0 |  0 |     0 |        0 |         0 |
++----+----+-------+----------+-----------+
+
+
+10. Device Cell Placement Summary for Global Clock g1
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock           | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                                                                       |
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g1        | BUFG_GT/O       | X3Y3              | txoutclk_out[3] |       4.000 | {0.000 2.000} | X2Y2     |        1035 |        0 |              0 |        4 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_PCLK |
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----+----+-------+-----------+
+|    | X0 | X1 | X2    | X3        |
++----+----+----+-------+-----------+
+| Y4 |  0 |  0 |     0 |         0 |
+| Y3 |  0 |  0 |     0 |  (D) 1039 |
+| Y2 |  0 |  0 | (R) 0 |         0 |
+| Y1 |  0 |  0 |     0 |         0 |
+| Y0 |  0 |  0 |     0 |         0 |
++----+----+----+-------+-----------+
+
+
+11. Device Cell Placement Summary for Global Clock g2
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock           | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                                                                          |
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g2        | BUFG_GT/O       | X3Y3              | txoutclk_out[3] |       4.000 | {0.000 2.000} | X2Y2     |          15 |        0 |              0 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_CORECLK |
++-----------+-----------------+-------------------+-----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----+----+-------+---------+
+|    | X0 | X1 | X2    | X3      |
++----+----+----+-------+---------+
+| Y4 |  0 |  0 |     0 |       0 |
+| Y3 |  0 |  0 |     0 |  (D) 15 |
+| Y2 |  0 |  0 | (R) 0 |       0 |
+| Y1 |  0 |  0 |     0 |       0 |
+| Y0 |  0 |  0 |     0 |       0 |
++----+----+----+-------+---------+
+
+
+12. Device Cell Placement Summary for Global Clock g3
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock    | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                                                            |
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| g3        | BUFG_GT/O       | X3Y3              | mcap_clk |       8.000 | {0.000 4.000} | X3Y3     |           1 |        0 |              0 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/MCAPCLK |
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----+----+----+-----------+
+|    | X0 | X1 | X2 | X3        |
++----+----+----+----+-----------+
+| Y4 |  0 |  0 |  0 |         0 |
+| Y3 |  0 |  0 |  0 | (R) (D) 1 |
+| Y2 |  0 |  0 |  0 |         0 |
+| Y1 |  0 |  0 |  0 |         0 |
+| Y0 |  0 |  0 |  0 |         0 |
++----+----+----+----+-----------+
+
+
+13. Device Cell Placement Summary for Global Clock g4
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock        | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                                |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------+
+| g4        | BUFGCE/O        | X0Y1              | mmcm_clkout0 |       5.000 | {0.000 2.500} | X1Y1     |       25905 |        0 |              3 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0 |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----------+----------+------+----+
+|    | X0        | X1       | X2   | X3 |
++----+-----------+----------+------+----+
+| Y4 |         0 |        0 |    0 |  0 |
+| Y3 |         0 |        0 |    0 |  0 |
+| Y2 |      8254 |     4217 |    0 |  0 |
+| Y1 |  (D) 8579 | (R) 1206 |  645 |  0 |
+| Y0 |      3007 |        0 |    0 |  0 |
++----+-----------+----------+------+----+
+
+
+14. Device Cell Placement Summary for Global Clock g5
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+---------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock   | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                            |
++-----------+-----------------+-------------------+---------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+| g5        | BUFGCE/O        | X0Y3              | APP_CLK |       8.000 | {0.000 4.000} | X1Y2     |        5832 |       85 |              0 |        0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x |
++-----------+-----------------+-------------------+---------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+--------+----------+-------+----+
+|    | X0     | X1       | X2    | X3 |
++----+--------+----------+-------+----+
+| Y4 |      0 |        0 |    23 |  0 |
+| Y3 |  (D) 6 |      168 |    34 |  0 |
+| Y2 |     53 | (R) 2311 |  1127 |  0 |
+| Y1 |      0 |     1083 |  1112 |  0 |
+| Y0 |      0 |        0 |     0 |  0 |
++----+--------+----------+-------+----+
+
+
+15. Device Cell Placement Summary for Global Clock g6
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock        | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                      |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------------------+
+| g6        | BUFGCE/O        | X0Y1              | mmcm_clkout6 |      10.000 | {0.000 5.000} | X1Y1     |        1579 |        0 |              0 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----------+-------+----+----+
+|    | X0       | X1    | X2 | X3 |
++----+----------+-------+----+----+
+| Y4 |        0 |     0 |  0 |  0 |
+| Y3 |        0 |     0 |  0 |  0 |
+| Y2 |       84 |     0 |  0 |  0 |
+| Y1 |  (D) 786 | (R) 0 |  0 |  0 |
+| Y0 |      709 |     0 |  0 |  0 |
++----+----------+-------+----+----+
+
+
+16. Device Cell Placement Summary for Global Clock g7
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+--------------+-------------+----------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock        | Period (ns) | Waveform (ns)  | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                   |
++-----------+-----------------+-------------------+--------------+-------------+----------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
+| g7        | BUFGCE/O        | X0Y1              | mmcm_clkout5 |      20.000 | {0.000 10.000} | X0Y1     |         534 |        0 |              0 |        0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/dbg_clk |
++-----------+-----------------+-------------------+--------------+-------------+----------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-------------+----+----+----+
+|    | X0          | X1 | X2 | X3 |
++----+-------------+----+----+----+
+| Y4 |           0 |  0 |  0 |  0 |
+| Y3 |           0 |  0 |  0 |  0 |
+| Y2 |           0 |  0 |  0 |  0 |
+| Y1 | (R) (D) 308 |  0 |  0 |  0 |
+| Y0 |         226 |  0 |  0 |  0 |
++----+-------------+----+----+----+
+
+
+17. Device Cell Placement Summary for Global Clock g8
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+--------------------------------------------------------------------------------------------+-------------+----------------+----------+-------------+----------+----------------+----------+----------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock                                                                                      | Period (ns) | Waveform (ns)  | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                    |
++-----------+-----------------+-------------------+--------------------------------------------------------------------------------------------+-------------+----------------+----------+-------------+----------+----------------+----------+----------------------------------------+
+| g8        | BUFGCE/O        | X0Y0              | dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK |      33.000 | {0.000 16.500} | X0Y0     |         458 |        0 |              0 |        0 | dbg_hub/inst/BSCANID.u_xsdbm_id/itck_i |
++-----------+-----------------+-------------------+--------------------------------------------------------------------------------------------+-------------+----------------+----------+-------------+----------+----------------+----------+----------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-------------+----+----+----+
+|    | X0          | X1 | X2 | X3 |
++----+-------------+----+----+----+
+| Y4 |           0 |  0 |  0 |  0 |
+| Y3 |           0 |  0 |  0 |  0 |
+| Y2 |           0 |  0 |  0 |  0 |
+| Y1 |         146 |  0 |  0 |  0 |
+| Y0 | (R) (D) 312 |  0 |  0 |  0 |
++----+-------------+----+----+----+
+
+
+18. Device Cell Placement Summary for Global Clock g9
+-----------------------------------------------------
+
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+---------------------------------------------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock        | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                     |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+---------------------------------------------------------------------------------------------------------+
+| g9        | BUFG_GT/O       | X3Y3              | PCIE_REF_CLK |      10.000 | {0.000 5.000} | X3Y3     |         137 |        0 |              0 |        4 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/ext_ch_gt_drpclk |
++-----------+-----------------+-------------------+--------------+-------------+---------------+----------+-------------+----------+----------------+----------+---------------------------------------------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+----+----+----+-------------+
+|    | X0 | X1 | X2 | X3          |
++----+----+----+----+-------------+
+| Y4 |  0 |  0 |  0 |           0 |
+| Y3 |  0 |  0 |  0 | (R) (D) 141 |
+| Y2 |  0 |  0 |  0 |           0 |
+| Y1 |  0 |  0 |  0 |           0 |
+| Y0 |  0 |  0 |  0 |           0 |
++----+----+----+----+-------------+
+
+
+19. Device Cell Placement Summary for Global Clock g10
+------------------------------------------------------
+
++-----------+-----------------+-------------------+------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock      | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                            |
++-----------+-----------------+-------------------+------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+| g10       | BUFGCE/O        | X0Y3              | APP_2X_CLK |       4.000 | {0.000 2.000} | X0Y3     |          55 |       18 |              0 |        0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_2x |
++-----------+-----------------+-------------------+------------+-------------+---------------+----------+-------------+----------+----------------+----------+----------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----------+-----+----+----+
+|    | X0        | X1  | X2 | X3 |
++----+-----------+-----+----+----+
+| Y4 |        40 |   0 |  0 |  0 |
+| Y3 | (R) (D) 0 |  33 |  0 |  0 |
+| Y2 |         0 |   0 |  0 |  0 |
+| Y1 |         0 |   0 |  0 |  0 |
+| Y0 |         0 |   0 |  0 |  0 |
++----+-----------+-----+----+----+
+
+
+20. Device Cell Placement Summary for Global Clock g11
+------------------------------------------------------
+
++-----------+-----------------+-------------------+-------+-------------+---------------+----------+-------------+----------+----------------+----------+------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net        |
++-----------+-----------------+-------------------+-------+-------------+---------------+----------+-------------+----------+----------------+----------+------------+
+| g11       | BUFGCE/O        | X0Y4              |       |             |               | X2Y2     |          65 |        0 |              0 |        0 | dac_fb_clk |
++-----------+-----------------+-------------------+-------+-------------+---------------+----------+-------------+----------+----------------+----------+------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+--------+----+--------+----+
+|    | X0     | X1 | X2     | X3 |
++----+--------+----+--------+----+
+| Y4 |  (D) 0 |  0 |      0 |  0 |
+| Y3 |      0 |  0 |      0 |  0 |
+| Y2 |      0 |  0 | (R) 65 |  0 |
+| Y1 |      0 |  0 |      0 |  0 |
+| Y0 |      0 |  0 |      0 |  0 |
++----+--------+----+--------+----+
+
+
+21. Device Cell Placement Summary for Global Clock g12
+------------------------------------------------------
+
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock          | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                      |
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------+
+| g12       | BUFGCE/O        | X0Y3              | CLK_DIV0_CLK05 |       8.000 | {0.000 4.000} | X1Y2     |          65 |        0 |              1 |        0 | ins_sis8300ku_bsp_logic_top/ad9510_clk05 |
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+--------+-------+-----+----+
+|    | X0     | X1    | X2  | X3 |
++----+--------+-------+-----+----+
+| Y4 |      0 |     0 |   0 |  0 |
+| Y3 |  (D) 1 |     0 |   0 |  0 |
+| Y2 |      0 | (R) 0 |  65 |  0 |
+| Y1 |      0 |     0 |   0 |  0 |
+| Y0 |      0 |     0 |   0 |  0 |
++----+--------+-------+-----+----+
+
+
+22. Device Cell Placement Summary for Global Clock g13
+------------------------------------------------------
+
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock          | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                |
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------+
+| g13       | BUFGCE/O        | X0Y1              | 125MHZ_SYS_CLK |       8.000 | {0.000 4.000} | X0Y1     |          17 |        0 |              2 |        0 | sys_125_clk_BUFGCE |
++-----------+-----------------+-------------------+----------------+-------------+---------------+----------+-------------+----------+----------------+----------+--------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----------+----+----+----+
+|    | X0        | X1 | X2 | X3 |
++----+-----------+----+----+----+
+| Y4 |         0 |  0 |  0 |  0 |
+| Y3 |         0 |  0 |  0 |  0 |
+| Y2 |         1 |  0 |  0 |  0 |
+| Y1 | (R) (D) 5 |  0 |  0 |  0 |
+| Y0 |        13 |  0 |  0 |  0 |
++----+-----------+----+----+----+
+
+
+23. Device Cell Placement Summary for Global Clock g14
+------------------------------------------------------
+
++-----------+-----------------+-------------------+--------------------------------+-------------+---------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock                          | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                               |
++-----------+-----------------+-------------------+--------------------------------+-------------+---------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
+| g14       | BUFGCE/O        | X0Y2              | payload_i[bsp_domain_clock][1] |       5.000 | {0.000 2.500} | X0Y2     |           6 |        0 |              0 |        0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFGCE |
++-----------+-----------------+-------------------+--------------------------------+-------------+---------------+----------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----------+----+----+----+
+|    | X0        | X1 | X2 | X3 |
++----+-----------+----+----+----+
+| Y4 |         0 |  0 |  0 |  0 |
+| Y3 |         2 |  0 |  0 |  0 |
+| Y2 | (R) (D) 2 |  2 |  0 |  0 |
+| Y1 |         0 |  0 |  0 |  0 |
+| Y0 |         0 |  0 |  0 |  0 |
++----+-----------+----+----+----+
+
+
+24. Device Cell Placement Summary for Global Clock g15
+------------------------------------------------------
+
++-----------+-----------------+-------------------+---------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock         | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                       |
++-----------+-----------------+-------------------+---------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------+
+| g15       | BUFGCE/O        | X0Y2              | mmcm0_clkout2 |       8.000 | {0.000 4.000} | X0Y2     |           0 |        0 |              1 |        0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_app_clk |
++-----------+-----------------+-------------------+---------------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----------+----+----+----+
+|    | X0        | X1 | X2 | X3 |
++----+-----------+----+----+----+
+| Y4 |         0 |  0 |  0 |  0 |
+| Y3 |         1 |  0 |  0 |  0 |
+| Y2 | (R) (D) 0 |  0 |  0 |  0 |
+| Y1 |         0 |  0 |  0 |  0 |
+| Y0 |         0 |  0 |  0 |  0 |
++----+-----------+----+----+----+
+
+
+25. Device Cell Placement Summary for Global Clock g16
+------------------------------------------------------
+
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock    | Period (ns) | Waveform (ns) | Root (R) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                             |
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------+
+| g16       | BUFGCE/O        | X0Y3              | clkfbout |       8.000 | {0.000 4.000} | X1Y2     |           0 |        0 |              1 |        0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout_buf |
++-----------+-----------------+-------------------+----------+-------------+---------------+----------+-------------+----------+----------------+----------+-----------------------------------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+--------+-------+----+----+
+|    | X0     | X1    | X2 | X3 |
++----+--------+-------+----+----+
+| Y4 |      0 |     0 |  0 |  0 |
+| Y3 |  (D) 1 |     0 |  0 |  0 |
+| Y2 |      0 | (R) 0 |  0 |  0 |
+| Y1 |      0 |     0 |  0 |  0 |
+| Y0 |      0 |     0 |  0 |  0 |
++----+--------+-------+----+----+
+
+
+26. Clock Region Cell Placement per Global Clock: Region X0Y0
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| g4        | 13    | BUFGCE/O        | None       |        3006 |               1 | 2963 |      3 |    0 |   0 |  0 |    0 |   1 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0 |
+| g6        | 12    | BUFGCE/O        | None       |         709 |               0 |  667 |     20 |   13 |   1 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk           |
+| g7        | 2     | BUFGCE/O        | None       |         226 |               0 |  226 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/dbg_clk              |
+| g8        | 8     | BUFGCE/O        | None       |         312 |               0 |  312 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dbg_hub/inst/BSCANID.u_xsdbm_id/itck_i                                                                             |
+| g13       | 3     | BUFGCE/O        | None       |          13 |               0 |   13 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | sys_125_clk_BUFGCE                                                                                                 |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+27. Clock Region Cell Placement per Global Clock: Region X1Y0
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| g4+       | 13    | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0 |
+| g6+       | 12    | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk           |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+28. Clock Region Cell Placement per Global Clock: Region X0Y1
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+| g4        | 13    | BUFGCE/O        | None       |        8578 |               1 | 8019 |    532 |    2 |   0 |  0 |    0 |   1 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0 |
+| g6        | 12    | BUFGCE/O        | None       |         786 |               0 |  705 |     62 |   11 |   2 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk           |
+| g7        | 2     | BUFGCE/O        | None       |         308 |               0 |  308 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/dbg_clk              |
+| g8        | 8     | BUFGCE/O        | None       |         146 |               0 |  146 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dbg_hub/inst/BSCANID.u_xsdbm_id/itck_i                                                                             |
+| g13       | 3     | BUFGCE/O        | None       |           4 |               1 |    4 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | sys_125_clk_BUFGCE                                                                                                 |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+29. Clock Region Cell Placement per Global Clock: Region X1Y1
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        2474 |               0 | 2474 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g4        | 13    | BUFGCE/O        | None       |        1206 |               0 | 1188 |     18 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0                                           |
+| g5        | 16    | BUFGCE/O        | None       |        1083 |               0 | 1079 |      0 |    2 |   2 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g6+       | 12    | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk                                                     |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+30. Clock Region Cell Placement per Global Clock: Region X2Y1
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        6085 |               0 | 6058 |      4 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g4        | 13    | BUFGCE/O        | None       |         645 |               0 |  644 |      1 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0                                           |
+| g5        | 16    | BUFGCE/O        | None       |        1112 |               0 | 1086 |      3 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+31. Clock Region Cell Placement per Global Clock: Region X3Y1
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF  | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |         349 |               0 | 349 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+32. Clock Region Cell Placement per Global Clock: Region X0Y2
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |           2 |               0 |    2 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g4        | 13    | BUFGCE/O        | None       |        8253 |               1 | 8110 |    102 |    1 |   0 |  0 |    0 |   1 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0                                           |
+| g5        | 16    | BUFGCE/O        | None       |          53 |               0 |   52 |      0 |    1 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g6        | 12    | BUFGCE/O        | None       |          84 |               0 |   76 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk                                                     |
+| g13       | 3     | BUFGCE/O        | None       |           0 |               1 |    0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | sys_125_clk_BUFGCE                                                                                                                                           |
+| g14       | 4     | BUFGCE/O        | None       |           2 |               0 |    2 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFGCE                                                                                            |
+| g15+      | 2     | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_app_clk                                                                                                    |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+33. Clock Region Cell Placement per Global Clock: Region X1Y2
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        4309 |               0 | 4284 |     25 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g4        | 13    | BUFGCE/O        | None       |        4217 |               0 | 3928 |    285 |    4 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/input_rst_mmcm_reg_0                                           |
+| g5        | 16    | BUFGCE/O        | None       |        2311 |               0 | 2301 |      0 |    6 |   4 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g6+       | 12    | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/ddr/ddr4_0/inst/u_ddr4_infrastructure/c0_riu_clk                                                     |
+| g12+      | 0     | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/ad9510_clk05                                                                                                                     |
+| g14       | 4     | BUFGCE/O        | None       |           2 |               0 |    2 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFGCE                                                                                            |
+| g16+      | 15    | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout_buf                                                                                              |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+34. Clock Region Cell Placement per Global Clock: Region X2Y2
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        8356 |               0 | 8316 |     26 |    3 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g5        | 16    | BUFGCE/O        | None       |        1127 |               0 | 1114 |      2 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g1+       | 20    | BUFG_GT/O       | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_PCLK    |
+| g11       | 1     | BUFGCE/O        | None       |          65 |               0 |   65 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dac_fb_clk                                                                                                                                                   |
+| g12       | 0     | BUFGCE/O        | None       |          65 |               0 |   65 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/ad9510_clk05                                                                                                                     |
+| g2+       | 14    | BUFG_GT/O       | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_CORECLK |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+35. Clock Region Cell Placement per Global Clock: Region X3Y2
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF  | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |         385 |               0 | 385 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+36. Clock Region Cell Placement per Global Clock: Region X0Y3
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |           9 |               0 |  2 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g5        | 16    | BUFGCE/O        | None       |           6 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g10+      | 8     | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_2x                                                                                               |
+| g12       | 0     | BUFGCE/O        | None       |           0 |               1 |  0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | ins_sis8300ku_bsp_logic_top/ad9510_clk05                                                                                                                     |
+| g14       | 4     | BUFGCE/O        | None       |           2 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_200m_clk_BUFGCE                                                                                            |
+| g15       | 2     | BUFGCE/O        | None       |           0 |               1 |  0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm/po_app_clk                                                                                                    |
+| g16       | 15    | BUFGCE/O        | None       |           0 |               1 |  0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout_buf                                                                                              |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+37. Clock Region Cell Placement per Global Clock: Region X1Y3
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF  | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |         843 |               0 | 841 |      2 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g5        | 16    | BUFGCE/O        | None       |         168 |               0 | 166 |      2 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g10       | 8     | BUFGCE/O        | None       |          33 |               0 |  33 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_2x                                                                                               |
+| g12+      | 0     | BUFGCE/O        | None       |           0 |               0 |   0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/ad9510_clk05                                                                                                                     |
+| g16+      | 15    | BUFGCE/O        | None       |           0 |               0 |   0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/clkfbout_buf                                                                                              |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+38. Clock Region Cell Placement per Global Clock: Region X2Y3
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        4838 |               0 | 4813 |      2 |    1 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g5        | 16    | BUFGCE/O        | None       |          34 |               0 |   12 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g1+       | 20    | BUFG_GT/O       | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_PCLK    |
+| g11+      | 1     | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dac_fb_clk                                                                                                                                                   |
+| g2+       | 14    | BUFG_GT/O       | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_CORECLK |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+39. Clock Region Cell Placement per Global Clock: Region X3Y3
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        4450 |               0 | 4440 |      0 |    9 |   0 |  0 |    0 |   0 |       1 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g1        | 20    | BUFG_GT/O       | None       |        1039 |               0 | 1034 |      0 |    0 |   0 |  4 |    0 |   0 |       1 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_PCLK    |
+| g9        | 3     | BUFG_GT/O       | None       |         141 |               0 |  133 |      4 |    0 |   0 |  4 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/ext_ch_gt_drpclk                                                      |
+| g2        | 14    | BUFG_GT/O       | None       |          15 |               0 |    0 |      0 |   14 |   0 |  0 |    0 |   0 |       1 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_CORECLK |
+| g3        | 2     | BUFG_GT/O       | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       1 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/MCAPCLK               |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+
+40. Clock Region Cell Placement per Global Clock: Region X0Y4
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                            |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+| g10       | 8     | BUFGCE/O        | None       |          40 |               0 |  5 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_2x |
+| g11+      | 1     | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dac_fb_clk                                                     |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+41. Clock Region Cell Placement per Global Clock: Region X1Y4
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                            |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+| g5+       | 16    | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x |
+| g11+      | 1     | BUFGCE/O        | None       |           0 |               0 |  0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dac_fb_clk                                                     |
++-----------+-------+-----------------+------------+-------------+-----------------+----+--------+------+-----+----+------+-----+---------+----------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+42. Clock Region Cell Placement per Global Clock: Region X2Y4
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        2663 |               0 | 2634 |      0 |    6 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
+| g5        | 16    | BUFGCE/O        | None       |          23 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_logic_top/blk_clock.ins_mmcm_app/po_clock_1x                                                                                               |
+| g11+      | 1     | BUFGCE/O        | None       |           0 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | dac_fb_clk                                                                                                                                                   |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+**** In Global Id column, sympbol '+' indicates that global clock was used only to route through the clock region.
+
+
+43. Clock Region Cell Placement per Global Clock: Region X3Y4
+-------------------------------------------------------------
+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                                                                          |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| g0        | 23    | BUFG_GT/O       | None       |        2265 |               0 | 2265 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | ins_sis8300ku_bsp_system_wrapper/sis8300ku_bsp_system_i/pcie/xdma_0/inst/pcie3_ip_i/U0/sis8300ku_bsp_system_xdma_0_0_pcie3_ip_gt_top_i/phy_clk_i/CLK_USERCLK |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+* Clock Loads column represents the clock pin loads (pin count)
+** Non-Clock Loads column represents the non-clock pin loads (pin count)
+*** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
+
+

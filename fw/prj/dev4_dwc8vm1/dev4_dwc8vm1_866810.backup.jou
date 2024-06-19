@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Sep 18 12:45:22 2023
+# Process ID: 866810
+# Current directory: /home/kristiaanpelckmans/Downloads/dev4/fw
+# Command line: vivado -mode tcl -source ./fwk/src/main.tcl -notrace -journal prj/dev4_dwc8vm1/dev4_dwc8vm1.jou -log prj/dev4_dwc8vm1/dev4_dwc8vm1.log -tclargs init create -c cfg/dwc8vm1.cfg -t vivado --exit --colorterm 1
+# Log file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.log
+# Journal file: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.jou
+#-----------------------------------------------------------
+source ./fwk/src/main.tcl -notrace

@@ -1,0 +1,26 @@
+= DS8VM1 Module Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:math:
+
+image::ds8vm1.jpg[]
+
+Welcome to the start page of the DS8VM1 Module documentation. This documentation page includes information about the hardware and firmware.
+
+The DRTM-DS8VM1 is a 8+2-channel feed through RTM for direct sampling applications combined with a high frequency single channel vector modulator. It is compliant to the MTCA.4 standard and the Zone3 interface is Class A1.1 compliant.
+
+Here are some useful links:
+
+* xref:registers.adoc[Register Descriptions]
+* xref:dependencies.adoc[HDL dependencies]
+* xref:pll_config.adoc[Information about how to use the on-board PLL]
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+Tested on Vivado 2020.1 +
+Tested on ISE 14.7 +
+Tested on PlanAhead +

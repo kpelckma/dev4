@@ -1,0 +1,61 @@
+== Quick Start
+
+In this chapter, project creation and implementation steps are shown.
+
+
+=== Creating the Project
+
+```
+git clone https://gitlab.msktools.desy.de/fpgafw/projects/example/sis8300ku_reference_design.git
+cd sis8300ku_example_design 
+git submodule init --update --recursive
+make install
+make project <cfg=configuration>
+```
+
+`make install` command automatically installs DesyRDL via pip and triggers the DesyRDL Python library to create virtual environment. 
+
+This project can be build in two different configuration. This can be selected during project creation via `cfg=<>` argument on the make project step. 
+
+
+==== Project Configuration 
+
+Inside the `./cfg` folder, two distinct project configuration is defined: 
+
+when used with `cfg=ds8vm1` argument, project will be build with pkg_app_config_conf_1.vhd package. Inside this package `C_RTM_TYPE` is selected to be `RTM_DS8VM1`. 
+
+when used with `cfg=dwc8vm1` argument, project will be build with pkg_app_config_conf_2.vhd package. Inside this package `C_RTM_TYPE` is selected to be `RTM_DWC8VM1`. 
+
+Both of these cfg files essentially creates the AppConf variable for the `fwfwk::` name space. This trickles down all the way to the app.tcl file where correct RTM module is sourced.
+
+
+=== Viewing the Project on Vivado 
+
+After project is created by FWK, users can view the complete project by invoking; 
+
+```
+ make gui <cfg=configuration>
+```
+
+Or alternatively, the project folder itself will reside inside the `./prj/` folder. Users can navigate inside the Vivado Project and start the vivado by point it to the project `.xpr` file via argument for Vivado
+
+```
+ cd ./prj/sis8300ku_example_project_ds8vm1
+ vivado sis8300ku_example_project_ds8vm1.xpr
+```
+
+
+=== Building the Project
+
+FWK can trigger the synthesis + implementation + bit stream generation of a project with:
+
+
+```
+ make build <cfg=configuration>
+```
+
+After the build stage is complete, FWK will fetch the bit file and place it under `./out/sis8300ku_example_design_<ds8vm1/dwc8vm1>` folder along with other artifacts of the project (map file)
+
+
+
+

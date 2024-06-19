@@ -1,0 +1,22 @@
+= SIS8300-KU BSP Module Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+
+image::ku-pic.png[]
+
+Welcome to the start page of the SIS8300-KU AMC BSP Module documentation. This documentation page includes information about the hardware and firmware. 
+
+Here are some useful links:
+
+* xref:registers.adoc[Register Descriptions]
+* xref:firmware.adoc[Firmware Implementation]
+* xref:dependencies.adoc[HDL dependencies]
+* xref:hardware.adoc[Information about the hardware]
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+Using the side-bar, you can navigate to each section to learn more about this project.

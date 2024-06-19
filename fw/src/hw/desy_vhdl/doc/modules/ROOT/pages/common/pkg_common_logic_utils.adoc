@@ -1,0 +1,152 @@
+
+
+== Package common_logic_utils
+** *Line: 25 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+package common_logic_utils is
+----
+*Description:*
+Miscellaneous logic functions. All ported functions from
+IEEE.std_logic_misc belongs here.
+
+=== Function common_logic_utils.f_to_std_logic
+** *Line: 28 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_to_std_logic (arg: boolean) return std_logic;
+----
+*Description:*
+Converts std_logic to boolean.
+
+=== Function common_logic_utils.f_to_boolean
+** *Line: 31 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_to_boolean (arg: std_logic) return boolean;
+----
+*Description:*
+Converts std_logic to boolean
+
+=== Function common_logic_utils.f_all_ones
+** *Line: 35 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_all_ones (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Checks whether all bits of `arg` are equal to `1`.
+Equivalent to <<and_reduce>>
+
+=== Function common_logic_utils.f_all_zeroes
+** *Line: 39 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_all_zeroes (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Checks wheter all bits of `arg` are equal to `0`.
+Equivalent to <<nor_reduce>>
+
+=== Function common_logic_utils.f_odd_ones
+** *Line: 43 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_odd_ones (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Return `1` if an odd number of bits in `arg` are `1`.
+Equivalent to <<xor_reduce>>
+
+=== Function common_logic_utils.f_even_ones
+** *Line: 48 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_even_ones (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Return `1` if an even number of bits in `arg` are `1`.
+Return `1` if zero bits in `arg` are `1`.
+Equivalent to <<xnor_reduce>>
+
+=== Function common_logic_utils.f_odd_zeroes
+** *Line: 52 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_odd_zeroes (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Return `1` if an odd number of bits in `arg` are `0`.
+Equivalent to <<xor_reduce>>
+
+=== Function common_logic_utils.f_even_zeroes
+** *Line: 57 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function f_even_zeroes (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Return `1` if an even number of bits in `arg` are `0`.
+Return `1` if zero bits in `arg` are `0`.
+Equivalent to <<xnor_reduce>>
+
+=== Function common_logic_utils.or_reduce
+** *Line: 63 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function or_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Reduction of bits in `arg` with the `or` logical operator.
+Port of nonstandard `ieee.std_logic_misc.or_reduce`
+
+=== Function common_logic_utils.and_reduce
+** *Line: 67 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function and_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Reduction of bits in `arg` with the `and` logical operator.
+Port of nonstandard `ieee.std_logic_misc.and_reduce`
+
+=== Function common_logic_utils.xor_reduce
+** *Line: 71 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function xor_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Reduction of bits in `arg` with the `xor` logical operator.
+Port of nonstandard `ieee.std_logic_misc.xor_reduce`
+
+=== Function common_logic_utils.nor_reduce
+** *Line: 75 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function nor_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Negated reduction of bits in `arg` with the `or` logical operator.
+Port of nonstandard `ieee.std_logic_misc.nor_reduce`
+
+=== Function common_logic_utils.nand_reduce
+** *Line: 79 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function nand_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Negated reduction of bits in `arg` with the `and` logical operator.
+Port of nonstandard `ieee.std_logic_misc.nand_reduce`
+
+=== Function common_logic_utils.xnor_reduce
+** *Line: 83 of link:pkg_common_logic_utils.vhd[pkg_common_logic_utils.vhd]*
+[source,vhdl]
+----
+  function xnor_reduce (arg: std_logic_vector) return std_logic;
+----
+*Description:*
+Negated reduction of bits in `arg` with the `xor` logical operator.
+Port of nonstandard `ieee.std_logic_misc.xnor_reduce`
+

@@ -1,0 +1,366 @@
+[#ch_fwk_fwk]
+= Framework Tcls
+ifndef::imagesdir[:imagesdir: ../images]
+
+The FPGA firmware framework (FWK) is based on the Tcl scripts.
+Tcl language is supported by most of the HDL tools like Xilinx Vivaod/ISE, ModelSim and Quartus.
+This means that framework can be natively run within the tools as a part of the project.
+
+
+== Tcl sources
+
+There three main groups of Tcl files: FWK tool Tcls, project Tcls and module Tcls.
+
+=== FWK tool Tcl
+
+They are the core of the tool. All the Tcl source files are located in icon:folder-o[]`src` location.
+The framework is run over one `main` procedure with arguments provided from the `maint.tcl` file.
+Depends on the arguments there are correct Tcl files soruced.
+
+Main.tcl should be sources by the HDL tool directly from tool or as a tool argument.
+
+  source main.tcl <list_of_commands> -c <configfile.cfg> -t <ToolType> -a <AddrType>
+
+Example execution as an argument with xtclsh:
+
+  xtclsh main.tcl info create -c test.cfg -t xise
+
+[NOTE]
+Proper tool command syntax with all arguments is selected by the Makefile. +
+Please check <<ch_prj.adoc#ch_fwk_prj_makefile,Project Makefile>>.
+
+.Tcl source files description:
+
+`**main.tcl**`::
+main Tcl file
+
+`**fwfwk.tcl**`::
+Tcl with the main framework procedures
+
+`**fwfwk_<ToolType>.tcl**`::
+Tcl with the tool depended procedures
+
+=== Project Tcl
+
+Project Tcl is the entry point for the FWK.
+It defines main sources modules used in the project and specifies root of the address tree.
+
+=== Sources Tcl
+
+Each of the sources module should have at least one Tcl file wich is sources by the FWK.
+This Tcl allows to add module sources and define behavior during the project creation, build or simulation.
+
+== Flow
+
+The main firmware framework flow is presented in figure <<fig_fwk_flow>>.
+
+The main flow steps are following:
+
+* Run Makefile task
+* Start `main.tcl` with arguments
+** Read configuration file
+** Initialize variables
+** `source fwfwk.tcl`
+** `source fwfwk_<ToolType>.tcl` - tool dependent functions
+** `source project.tcl` - main project Tcl
+** Run `init {}` from the `project.tcl` +
+  `init {}` procedure should define sources modules Tcl +
+  this should run `init {}` from top project.tcl to last child
+* Start tool dependent function
+.. create project
+*** run `setSources {}` from last child to the top
+*** run `doOnCreate {}` from last child to the top
+.. build project
+*** `doOnBuild {}` from last child to the top
+
+[#fig_fwk_flow]
+.Framework Process Diagram
+image::fwk_flow.svg[]
+
+
+== Namespaces
+
+FWK is organized in namespaces. Namespaces are organized in a tree.
+Each tool depended procedure has its own namespace.
+
+Each `fwk` module has:
+
+`**::fwfwk**`::
+Main firmware framework namespace.
+It is a ROOT of the namespaces tree.
+All the project parameters and variables can be accessed from this namespace e.g. `::fwfwk::ToolType`.
+It provides all generic procedures which are described in <<ch_fwfwk_main_namespace>>.
+
+`**::fwfwk::tool**`::
+Namespace with the tool depended variables and procedures. E.g. Vivado or ISE procedures.
+It is the namespace where `fwfwk_<ToolType>.tcl` is loaded.
+
+`**::fwfwk::src**`::
+The main project namespace. Project Tcl is run under this namespace.
+Collects all the source modules.
+
+`**::fwfwk::src::<module>::<submodule>**`::
+Namespace with the sources module variables and procedures.
+If module includes sub-module then module namespace contains sub modules namespaces.
+Module Tcl runs under this namespace.
+
+
+.Example namespaces tree
+----
+::fwfwk
+::fwfwk::src::app
+::fwfwk::src::app::daq
+::fwfwk::src::app::timing
+::fwfwk::src::bsp
+::fwfwk::src::bsp::pcie
+::fwfwk::tool
+----
+
+[#ch_fwfwk_main_namespace]
+== ::fwfwk namespace
+
+`::fwfwk` is the namespace containing main framework procedures and variables.
+The main variables has been described in <<ch_prj.adoc#ch_fwk_prj_config,Project Configuration>>.
+
+The most important procedures in the `::fwfwk` namespace are presented in this section.
+
+IMPORTANT: Many procedures in child namespace have aliases to `::fwfwk` with namespace argument already provided. +
+Check <<ch_fwfwk_src_namespace,Module Aliases>>.
+
+=== Procedures
+
+::fwfwk::addSrcModule {{ns ::} ModuleName TclFile}::
+adds sources module to the fwfwk namespace,
+it creates a new namespace under `+{namespace}::{ModuleName}+` with dedicated procedures
+as well sources provided TclFile
+[source,tcl]
+----
+::fwfwk::addSrcModule ::fwfwk::src::app ModuleName modulepath/tcl/main.tcl
+----
+
+::fwfwk::addSources {{ns ::} SrcVarName -lib LibraryName _opt_args_}::
+adds sources to project in selected namespaces,
+it uses ToolType variable to run tool depended procedure +
+`-lib` [optional] is the library to which sources are added, default is `work`
+[source,tcl]
+----
+::fwfwk::addSources ::fwfwk::src::app Vhdl -fileset sources_1 -lib work
+----
+
+::fwfwk::createNamespacesList {{ns ::}}::
+creates namespaces list, it runs recursively init{} procedure from mosules
+
+::fwfwk::loadProjectInfo{}::
+loads project information and configuration form the provided config file cfgFile
+
+::fwfwk::printProjectInfo{}::
+prints to output main project settings
+
+::fwfwk::setSources {{ns ::}}::
+executes recursively `setSources` procedure from all namespacess, last child to top
+
+::fwfwk::setAddressSpace{{ns ::}}::
+executes recursively `setAddressSpace` procedure from all namespacess, last child to top
+
+::fwfwk::parseVhdlConfigFile {{ns ::} VarName VhdlFile}::
+parse VHDL config file and creates _VarName_ array with constant values from VHDL file.
+
+::fwfwk::genPrjVerFile {{ns ::} FileType FileName}::
+creates version file with the project version timestamp and shasum +
+superted fileType=VHDL +
+[source,tcl]
+----
+genPrjVerFile VHDL ../hdl/pkg_prj_version.vhd`
+----
+
+::fwfwk::genModVerFile {{ns ::} FileType FileName}::
+creates version file with the source module version +
+superted FileType=VHDL +
+[source,tcl]
+----
+genModVerFile VHDL ../hdl/pkg_prj_version.vhd
+----
+
+::fwfwk::addAddressSpace {{ns ::} {&AddressSpace} Name Type BaseAddress Args}::
+add address space item to the AddressSpace array.
+There is one automatically created ::fwfwk::AddressSpace variable that can be used. +
+[source,tcl]
+----
+::fwfwk::addAddressSpace ::fwfwk::AddressSpace "BOARD" IBUS 0x00000000 ../hdl/pkg_address_space.vhd
+----
+
+::fwfwk::releaseFile {path {suffix ""}}::
+copy a file in the artifact directory ($::fwfwk::ReleasePath). The file is renamed to the release name (::fwfwk::ReleaseName) +
+while keeping its extension. An additional suffix to the release file can be passed.
+[source,tcl]
+----
+::fwfwk::releaseFile generated_data.dat
+----
+
+=== Variables
+
+There is a numer of variables available within fwfwk namespace.
+All of them are accesible with namspace prefix. Variables names follows *UpperCamelCase* practice.
+----
+::fwfwk::<VariableName>
+----
+
+.Variables
+[cols="s,4d"]
+|==========================================
+|ProjectPath   | system path of the project
+|ProjectName   | project name
+|ProjectConf   | the current configuration of the project used
+|ToolType      | type of tool used. e.g. vivado
+|PrjPath       | returns folder with project builds, by default full path of `./prj/`
+|PrjBuildName  | returns `ProjectName_ConfigName`
+|PrjBuildPath  | path of the current project build, `./prj/ProjectName_ConfigName/`
+|ReleasePath   | artifact directory, `/out/$::fwfwk::PrjBuildName/`
+|ReleaseName   | release name, alias for `${::fwfwk::PrjBuildName}_${::fwfwk::VerString}`
+|SrcPath       | path to the sources, by default full path of `./src/`
+|LibPath       | path to the library sources, by default full path of `./src/lib`
+|VerString     | sting with version of module
+|==========================================
+
+
+== ::fwfwk::src::* namespace
+
+When running function inside sources namespace like from module.tcl, you can use aliased procedures.
+
+=== Procedures
+
+addSrcModule {ModuleName TclFile}::
+runs `+::fwfwk::addSrcModule ${CurrentNamespace} ...+`
+[source,tcl]
+----
+addModule bsp "src/bsp/tcl/main.tcl"
+----
+
+addSources {SrcVarName -lib LibraryName _opt_args_}::
+runs `+::fwfwk::addSources ${CurrentNamespace} ...+`
+[source,tcl]
+----
+lappend Vhdl "./source.vhd"
+addSources Vhdl -lib my_lib
+----
+
+parseVhdlConfigFile {VarName VhdlFile}::
+runs `+::fwfwk::parseVhdlConfigFile ${CurrentNamespace} ...+`
+
+genModVerFile {FileType FileName}::
+runs `+::fwfwk::genModVerFile ${CurrentNamespace} ...+`
+
+genPrjVerFile {FileType FileName}::
+runs `+::fwfwk::genPrjVerFile ${CurrentNamespace} ...+`
+
+addAddressSpace {{&AddressSpace} Name Type BaseAddress Args}::
+runs `+::fwfwk::addAddressSpace ${CurrentNamespace} ...+`
+
+=== Variables
+.Variables
+[cols="s,4d"]
+|==========================================
+| TclPath   | path of the tcl file of the source module
+| TclFile   | tcl file name with path included
+|==========================================
+
+== ::fwfwk::utils::xps::* namespace
+
+Utilities to work with Xilinx XPS .xmp/.mhs/.xml files
+
+generateCpuHdl {XMPFile outDir partName instanceName}::
+* *XMPFile:* xps system file
+* *outDir:* directory where sources are generated
+* *partName* the FPGA identifier (e.g. xc6slx100-3csg484i-3 for a Xilinx Spartan 5)
+* *instanceName* the path of the CPU within the project (e.g. `inst_board/gen_ppc_cpu.inst_ppc/ins_ppc_generated`)
+generates the HDL and netlist files from an .xmp file. The function returns +
+a list that contains the path to files to be added to the project. The indices +
+of that list are `Ngc`, `Vhdl` and `Bmm`.
+[source,tcl]
+----
+array set params [::fwfwk::utils::xps::generateCpuHdl system.xmp $path $device $instance]
+
+# source files
+set Vhdl $params(Vhdl)
+
+# netlist files
+set Ngc $params(Ngc)
+
+# memory interface files
+set Bmm $params(Bmm)
+----
+IMPORTANT: `generateCpuHdl` does not work with Microblaze-based projects.
+Directly include the .xmp file as a source of your project instead
+
+generateHwFile {MHSFile HwFile}::
+* *MHSFile:* path to the input .mhs file
+* *HwFile:* path to the generated .xml hardware file
+generates an hardware file (.xml) from .mhs file. The hardware platform file is +
+required to produce the software platform of a CPU system.
+[source,tcl]
+----
+generateHwFile $MHSFile $HwFile
+----
+
+generateCpuSwBsp {HwFile outDir {appguruFlags ""}::
+* *HwFile:* input hardware .xml file
+* *outDir:* output directory
+* *appguruFlags:* optional flags to pass to appguru
+Generates a make project to compile a cpu payload for the hardware described in +
+$HwFile. The output is generated in `outDir`.
+[source,tcl]
+----
+generateCpuSwBsp system.xml $outDir
+----
+
+== Tool related documentation
+
+=== Xilinx platgen tool
+
+Xilinx platgen is used to compile C-programming payload and upload the +
+generated .elf file in a FPGA .bit file.
+
+To add C sources to in the tcl project
+
+[source,tcl]
+----
+# Executed in the "setSources" function
+variable CSrc
+
+lappend CSrc {../src/sw/bootloader "sources"}  # add all c sources in a directory
+lappend CSrc {../src/sw/bootloader "includes"} # add the directory as an header
+lappend CSrc ../src/sw/src/main.c              # add the source "main.c"
+
+# Executed in the "doOnCreate" function
+addSources CSrc
+----
+
+The platgen tool requires additional variables to be set in the configuration file
+
+[#fwk_platgen_variables]
+[%autowidth]
+.Platgen related variables
+|===
+| Variable name | Description
+
+| HwFile        | Hardware file path in XML format. Generated by the command `generateHwFile`.
+| BitFile       | .bit file path. The generated .elf is uploaded in this file and copied in the release directory.
+| MemFile       | Memory file path in .bmm format.
+| AppguruFlags  | Additional flags to pass to the `appguru` command. Useful to define linker script and stdin/stdout parameters.
+|===
+
+In the above file paths, every occurrence of the substring `$\{VerString\}` is substituted with the release number of the project.
+
+=== cocotb tool
+
+https://docs.cocotb.org/en/stable/[cocotb is a python simulation tool].
+With cocotb it is possible to drive a DUT written in HDL (Verilog or VHDL).
+
+To add a cocotb test bench in the tcl project
+
+[source,tcl]
+----
+# add the test bench tb_cocotb.py with G_LENGTH=18 and G_WIDTH=8 as generic
+# parameters of the "::fwfwk::Top" DUT.
+lappend ::fwfwk::SimTop {../sim/tb_cocotb.py G_LENGTH 18 G_WIDTH 8}
+----

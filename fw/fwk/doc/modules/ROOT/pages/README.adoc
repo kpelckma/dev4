@@ -1,0 +1,90 @@
+[#README]
+= FPGA Firmware Framework README
+ifndef::env-site[]
+:maindocumentationlink: link:./doc/main.adoc[doc]
+endif::env-site[]
+ifdef::env-site[]
+:maindocumentationlink: xref:fwk:ROOT:index.adoc[doc]
+endif::env-site[]
+
+
+The main repository containing framework for the FPGA firmware projects.
+
+NOTE: This repository has to be added as a submodule to the superproject,
+which should consist of other components like board support package
+(BSP), application, libraries and modules.
+
+Firmware Framework (FWK) is based on Tcl scripts which are executed by the HDL tool.
+
+Detailed documentation is placed in  **{maindocumentationlink}** .
+
+== Getting started
+
+To create new project that will use framework follow below steps:
+
+. Create new repository with framework included
++
+[source,shell]
+----
+mkdir <new_folder_name>      #<1>
+cd <new_folder_name>         #<2>
+git init                     #<3>
+git submodule add -b main git@gitlab.msktools.desy.de:fpgafw/fwk.git ./fwk  #<4>
+git submodule update --init  #<5>
+----
+<1> create new empty folder
+<2> go to the new folder
+<3> create new git repo
+<4> add framework repository as a submodule to the new repo
+<5> initialize submodule
++
+. Initialize framework
++
+To initialize project with default structure and basic files you can run script: link:./scr/init_fwfwk_prj.sh[]
++
+Run from the project folder:
++
+[source,shel]
+----
+./fwk/scr/init_fwfwk_prj.sh <new_project_name>
+----
++
+. Add sources components
++
+Sources can be added to the git project as a files or as a submodule.
++
+.. Existing
++
+For each submodule to be added run:
++
+[source,shell]
+----
+git submodule add -b master git@gitlab.msktools.desy.de:fpgafw/<path>/<name>.git ./src/<path>/<name>
+git submodule update --init
+----
++
+.. New
++
+To create new module with default structure you can use script:
++
+[source,shell]
+----
+./fwk/scr/init_module.sh <module_path>
+----
++
+It will create new module with default structure. +
+Next to create git submodule:
++
+* go to new module and init new git repo
++
+ cd <module_path>
+ git init
++
+* add files to new repo and commit
+* go to GitLab and create new repository
+* add remote to module repository and push changes
++
+ git remote add origin git@gitlab.msktools.desy.de:fpgafw/<modulePath>.git
+ git push -u origin --all
++
+* go to up to project top and add existing submodule as in point _3.a_

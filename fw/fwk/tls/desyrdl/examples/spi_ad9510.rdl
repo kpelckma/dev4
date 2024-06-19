@@ -1,0 +1,313 @@
+regfile spi_ad9510 {
+  desc = "Registers of the AD9510, attached via SPI. Register descriptions are incomplete, taken from datasheet Rev. C." ;
+
+  reg {
+    desc = "Clocks select, power-down (PD) options. Default: All clocks on, select CLK1," ;
+    regwidth = 8;
+    field {
+      desc = "CLKs in PD" ;
+    } clks_in_pd[5:5] ;
+    field {
+      desc = "REFIN PD" ;
+    } refin_pd[4:4] ;
+    field {
+      desc = "CLK to PLL PD" ;
+    } clk_to_pll_pd[3:3] ;
+    field {
+      desc = "CLK2 PD" ;
+    } clk2_pd[2:2] ;
+    field {
+      desc = "CLK1 PD" ;
+    } clk1_pd[1:1] ;
+    field {
+      desc = "Select CLK IN" ;
+      reset = 1 ;
+    } sel_clk_in[0:0] ;
+  } clk_sel_pd @0x45 ;
+
+  // Divider 0
+  reg {
+    desc = "Divide by 2" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+    } high[3:0] ;
+  } divider_0_low @0x48 ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_0_high @0x49 ;
+
+  // Divider 1
+  reg {
+    desc = "Divide by 2" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+    } high[3:0] ;
+  } divider_1_low @0x4a ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_1_high @0x4b ;
+
+  // Divider 2
+  reg {
+    desc = "Divide by 4" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+      reset = 0x1 ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+      reset = 0x1 ;
+    } high[3:0] ;
+  } divider_2_low @0x4c ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_2_high @0x4d ;
+
+  // Divider 3
+  reg {
+    desc = "Divide by 8" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+      reset = 0x2 ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+      reset = 0x2 ;
+    } high[3:0] ;
+  } divider_3_low @0x4e ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_3_high @0x4f ;
+
+  // Divider 4
+  reg {
+    desc = "Divide by 2" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+    } high[3:0] ;
+  } divider_4_low @0x50 ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_4_high @0x51 ;
+
+  // Divider 5
+  reg {
+    desc = "Divide by 4" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+      reset = 0x1 ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+      reset = 0x1 ;
+    } high[3:0] ;
+  } divider_5_low @0x52 ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_5_high @0x53 ;
+
+  // Divider 6
+  reg {
+    desc = "Divide by 2" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+    } high[3:0] ;
+  } divider_6_low @0x54 ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_6_high @0x55 ;
+
+  // Divider 7
+  reg {
+    desc = "Divide by 2" ;
+    regwidth = 8;
+    field {
+      desc = "Low Cycles" ;
+    } low[7:4] ;
+    field {
+      desc = "High Cycles" ;
+    } high[3:0] ;
+  } divider_7_low @0x56 ;
+
+  reg {
+    desc = "Phase = 0" ;
+    regwidth = 8;
+    field {
+      desc = "Bypass" ;
+    } bypass[7:7] ;
+    field {
+      desc = "No Sync" ;
+    } no_sync[6:6] ;
+    field {
+      desc = "Force" ;
+    } force[5:5] ;
+    field {
+      desc = "Start H/L" ;
+    } start_hl[4:4] ;
+    field {
+      desc = "Phase Offset" ;
+    } phase_offset[3:0] ;
+  } divider_7_high @0x57 ;
+
+  reg  {
+    desc = "FUNCTION Pin and sync. Default: FUNCTION pin = RESETB." ;
+    regwidth = 8;
+    field {
+      desc = "Set FUNCTION pin" ;
+    } set_fnc_pin[6:5] ;
+    field {
+      desc = "PD sync" ;
+    } pd_sync[4:4] ;
+    field {
+      desc = "PD all ref." ;
+    } pd_all_ref[3:3] ;
+    field {
+      desc = "Sync reg." ;
+    } sync_reg[2:2] ;
+    field {
+      desc = "Sync select" ;
+    } sync_select[1:1] ;
+    field {
+      desc = "Sync enable" ;
+    } sync_enable[0:0] ;
+  } function_pin_and_sync @0x58 ;
+
+} ;

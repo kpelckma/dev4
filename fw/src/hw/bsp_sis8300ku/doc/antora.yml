@@ -1,0 +1,6 @@
+name: bsp_sis8300ku
+title: BSP for SIS8300-KU board
+version: main
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

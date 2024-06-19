@@ -1,0 +1,232 @@
+
+
+== Package math_signed
+** *Line: 29 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+package math_signed is
+----
+*Description:*
+Provides math functions/procedures with signed signals.
+
+=== Function math_signed.f_shift
+** *Line: 32 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_shift (arg : signed; shift : integer) return signed;
+----
+*Description:*
+Absolute shift. Positive values shift left and negative values shift right
+
+=== Function math_signed.f_resize_lsb
+** *Line: 35 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_resize_lsb (arg : signed; length : natural) return signed;
+----
+*Description:*
+Resize by changing the number of least significant bits
+
+=== Function math_signed.f_saturate
+** *Line: 39 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_saturate (arg : signed; sat: t_saturation) return signed;
+----
+*Description:*
+Saturate *arg* to the maximum or minimum representable value depending on
+*saturation*
+
+=== Function math_signed.f_resize_sat
+** *Line: 42 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_resize_sat (arg : signed; length : natural) return signed;
+----
+*Description:*
+Resize with saturation protection
+
+=== Procedure math_signed.prd_resize_sat
+** *Line: 46 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_resize_sat (
+    signal arg          : in signed;
+    constant length     : in natural;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true
+  );
+----
+*Description:*
+Resize with saturation protection and saturation flag
+Like the <<f_resize_sat>> function but also sets an overflow signal.
+
+=== Function math_signed.f_sum_ext
+** *Line: 59 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_sum_ext (a, b : signed) return signed;
+----
+*Description:*
+Extended summation. Never saturates.
+Return a signed with length equal to
+----
+maximum(a'length, b'length) + 1
+----
+
+=== Function math_signed.f_diff_ext
+** *Line: 66 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_diff_ext (a, b : signed) return signed;
+----
+*Description:*
+Extended difference. Never saturates.
+Return a signed with length equal to
+----
+maximum(a'length, b'length) + 1
+----
+
+=== Function math_signed.f_neg_ext
+** *Line: 73 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_neg_ext (a : signed) return signed;
+----
+*Description:*
+Extended negation. Never saturates.
+Return a signed with length equal to
+----
+a'length + 1
+----
+
+=== Function math_signed.f_abs_ext
+** *Line: 80 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_abs_ext (a : signed) return signed;
+----
+*Description:*
+Extended absolute value. Never saturates.
+Return a signed with length equal to
+----
+a'length + 1
+----
+
+=== Function math_signed.f_sum_sat
+** *Line: 83 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_sum_sat (a, b : signed) return signed;
+----
+*Description:*
+Saturated summation.
+
+=== Function math_signed.f_diff_sat
+** *Line: 86 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_diff_sat (a, b : signed) return signed;
+----
+*Description:*
+Saturated difference.
+
+=== Function math_signed.f_neg_sat
+** *Line: 89 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_neg_sat (a : signed) return signed;
+----
+*Description:*
+Saturated negation.
+
+=== Function math_signed.f_abs_sat
+** *Line: 92 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_abs_sat (a : signed) return signed;
+----
+*Description:*
+Saturated absolute value.
+
+=== Function math_signed.f_shift_left_sat
+** *Line: 95 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  function f_shift_left_sat (a : signed; shift : natural) return signed;
+----
+*Description:*
+Saturated shift left.
+
+=== Procedure math_signed.prd_sum_sat
+** *Line: 99 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_sum_sat (
+    signal a, b         : in signed;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated summation. Like <<f_sum_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_signed.prd_diff_sat
+** *Line: 107 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_diff_sat (
+    signal a, b         : in signed;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in  boolean := true);
+----
+*Description:*
+Saturated difference. Like <<f_diff_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_signed.prd_neg_sat
+** *Line: 115 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_neg_sat (
+    signal a            : in signed;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated negation. Like <<f_neg_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_signed.prd_abs_sat
+** *Line: 123 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_abs_sat (
+    signal a            : in signed;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated absolute value. Like <<f_abs_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_signed.prd_shift_left_sat
+** *Line: 131 of link:pkg_math_signed.vhd[pkg_math_signed.vhd]*
+[source,vhdl]
+----
+  procedure prd_shift_left_sat (
+    signal a            : in signed;
+    constant shift      : in natural;
+    signal result       : out signed;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated shift left. Like <<f_shift_left>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+

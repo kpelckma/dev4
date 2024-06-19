@@ -1,0 +1,19 @@
+== BSP for the SIS8300-KU README
+:hide-uri-scheme:
+
+:maindocumentationlink: link:./doc/main.adoc[Main Documentation]
+
+
+This repository contains the Board Support Package of the SIS8300-KU AMC Board.
+
+To read more about the firmware documentation, please visit: **{maindocumentationlink}**
+
+This module does not contain the dependent modules. These should be added by the developer on the super project repo.
+
+include::doc/modules/ROOT/pages/dependencies.adoc[]
+
+
+== Usage Examples
+The following projects use this module: 
+
+https://gitlab.desy.de/fpgafw/projects/example/sis8300ku_example_design[SIS8300KU Example Design]

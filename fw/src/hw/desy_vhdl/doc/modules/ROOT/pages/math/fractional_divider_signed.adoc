@@ -1,0 +1,37 @@
+
+
+== Entity fractional_divider_signed
+** *Line: 40 of link:fractional_divider_signed.vhd[fractional_divider_signed.vhd]*
+[source,vhdl]
+----
+entity fractional_divider_signed is
+  generic (
+    G_INPUT_LENGTH     : natural;
+    G_OUTPUT_LENGTH    : natural;
+    G_SEPARATE_COMPARE : boolean := false
+  );
+  port (
+    pi_clk         : in    std_logic;
+    pi_rst         : in    std_logic;
+    pi_stb         : in    std_logic;
+    po_rdy         : out   std_logic;
+    pi_numerator   : in    signed(G_INPUT_LENGTH - 1 downto 0);
+    pi_denominator : in    signed(G_INPUT_LENGTH - 1 downto 0);
+    po_vld         : out   std_logic;
+    po_saturated   : out   t_saturation;
+    po_quotient    : out   signed(G_OUTPUT_LENGTH - 1 downto 0)
+  );
+end entity fractional_divider_signed;
+----
+*Description:* 
+Fractional divider for signed types. The quotient is computed in an +
+iterative way using the pencil-paper algorithm. The assumed range for the +
+numerator and denominator is `[-1, 1)`, the range for the quotient is +
+`(-1,1)`.
+The number of cycles the divider +
+takes to complete one iteration is equal to `g_output_length+2` when +
+`G_SEPARATE_COMPARE` is `false` or `g_output_length*2+2` otherwise.
+`G_SEPARATE_COMPARE` adds an additional stage to improve the max design +
+frequency.
+If `abs(numerator) >= abs(denominator)` `po_saturated` is equal to `ST_SAT_OVERFLOWN` if
+the quotient overflown or `ST_SAT_UNDERFLOWN` if the quotient underflown.

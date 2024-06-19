@@ -1,0 +1,10 @@
+== HDL Dependencies
+
+This module does not automatically add dependent libraries and modules. 
+Instead the super-project should add the necessary dependencies as the git submodule and include their the tcl scripts on the main project.tcl
+
+This DS8VM1 Module depends on the following modules and libraries:
+
+* https://gitlab.msktools.desy.de/fpgafw/lib/desy_vhdl[DESY VDHL Library]
+
+Registers are generated using https://pypi.org/project/desyrdl[DesyRDL]

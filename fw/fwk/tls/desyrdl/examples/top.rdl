@@ -1,0 +1,10 @@
+// top level RDL file
+addrmap top {
+  desyrdl_interface = "AXI4L";
+  desyrdl_access_channel = 0;
+
+  // <type name> <instance name>;
+	llrf_fd_top fd;
+  test_hectare hectare;
+};
+

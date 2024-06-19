@@ -1,0 +1,10 @@
+
+addrmap ch13_top {
+  desyrdl_generate_hdl = false ;
+  desyrdl_access_channel = 13 ;
+  desyrdl_interface = "AXI4L" ;
+  bridge;
+  TOP  BSP @0;
+  app  APP @8388608;
+  app_daq  DAQBUF @2147483648;
+} ;

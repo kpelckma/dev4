@@ -1,0 +1,140 @@
+== Register Descriptions
+
+
+Most of the registers lengths gets configured through how many Regions are active on DAQ configuration (determined by a constant ``C_DAQ_REGIONS``). This parameters currently gets fetched through appconfig.
+
+[cols="6,3,3,3,9"]
+|===
+|Name |Register Width |Number of Elements | RO/RW | Description
+
+|ID
+|32
+|1
+|RO
+|Shows how DAQ is configured under the hood. +
+(3 downto 0) -> "0000" => "GENERIC FIFO Architecture" +
+(3 downto 0) -> "0001" => "VIRTEX5 FIFO Architecture" +
+(3 downto 0) -> "0010" => "VIRTEX6 FIFO Architecture" +
+(3 downto 0) -> "0011" => "7SERIES FIFO Architecture" +
+(3 downto 0) -> "0100" => "XPM FIFO Architecture" +
+(3 downto 0) -> "0101" => "ULTRSCALE FIFO Architecture" +
+(4) -> '0' -> First Word Fall Through Disabled + 
+(4) -> '1' -> First Word Fall Through Enabled  + 
+(9 downto 5) -> Number of DAQ regions
+
+|VERSION
+|32
+|1
+|RO
+|Shows the release version of the DAQ module, with separate 8 bit fields according to the Semantic Versioning
+
+|ENABLE
+|C_DAQ_REGIONS
+|1
+|RW
+|Enables the particular DAQ region
+
+|TAB_SEL
+|8
+|C_DAQ_REGIONS
+|RW
+|Select the active tab for particular DAQ region
+
+|STROBE_DIV
+|32
+|C_DAQ_REGIONS
+|RW
+|Divide the DAQ sampling frequency +
+0 -> No division +
+1 -> Divide by 2
+
+|STROBE_CNT
+|32
+|C_DAQ_REGIONS
+|RO
+|Counts the strobe for each region. +
+Useful when region is using external strobe +
+It can be check if the external strobe is arriving to the DAQ module
+
+|SAMPLES
+|32
+|C_DAQ_REGIONS
+|RW
+|Determines how many samples will DAQ take after each trigger +
+For narrowband and equalband transmission: Must be multiples of burst length +
+For wideband transmission: Must be multiples of (burst_length)/(CON_CHANNEL_WIDTH_BYTES*8*CON_DAQx_CHANNELS_IN_TAB/G_AXI_DATA_WIDTH)
+
+|DOUBLE_BUF_ENA
+|C_DAQ_REGIONS
+|1
+|Rw
+|Enable double buffering feature for the particular DAQ region
+
+|ACTIVE_BUF
+|C_DAQ_REGIONS
+|1
+|RO
+|Shows which buffer is currently being written by DAQ
+
+|FIFO_STATUS
+|32
+|C_DAQ_REGIONS
+|RO
+|Counter counting on the state of Almost Full for the data FIFOs. If this counting up, it can be an indicator that subordinate is not accepting the AXI.4 Packages.
+
+|SENT_BURST_CNT
+|32
+|C_DAQ_REGIONS
+|RO
+|Counts the number of bursts sent to AXI.4 subordinate
+
+|TRG_DELAY_VAL
+|32
+|C_DAQ_REGIONS
+|RW
+|Delay the DAQ trigger by number of clock cycles
+
+|TRG_DELAY_ENA
+|C_DAQ_REGIONS
+|1
+|RW
+|Enable the delay of the DAQ trigger
+
+|TRG_CNT_BUF0
+|16
+|3 (TODO: make this also change with C_DAQ_REGIONS)
+|RO
+|Number of trigger timestamps available for buffer 0
+
+|TRG_CNT_BUF1
+|16
+|3 (TODO: make this also change with C_DAQ_REGIONS)
+|RO
+|Number of trigger timestamps available for buffer 1
+
+|TIMESTAMP_RST
+|1
+|C_DAQ_REGIONS
+|RW
+|Setting this resets the timestamp module per DAQ region
+
+|DAQ_TIMES_0
+|32
+|1024
+|RW
+|Timestamps for buffer start and triggers - DAQ region 0
+
+|DAQ_TIMES_1
+|32
+|1024
+|RW
+|Timestamps for buffer start and triggers - DAQ region 1
+
+
+|DAQ_TIMES_2
+|32
+|1024
+|RW
+|Timestamps for buffer start and triggers - DAQ region 2
+
+|===

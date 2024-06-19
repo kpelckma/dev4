@@ -1,0 +1,20 @@
+== Hardware Overview
+
+image::ds8vm1_bd.png[]
+
+
+The DRTM-DS8VM1 is a 8+2-channel feed through RTM for direct sampling applications combined with a high frequency single channel vector modulator. It iscompliant to the MTCA.4 standard and the Reartransition module (RTM) interface is Class A1.1 compliant.
+Eight feed through channels are configured as ACcoupled and two channels are configured as DCcoupled. The signals can be interfaced to a Class A1.1 compatible AMC digitizer board. The ADC clock and RF reference input signals can be sourced externally from the front panel as well as internally from an RF-backplane. An on-board PLL/VCO can be used for ultra-low jitter clock generation.
+The module features on-board power level monitors and user I2C interfaces for communication and diagnostics.
+
+
+* Double-width MTCA.4 Rear-transition module (RTM)
+* Class A1.1 compatible
+* 8 analog input channels (5 to 400MHz*) with phase resolution of 0.050°at 400MHz
+* 2 analog input channels (DC to 400MHz*) with phase resolution of 0.05°at 400MHz
+* One high frequency vector modulator channel (0.05 to 6.0GHz) with modulation bandwidth from DC to 50MHz
+* ADC clock and RF reference from front panel or RF-backplane (optional)
+* Power level monitors
+* User I2C support
+* RoHS compliant
+* Options: RF-backplane support

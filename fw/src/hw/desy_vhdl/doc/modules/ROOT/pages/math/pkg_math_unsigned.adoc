@@ -1,0 +1,147 @@
+
+
+== Package math_unsigned
+** *Line: 29 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+package math_unsigned is
+----
+*Description:*
+Provides math functions/procedures with unsigned signals.
+
+=== Function math_unsigned.f_shift
+** *Line: 32 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_shift (arg : unsigned; shift : integer) return unsigned;
+----
+*Description:*
+Absolute shift. Positive values shift left and negative values shift right
+
+=== Function math_unsigned.f_resize_lsb
+** *Line: 35 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_resize_lsb (arg : unsigned; length : natural) return unsigned;
+----
+*Description:*
+Resize by changing the number of least significant bits
+
+=== Function math_unsigned.f_saturate
+** *Line: 39 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_saturate (arg : unsigned; sat: t_saturation) return unsigned;
+----
+*Description:*
+Saturate *arg* to the maximum or minimum representable value depending on
+*saturation*
+
+=== Function math_unsigned.f_resize_sat
+** *Line: 42 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_resize_sat (arg : unsigned; length : natural) return unsigned;
+----
+*Description:*
+Resize with saturation protection
+
+=== Procedure math_unsigned.prd_resize_sat
+** *Line: 46 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  procedure prd_resize_sat (
+    signal arg          : in unsigned;
+    constant length     : in natural;
+    signal result       : out unsigned;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true
+  );
+----
+*Description:*
+Resize with saturation protection and saturation flag
+Like the <<f_resize_sat>> function but also sets an overflow signal.
+
+=== Function math_unsigned.f_sum_ext
+** *Line: 59 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_sum_ext (a, b : unsigned) return unsigned;
+----
+*Description:*
+Extended summation. Never saturates.
+Return a unsigned with length equal to
+----
+maximum(a'length, b'length) + 1
+----
+
+=== Function math_unsigned.f_sum_sat
+** *Line: 62 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_sum_sat (a, b : unsigned) return unsigned;
+----
+*Description:*
+Saturated summation.
+
+=== Function math_unsigned.f_diff_sat
+** *Line: 65 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_diff_sat (a, b : unsigned) return unsigned;
+----
+*Description:*
+Saturated difference.
+
+=== Function math_unsigned.f_shift_left_sat
+** *Line: 68 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  function f_shift_left_sat (a : unsigned; shift : natural) return unsigned;
+----
+*Description:*
+Saturated shift left.
+
+=== Procedure math_unsigned.prd_sum_sat
+** *Line: 72 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  procedure prd_sum_sat (
+    signal a, b         : in unsigned;
+    signal result       : out unsigned;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated summation. Like <<f_sum_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_unsigned.prd_diff_sat
+** *Line: 80 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  procedure prd_diff_sat (
+    signal a, b         : in unsigned;
+    signal result       : out unsigned;
+    signal sat          : out t_saturation;
+    constant sat_result : in  boolean := true);
+----
+*Description:*
+Saturated difference. Like <<f_diff_sat>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+
+=== Procedure math_unsigned.prd_shift_left_sat
+** *Line: 88 of link:pkg_math_unsigned.vhd[pkg_math_unsigned.vhd]*
+[source,vhdl]
+----
+  procedure prd_shift_left_sat (
+    signal a            : in unsigned;
+    constant shift      : in natural;
+    signal result       : out unsigned;
+    signal sat          : out t_saturation;
+    constant sat_result : in boolean := true);
+----
+*Description:*
+Saturated shift left. Like <<f_shift_left>> with the addition of
+a saturation signal. If sat_result = false the result is not saturated
+

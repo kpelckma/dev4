@@ -1,0 +1,41 @@
+
+
+addrmap module_b {
+  name = "example module b address space";
+  desyrdl_interface = "AXI4L";
+
+  reg { //constant in user logic
+		default sw = r;
+		default hw = rw;
+		field {} data[32] ;
+	  } ID @0x00;
+
+	reg { //constant in RDL with 4 fields
+		default sw = r;
+		default hw = r;
+		field {} changes [8] = 0x00;
+		field {} patch [8] = 0x01;
+		field {} minor [8] = 0x01;
+		field {} major [8] = 0x00;
+	  } VERSION @0x04;
+
+	reg { // user register, like IBUS WORD_USER, default value 0xA at address 0x10
+		default sw = rw;
+		default hw = r;
+		field {} data[32] = 0x000000BA;
+	  } USER @0x10;
+
+	reg { // test register, sw and hw can read, we flag needed to trigger write from hw
+		default sw = rw;
+		default hw = rw;
+    default we = true;
+		field {} data[32] = 0x000000BB;
+	  } TEST ;
+
+	reg { // test register, sw and hw can read, we flag needed to trigger write from hw
+		default sw = rw;
+		default hw = r;
+		field {} data[32] = 0x00000ABB;
+	  } TAB [32] ;
+
+};

@@ -1,0 +1,7 @@
+
+addrmap top {
+  desyrdl_generate_hdl = false ;
+  desyrdl_access_channel = 0 ;
+  desyrdl_interface = "AXI4L" ;
+  module_a  MODA @0;
+} ;

@@ -1,0 +1,26 @@
+= DWC8VM1 Module Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:math:
+
+image::dwc8vm1.jpg[]
+
+Welcome to the start page of the DWC8VM1 Module documentation. This documentation page includes information about the hardware and firmware.
+
+The DRTM-DWC8VM1 is a combined high frequency eight channel down- and single channel upconversion RTM compliant with the MTCA.4 standard. The unit covers the L and S-band. The down-conversion offers an excellent rms amplitude and phase short-term stability of typ. <0.005% and <10fs in the range of 10Hz to 1MHz.
+
+Here are some useful links:
+
+* xref:hardware.adoc[Hardware Overview]
+* xref:registers.adoc[Register Descriptions]
+* xref:dependencies.adoc[HDL dependencies]
+
+The main developer for this module: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this module: Michael Buechler (michael.buechler@desy.de)
+
+Tested on Vivado 2020.2 +
+Tested on ISE 14.7 +
+Tested on PlanAhead +

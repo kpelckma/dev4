@@ -1,0 +1,80 @@
+= Template Engine
+
+`fwk` allows to use templates as a sources.
+Templates are rendered using Jinja2 tool.
+The rendered output file is automatically included into the design.
+
+For template engine details please follow:
+link:https://jinja.palletsprojects.com/en/3.1.x/templates/[Jinja2 Template Designer Documentation]
+
+== Installation
+
+You can use globally installed tool or local `fwk` environment.
+
+.Globally installed
+[source,bash]
+----
+pip install jinja2-cli
+----
+
+.FWK local virtual environment
+[source,bash]
+----
+make env
+----
+
+== FWK Usage
+
+Template variables are defined in module Tcl in `Config` array as `set Config(key) value`
+The same variables are visible for DesyRDL.
+
+=== Define variables to be used
+
+.module.tcl
+[source,tcl]
+----
+proc init {} {
+  variable Config
+  set Config(C_TEST) 1
+  set Config(C_USER) 10
+}
+----
+[IMPORTANT]
+Variable has to have `Config` name.
+
+=== Define template sources
+
+Templates are defined by adding `_TPL` posftix to the source type in the source list e.g. `VHDL` -> `VHDL_TPL`.
+
+.module.tcl
+[source,tcl]
+----
+  variable Sources
+  lappend Sources {../hdl/component_b.vhd  "VHDL"}; # standard VHDL source
+  lappend Sources {../hdl/module_b_top.vhd "VHDL_TPL"}; # VHDL Template
+----
+
+[NOTE]
+Rendered templates are places under `prj/<prjname_config>/src/<path_of_template_in_src>`
+
+== Template Example
+
+=== Conditional statement
+
+.module_b_top.vhd
+[source,jinja2]
+----
+{%- if C_TEST is defined and C_TEST | int == 1 %} {#- key values are string '| int' is filter conversion #}
+   addrmap_i.TEST_TPL.data.data <= x"FAFAFAFA";
+   addrmap_i.TEST_TPL.data.we   <= trigger;
+{%- endif %}
+----
+
+=== Variable value placement
+
+.module_b_top.vhd
+[source,vhdl]
+----
+constant  C_VERSION_INT : integer := {{C_VERSION | int(base=16) }};
+----
+

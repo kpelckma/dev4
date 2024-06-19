@@ -1,0 +1,38 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Wed Jul 26 20:28:34 2023
+# Process ID: 2082590
+# Current directory: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo
+# Command line: vivado
+# Log file: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo/vivado.log
+# Journal file: /home/kristiaanpelckmans/Downloads/dev4/fw/src/hw/mimo/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/kristiaanpelckmans/Xilinx/Vivado/2020.1/data/ip'.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+open_project: Time (s): cpu = 00:00:24 ; elapsed = 00:00:12 . Memory (MB): peak = 7313.145 ; gain = 38.066 ; free physical = 102600 ; free virtual = 121150
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+[Wed Jul 26 20:31:31 2023] Launched synth_1...
+Run output will be captured here: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.runs/synth_1/runme.log
+[Wed Jul 26 20:31:31 2023] Launched impl_1...
+Run output will be captured here: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 7599.410 ; gain = 0.000 ; free physical = 102659 ; free virtual = 120959
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+[Thu Jul 27 08:33:27 2023] Launched synth_1...
+Run output will be captured here: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.runs/synth_1/runme.log
+[Thu Jul 27 08:33:27 2023] Launched impl_1...
+Run output will be captured here: /home/kristiaanpelckmans/Downloads/dev4/fw/prj/dev4_dwc8vm1/dev4_dwc8vm1.runs/impl_1/runme.log
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Jul 27 09:58:45 2023...

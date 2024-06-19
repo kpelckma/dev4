@@ -1,0 +1,20 @@
+
+:imagesdir: modules/ROOT/images
+
+toc::[]
+
+:leveloffset: +1
+
+<<<
+include::modules/ROOT/pages/ch_intro.adoc[]
+<<<
+include::modules/ROOT/pages/ch_src_modules.adoc[]
+<<<
+include::modules/ROOT/pages/ch_prj.adoc[]
+<<<
+include::modules/ROOT/pages/ch_fwk.adoc[]
+<<<
+include::modules/ROOT/pages/ch_doc.adoc[]
+
+<<<
+include::modules/ROOT/pages/README.adoc[]

@@ -1,0 +1,5 @@
+== Known Issues 
+
+* TIMING module can only produce maximum 32 trigger channels. This is because limitation with the address space. If any user requests this please contact firmware team.
+
+

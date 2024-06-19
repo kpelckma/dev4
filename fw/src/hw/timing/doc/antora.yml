@@ -1,0 +1,6 @@
+name: timing
+title: Generic TIMING Module
+version: main
+start_page: index.adoc
+nav:
+- modules/ROOT/nav.adoc

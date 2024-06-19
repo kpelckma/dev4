@@ -1,0 +1,163 @@
+`include "daq.vh" //automatically created and added by fwk with conf variables such a C_VERSION ...
+
+/* default values of defined constants */
+
+`ifndef C_VERSION
+`define C_VERSION 0x00000000
+`endif
+
+`ifndef C_DAQ_REGIONS
+`define C_DAQ_REGIONS 1
+`endif
+
+addrmap daq {
+
+  desc = "Address Map for the DAQ module";
+  desyrdl_generate_hdl = true;
+  desyrdl_interface = "AXI4L";
+
+  reg {
+    desc = "Shows the Identification number for the DAQ. DAQ configuration will be exposed here.";
+    default sw = r;
+    default hw = rw;
+    field {} data[32];
+  } ID @0x00 ; // Hardcode the ID and VERSION address to a specific place
+
+  reg {
+    desc = "Shows the Git Version of the DAQ module. (Dissected)";
+    default sw = r;
+		default hw = r;
+    field {} changes [8] =  `C_VERSION & 0x000000FF;
+    field {} patch [8]   = (`C_VERSION & 0x0000FF00) >> 8;
+    field {} minor [8]   = (`C_VERSION & 0x00FF0000) >> 16;
+    field {} major [8]   = (`C_VERSION & 0xFF000000) >> 24;
+  } VERSION @0x04 ; // Hardcode the ID and VERSION address to a specific place
+
+  reg {
+    desc = "Enables the particular DAQ region to start sending AXI.4 Packages";
+    default sw = rw;
+    default hw = r;
+    field {} data[`C_DAQ_REGIONS];
+  } ENABLE;
+
+  reg {
+    desc = "Choose which tab is connected to the region";
+    default sw = rw;
+    default hw = r;
+    field {} data[32];
+  } TAB_SEL[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Choose which tab is connected to the region";
+    default sw = rw;
+    default hw = r;
+    field {} data[32];
+  } STROBE_DIV[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Counting the strobe per each region";
+    default sw = r;
+    default hw = w;
+    field {} data[32];
+  } STROBE_CNT[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Determines how many samples will be written on each trigger ";
+    default sw = rw;
+    default hw = r;
+    field {} data[32];
+  } SAMPLES[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Enables double buffering feature for a region";
+    default sw = rw;
+    default hw = r;
+    field {} data[`C_DAQ_REGIONS];
+  } DOUBLE_BUF_ENA;
+
+  reg {
+    desc = "Shows which buffer currently being written to by DAQ";
+    default sw = r;
+    default hw = w;
+    field {} data[`C_DAQ_REGIONS];
+  } ACTIVE_BUF;
+
+  reg {
+    desc = "Shows the ID of the buffer which is not currently written by DAQ";
+    default sw = r;
+    default hw = w;
+    field {} data[32];
+  } INACTIVE_BUF_ID[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Counter counting on the state of Almost Full for the FIFOs. Indicator that subordinate is not accepting the AXI.4 Packages";
+    default sw = r;
+    default hw = w;
+    field {} data[32];
+  } FIFO_STATUS[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Counts the number of bursts sent to the AXI.4 Subordinate";
+    default sw = r;
+    default hw = w;
+    field {} data[32];
+  } SENT_BURST_CNT[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Delay the DAQ trigger by number of clock cycles";
+    default sw = rw;
+    default hw = r;
+    field {} data[32];
+  } TRG_DELAY_VAL[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Enable the Delay the DAQ trigger";
+    default sw = rw;
+    default hw = r;
+    field {} data[`C_DAQ_REGIONS];
+  } TRG_DELAY_ENA;
+
+  reg {
+    desc = "Number of trigger timestamps available for a buffer 0";
+    default sw = r;
+    default hw = w;
+    field {} data[16];
+  } TRG_CNT_BUF0[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Number of trigger timestamps available for a buffer 1";
+    default sw = r;
+    default hw = w;
+    field {} data[16];
+  } TRG_CNT_BUF1[`C_DAQ_REGIONS];
+
+  reg {
+    desc = "Resets the timestamp module for a given DAQ region";
+    default sw = rw;
+    default hw = r;
+    field {} data[`C_DAQ_REGIONS];
+  } TIMESTAMP_RST;
+
+// TODO: Change external mems instantiation style so that it can cover more regions.
+  external mem {
+    desc = "Timestamps for buffer start and triggers - DAQ region 0";
+    mementries = 1024;
+    memwidth   = 32;
+    sw         = rw;
+  } DAQ_TIMES_0;
+
+  external mem {
+    desc = "Timestamps for buffer start and triggers - DAQ region 1";
+    mementries = 1024;
+    memwidth   = 32;
+    sw         = rw;
+  } DAQ_TIMES_1;
+
+  external mem {
+    desc = "Timestamps for buffer start and triggers - DAQ region 2";
+    mementries = 1024;
+    memwidth   = 32;
+    sw         = rw;
+  } DAQ_TIMES_2;
+
+};

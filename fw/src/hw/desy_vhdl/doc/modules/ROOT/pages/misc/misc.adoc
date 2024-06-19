@@ -1,0 +1,147 @@
+== Package: logic_misc
+
+* *File*: pkg_logic_misc.vhd
+
+Miscellaneous logic functions. Since _ieee.std_logic_misc_ is a nonstandard proprietary
+package, some of its methods are provided in _logic_misc_.
+
+=== Functions
+
+==== logic_misc.f_to_std_logic
+[source,vhdl]
+----
+function f_to_std_logic (arg: boolean) return std_logic
+----
+*Description*: Converts boolean to std_logic. +
+ +
+ +
+
+==== logic_misc.f_to_boolean
+[source,vhdl]
+----
+function f_to_boolean (arg: std_logic) return boolean
+----
+*Description*: Converts std_logic to boolean. +
+ +
+ +
+
+==== logic_misc.f_all_ones
+[source,vhdl]
+----
+function f_all_ones (arg: std_logic_vector) return std_logic
+----
+*Description*: Checks whether all bits of _arg_ are equal to '1'.
+Equivalent to <<logic_misc.and_reduce>>. +
+ +
+ +
+
+==== logic_misc.f_all_zeroes
+[source,vhdl]
+----
+function f_all_zeroes (arg: std_logic_vector) return std_logic
+----
+*Description*: Checks wheter all bits of _arg_ are equal to '0'.
+Equivalent to <<logic_misc.nor_reduce>>. +
+ +
+ +
+
+==== logic_misc.f_odd_ones
+[source,vhdl]
+----
+function f_odd_ones (arg: std_logic_vector) return std_logic
+----
+*Description*: Return '1' if an odd number of bits in _arg_ are '1'.
+Equivalent to <<logic_misc.xor_reduce>>. +
+ +
+ +
+
+==== logic_misc.f_even_ones
+[source,vhdl]
+----
+function f_even_ones (arg: std_logic_vector) return std_logic
+----
+*Description*: Return '1' if an even number of bits in _arg_ are '1'.
+Return '1' if zero bits in _arg_ are '1'.
+Equivalent to <<logic_misc.xnor_reduce>>. +
+ +
+ +
+
+==== logic_misc.f_odd_zeroes
+[source,vhdl]
+----
+function f_odd_zeroes (arg: std_logic_vector) return std_logic
+----
+*Description*: Return '1' if an odd number of bits in _arg_ are '0'. +
+ +
+ +
+
+==== logic_misc.f_even_zeroes
+[source,vhdl]
+----
+function f_even_zeroes (arg: std_logic_vector) return std_logic
+----
+*Description*: Return '1' if an even number of bits in _arg_ are '0'.
+ +
+ +
+
+==== logic_misc.or_reduce
+[source,vhdl]
+----
+function or_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Reduction of bits in _arg_ with the **or** logical operator.
+Port of nonstandard _ieee.std_logic_misc.or_reduce_. +
+ +
+ +
+
+==== logic_misc.and_reduce
+[source,vhdl]
+----
+function and_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Reduction of bits in _arg_ with the **and** logical operator.
+Port of nonstandard _ieee.std_logic_misc.and_reduce_. +
+ +
+ +
+
+==== logic_misc.xor_reduce
+[source,vhdl]
+----
+function xor_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Reduction of bits in _arg_ with the **xor** logical operator.
+Port of nonstandard _ieee.std_logic_misc.xor_reduce_. +
+ +
+ +
+
+==== logic_misc.nor_reduce
+[source,vhdl]
+----
+function nor_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Negated reduction of bits in _arg_ with the **or** logical operator.
+Port of nonstandard _ieee.std_logic_misc.nor_reduce_. +
+ +
+ +
+
+==== logic_misc.nand_reduce
+[source,vhdl]
+----
+function nand_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Negated reduction of bits in _arg_ with the **and** logical operator.
+Port of nonstandard _ieee.std_logic_misc.nand_reduce_. +
+ +
+ +
+
+==== logic_misc.xnor_reduce
+[source,vhdl]
+----
+function xnor_reduce (arg: std_logic_vector) return std_logic
+----
+*Description*: Negated reduction of bits in _arg_ with the **xor** logical operator.
+Port of nonstandard _ieee.std_logic_misc.xnor_reduce_. +
+
+include::cdc_synch.adoc[]
+
+include::cdc_flag.adoc[]

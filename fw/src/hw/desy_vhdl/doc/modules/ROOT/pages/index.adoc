@@ -1,0 +1,21 @@
+= desy_vhdl Library Documentation
+:xrefstyle: full
+:toc: macro
+:sectnums:
+:text-alignment: justify
+:icons: font
+:math:
+
+This repo contains commonly used IPs and packages written in VHDL for the DESY firmware framework. The idea is to provide a set of reusable components that can be included in any project.
+
+== Sections
+
+* xref:common/common.adoc[Common utilities]
+* xref:bus/bus.adoc[Bus related IPs]
+* xref:dsp/dsp.adoc[Digital signal processing]
+* xref:math/math.adoc[Math packages and IPs]
+* xref:memory/memory.adoc[FIFO and Memory IPs]
+* xref:peripheal/peripheal.adoc[External device support IPs]
+
+The main developer for this library: Cagil Gumus (cagil.guemues@desy.de) +
+Secondary developer for this library: Katharina Schulz (katharina.schulz@desy.de)

@@ -1,0 +1,15 @@
+// Sourcing the images
+:imagesdir: modules/ROOT/images
+
+include::modules/ROOT/pages/index.adoc[]
+<<<
+include::modules/ROOT/pages/hardware.adoc[]
+<<<
+include::modules/ROOT/pages/firmware.adoc[]
+<<<
+include::modules/ROOT/pages/dependencies.adoc[]
+<<<
+include::modules/ROOT/pages/registers.adoc[]
+<<<
+
+

@@ -1,0 +1,420 @@
+= Address Space Tree
+
+In FWK it is possible to create  address tree with `::fwfwk::addAddressSpace procedure`.
+
+This procedure is available in each source namespaces eg. `::fwfwk::src::bsp::addAddressSpace`
+
+== addAddressSpace
+
+Address space procedure
+
+[source,tcl]
+----
+addAddressSpace <addr_var> <node_name> <node_type> <node_address> <node_argument>
+----
+
+addr_var::
+  Variable name which stores address space tree.
+node_name::
+  Name of the node to add. This is type or instance name of node depedently on node_type.
+node_type::
+  Type of the node that is added.
+  This variable defines the node argument type and if node_name is instance name of type name of the node.
+  <TODO: table and description>
+  - TOP
+  - INST or ARRAY
+  - RDL
+  - IBUS
+  - IPX
+node_address::
+  Node address properties. format is the list `{AccessChannel BaseAddress AddressRange}`. e.g. `{C0 0x0001000 1k}`
+  It accepts 1, 2 or 3 elements. `{ 0x0001000 1k }` or  `{ 0x0001000 }`
+node_argument::
+  depends on node type.
+
+== Node properties
+
+Each `addAddresSpace` procedure creates new node and places it in the address space tree. Each node has defined properties.
+
+[horizontal]
+ID             :: identification number of the node
+Parent ID      :: id of the parent node
+Name           :: name of the node
+Type           :: type od the node
+Base Address   :: base address of the node
+Address Range  :: address rang of the node
+Access Channel :: access channel of the node
+Config         :: list/dictionary of configuration variables
+
+
+
+== Generic tree creation idea
+
+In this section there are a few examples of how the address space tree is created
+
+=== Adding nodes to address tree
+
+[source,tcl]
+----
+variable AddressSpace
+addAddressSpace "AddressSpace" "node0" <TYPE> {0x00000000} <ARG>
+addAddressSpace "AddressSpace" "node1" <TYPE> {0x00001000} <ARG>
+addAddressSpace "AddressSpace" "node2" <TYPE> {0x00002000} <ARG>
+addAddressSpace "AddressSpace" "node3" <TYPE> {0x00003000} <ARG>
+----
+
+.address space tree
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_1 {
+    label="AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    node0 [shape=box]
+    node1 [shape=box]
+    node2 [shape=box]
+    node3 [shape=box]
+
+    ID0 -> node0 [arrowhead=none]
+    node0 -> node1
+    node0 -> node2
+    node0 -> node3
+  }
+}
+....
+
+.Explanation
+. ID0 is the default top node keeping information about whole tree. Number of nodes and three name. Created always in empty tree.
+. node0 is the fist node to be added to the address tree and it becomes the root node.
+. node1, node2 and node3 are added always as children of the root - node0
+
+=== Merging trees
+
+[source,tcl]
+----
+variable SubAddressSpace
+addAddressSpace "AddressSpace" "subNode0" <TYPE> {0x00000000} <ARG>
+addAddressSpace "AddressSpace" "subNode1" <TYPE> {0x00001000} <ARG>
+addAddressSpace "AddressSpace" "subNode2" <TYPE> {0x00002000} <ARG>
+addAddressSpace "AddressSpace" "subNode3" <TYPE> {0x00003000} <ARG>
+
+variable AddressSpace
+addAddressSpace "AddressSpace" "node0" <TYPE> {0x00000000} <ARG>
+addAddressSpace "AddressSpace" "node1" <TYPE> {0x00001000} <ARG>
+addAddressSpace "AddressSpace" "node2" <TYPE> {0x00002000} <ARG>
+addAddressSpace "AddressSpace" "node3" ARRAY {0x00010000} "SubAddressSpace"
+----
+
+.two address space trees
+[graphviz]
+....
+digraph foo {
+  compound=true;
+  subgraph cluster_1 {
+    label="AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    node0 [shape=box]
+    node1 [shape=box]
+    node2 [shape=box]
+    node3 [shape=box]
+
+    ID0 -> node0 [arrowhead=none]
+    node0 -> node1
+    node0 -> node2
+    node0 -> node3
+  }
+  subgraph cluster_2 {
+    label="SubAddressSpace";
+    node [style=rounded]
+    subID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    subNode0 [shape=box]
+    subNode1 [shape=box]
+    subNode2 [shape=box]
+    subNode3 [shape=box]
+
+    subID0 -> subNode0 [arrowhead=none]
+    subNode0 -> subNode1
+    subNode0 -> subNode2
+    subNode0 -> subNode3
+  }
+  subNode0 -> node3 [style=dashed]
+}
+....
+
+.merged address space trees
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_1 {
+    label="AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    node0 [shape=box]
+    node1 [shape=box]
+    node2 [shape=box]
+    node3 [shape=box]
+
+    ID0 -> node0 [arrowhead=none]
+    node0 -> node1
+    node0 -> node2
+    node0 -> node3
+
+    subNode1 [shape=box]
+    subNode2 [shape=box]
+    subNode3 [shape=box]
+
+    node3 -> subNode1
+    node3 -> subNode2
+    node3 -> subNode3
+  }
+  // subNode0 -> node3
+}
+....
+
+
+== FWK project three
+
+There is one global project wise  address tree variable `::fwfwk::AddressSpace` to which all sub address space trees should be added.
+Address tree is created from bottom (last child) to top.
+
+=== Example project
+
+.example_module.tcl
+[source,tcl]
+----
+addAddressSpace AddressSpace "example_rdl" RDL   {} ../rdl/example_rdl.rdl
+----
+
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_1 {
+    label="AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    example_rdl [shape=box, label="example_rdl"]
+    ID0 -> example_rdl [arrowhead=none]
+  }
+}
+....
+
+.app_module.tcl
+[source,tcl]
+----
+addAddressSpace AddressSpace "app_example" RDL   {} ../rdl/app_example.rdl
+addAddressSpace AddressSpace "EXMPL_0"  ARRAY {} example_desyrdl::AddressSpace
+addAddressSpace AddressSpace "EXMPL_1"  ARRAY {} example_desyrdl::AddressSpace
+----
+
+[graphviz]
+....
+digraph foo {
+  compound=true;
+  subgraph cluster_1 {
+    label="app::AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    app_example [shape=box]
+    EXMPL_0 [shape=box]
+    EXMPL_1 [shape=box]
+
+    ID0 -> app_example [arrowhead=none]
+    app_example -> EXMPL_0
+    app_example -> EXMPL_1
+  }
+  subgraph cluster_2 {
+    label="example_rdl::AddressSpace";
+    node [style=rounded]
+    subID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    example_rdl [shape=box, label="example_rdl"]
+    subID0 -> example_rdl [arrowhead=none]
+  }
+  example_rdl -> EXMPL_0 [style=dashed]
+  example_rdl -> EXMPL_1 [style=dashed]
+}
+....
+
+.bsp_module.tcl
+[source,tcl]
+----
+variable AddressSpace
+addAddressSpace AddressSpace "bsp"  RDL  {C0 0x00000000 2M} ../rdl/bsp.rdl
+addAddressSpace AddressSpace "AXIF" IPX  {C0 0x00200000 64k} bsp_system_axi_firewall_0_0
+----
+
+[graphviz]
+....
+digraph foo {
+  compound=true;
+  subgraph cluster_1 {
+    label="bsp::AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    node0 [shape=box, label="bsp"]
+    node1 [shape=box, label="AXIF"]
+
+    ID0   -> node0 [arrowhead=none]
+    node0 -> node1
+  }
+}
+....
+
+
+.fwfwk.tcl
+[source,tcl]
+----
+::fwfwk::addAddressSpace ::fwfwk ::fwfwk::AddressSpace $::fwfwk::ProjectName PROJECT 0 ""
+----
+
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_1 {
+    label="AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    node0 [shape=box, label="$::fwfwk::ProjectName"]
+    ID0 -> node0 [arrowhead=none]
+  }
+}
+....
+
+
+.project.tcl
+[source,tcl]
+----
+addAddressSpace ::fwfwk::AddressSpace "BSP" ARRAY {C0 0x00000000 8M} bsp::AddressSpace
+addAddressSpace ::fwfwk::AddressSpace "C2C" EMPTY {C0 0x01000000 8M} {}
+addAddressSpace ::fwfwk::AddressSpace "APP" ARRAY {C1 0x00000000 8M} app::AddressSpace
+----
+
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_bsp {
+    label="bsp::AddressSpace";
+    node [style=rounded]
+    bspID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    bsp [shape=box, label="bsp"]
+    axif [shape=box, label="AXIF"]
+
+    bspID0 -> bsp [arrowhead=none]
+    bsp -> axif
+  }
+
+  subgraph cluster_1 {
+    label="::fwfwk::AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    node0 [shape=box, label="$::fwfwk::ProjectName"]
+
+    node1 [shape=box, label="BSP"]
+    node2 [shape=box, label="C2C"]
+    node3 [shape=box, label="APP"]
+
+    ID0 -> node0 [arrowhead=none]
+    node0 -> node1
+    node0 -> node2
+    node0 -> node3
+  }
+  subgraph cluster_app {
+    label="app::AddressSpace";
+    node [style=rounded]
+    appID0 [fillcolor=lightgray, style="rounded,filled",shape=box,label="ID0"]
+    app_example [shape=box]
+    EXMPL_0 [shape=box]
+    EXMPL_1 [shape=box]
+
+    appID0 -> app_example [arrowhead=none]
+    app_example -> EXMPL_0
+    app_example -> EXMPL_1
+  }
+  bsp -> node1 [style=dashed]
+  app_example -> node3 [style=dashed]
+}
+....
+
+
+
+Total tree constructed:
+
+[graphviz]
+....
+digraph foo {
+  subgraph cluster_1 {
+    label="::fwfwk::AddressSpace";
+    node [style=rounded]
+    ID0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+    node0 [shape=record, label="{$::fwfwk::ProjectName| type: PROJECT | {addr: 0x00000000 | size: 3G} | \{\} }"]
+
+    node1 [shape=record, label="{BSP | type: RDL  | access channel: 0 | addr: 0x00000000 | size: 8M  | ../rdl/bsp.rdl}"]
+    node2 [shape=record, label="{C2C | type: NODE | access channel: 0 | addr: 0x00100000 | size: 8M  | \{\} }"]
+    node3 [shape=record, label="{APP | type: RDL  | access channel: 1 | addr: 0x00000000 | size: 8M  | ../rdl/app_example.rdl }"]
+    axif  [shape=record, label="{AXIF | type: IPX | access channel: 0 | addr: 0x00200000 | size: 64k | ../rdl/app_example.rdl }"]
+    exmpl0 [shape=record, label="{EXMPL_0 | type: RDL | access channel: 1 | addr: \{\} | size: \{\}  | ../rdl/example_rdl.rdl }"]
+    exmpl1 [shape=record, label="{EXMPL_1 | type: RDL | access channel: 1 | addr: \{\} | size: \{\}  | ../rdl/example_rdl.rdl }"]
+
+    ID0 -> node0 [arrowhead=none]
+    node0 -> node1
+    node0 -> node2
+    node0 -> node3
+
+    node1 -> axif
+    node3 -> exmpl0
+    node3 -> exmpl1
+
+  }
+}
+....
+
+
+[NOTE]
+The nodes that are not RDL type will be converted to RDL by FWK Tcl scripts. When the tree has only RDL files all of them are copied to one folder. FWK runs DesyRDL with proper order of .
+
+=== Access Channels separation
+
+
+Additional step after creating main address space tree is to create separate trees per Access Channel.
+
+[graphviz]
+....
+digraph foo {
+
+  subgraph cluster_1 {
+    label="::fwfwk::AddressSpaceDict CH0";
+    node [style=rounded]
+    CH0 [fillcolor=lightgray, style="rounded,filled",shape=box]
+
+    node1 [shape=record, label="{BSP | type: RDL  | access channel: 0 | addr: 0x00000000 | size: 8M  | ../rdl/bsp.rdl}"]
+    node2 [shape=record, label="{C2C | type: NODE | access channel: 0 | addr: 0x00100000 | size: 8M  | \{\} }"]
+    axif  [shape=record, label="{AXIF | type: IPX | access channel: 0 | addr: 0x00200000 | size: 64k | ../rdl/app_example.rdl }"]
+
+    CH0 -> node1 [arrowhead=none]
+    CH0 -> node2 [arrowhead=none]
+
+    node1 -> axif
+
+  }
+
+  subgraph cluster_2 {
+    label="::fwfwk::AddressSpaceDict CH1";
+    node [style=rounded]
+    CH1 [fillcolor=lightgray, style="rounded,filled",shape=box]
+
+    node3 [shape=record, label="{APP | type: RDL  | access channel: 1 | addr: 0x00000000 | size: 8M  | ../rdl/app_example.rdl }"]
+    exmpl0 [shape=record, label="{EXMPL_0 | type: RDL | access channel: 1 | addr: \{\} | size: \{\}  | ../rdl/example_rdl.rdl }"]
+    exmpl1 [shape=record, label="{EXMPL_1 | type: RDL | access channel: 1 | addr: \{\} | size: \{\}  | ../rdl/example_rdl.rdl }"]
+
+    CH1 -> node3 [arrowhead=none]
+
+    node3 -> exmpl0
+    node3 -> exmpl1
+
+  }
+}
+....
+
+
+

@@ -1,0 +1,193 @@
+= LTC2495 FPGA Firmware Implementation
+
+ifndef::imagesdir[:imagesdir: ../images]
+:stem: asciimath
+
+== General
+
+Linear Technologies LTC2495 is a 16-Bit 8-/16-Channel Sigma Delta ADC with PGA and I2C Interface https://www.analog.com/en/products/ltc2495.html[*^{counter:link}^*]. +
+
+_FPGA FW supported ADC-Features_:
+
+* 16 Single-Ended Inputs
+* 8 Differential Inputs (with configurable polarity)
+* Programmable Gain
+* Internal Temperature measurement
+* 2 Speed Modes
+* All Rejection Modes
+
+_FPGA FW supported I2C-Features_:
+
+* Continious Read
+* Bus release meanwhile ADC conversion time
+
+== Prerequest for Design Integration
+
+The FW Design of LTC2495 is ready to use together with the FW entity ENT_I2C_CONTROLLER. The LTC2495 component should be connected to the controller component. The controller converts the IC specific read and write commands to drive and scope the external LTC2945 device. Two iobuf primitives are required aditionally. See image below.
+
+image::I2C_integration.png[]
+
+== FPGA Firmware Design
+
+This Firmware design implementation of ADC LTC2945 operates as a I2C subordinate device. It is a costimized statemachine for continious read communication. 
+
+_Biref description_:
+
+* Trigger starts one continuous sampling process of all selcted channels
+** There is no termination condition apart from reset
+** Data ready indicating that all 17 channels been read
+* With each trigger, input configurations will be applied for triggered sampling process
+** 17 Channels are selectable (single, differential ended)
+** First 16 output channels are ADC values
+** 17th channel is internal ADC temperature bvalue
+* Conversion time depends on selected speed mode
+** Speed mode 1 fix to 170 ms
+** Speed mode 2 fix to 90 ms
+
+_Example of ouput interpretation_:
+
+[cols="3,5,5,5"]
+|===
+|Input |Example Configurtion |Explanation|Output
+
+|pi_ch_ena
+|'1' & x"FFFF"
+|All Channels including internal temperature sensor selected
+|po_adc_data(16) = internal ADC temperature
+
+|pi_ch_cfg_sgl_ena
+|'1' & x"01FF" +
+b"1 0000 0001 1111 1111"
+|Channels 0 t0 8 are configured as single ended +
+|po_adc_data(0) = IN+ to COM +
+po_adc_data(1) = IN+ to COM +
+... +
+po_adc_data(8) = IN+ to COM
+
+|pi_ch_cfg_diff_ena
+|x"F600" +
+b"1111 0110 0000 0000"
+|Channels 9, 10, 12, 13, 14, 15 are configured as diferential +
+whereas 9, 13 and 15 divers from 10, 12, 14 in polarity
+|po_adc_data(9) = CH9IN- to CH9IN+ +
+po_adc_data(10) = CH10IN+ to CH11IN- +
+po_adc_data(12) = CH12IN- to CH11IN+ +
+po_adc_data(13) = CH13IN+ to CH11IN- +
+po_adc_data(14) = CH14IN+ to CH13IN- +
+po_adc_data(15) = CH15IN- to CH14IN+ +
+
+|===
+
+CAUTION: A channel only can be single ended or differential configured. Means if pi_ch_cfg_sgl_ena(0) is '1' pi_ch_cfg_diff_ena(0) has to be '0'. 
+
+=== Converter Configuration over Configurtion Ports
+
+[cols="1,2,2,6,6"]
+|===
+|Port |Width (sign.integer.fraction) |Number of Elements |Setting |Example
+
+|pi_ch_ena
+|17 (0.17.0)
+|1
+|'0' not selected +
+'1' Channel i
+[0] ADC Channel 0 +
+[i] ADC Channel i +
+[16] ADC Channel 15 +
+[17] internal ADC temperature
+|pi_ch_ena: '0' & x"1002" +
+Temeperature read disabled +
+Channel 12 and 1 enabled 
+
+|pi_ch_cfg_sgl_ena
+|16 (0.16.0)
+|1
+|'0' not selected +
+'1' Channel i set as single ended IN+ to IN- (common mode)
+|pi_ch_cfg_single_end: x"0101" +
+Channel 8 and 1 configured as single ended
+
+|pi_ch_cfg_diff_ena
+|16 (0.16.0)
+|1
+|'0' not selected +
+'1' Channel i set as diferential +
+even channels are set to IN+ and the following channel i+1 is set to IN- +
+odd channels are set to IN- and the following channel i-1 is set to IN+ 
+|pi_ch_cfg_diff_ena x"9555" +
+Channels 0,2,4,6,8,10,12 are configured as diferential IN+ to IN- +
+Channel 15 is configured as diferential IN- to IN+
+
+|pi_ch_cfg_reject
+|16 (0.16.0) change to 15 bit
+|2
+|b"00" Simultaneous 50/60 Hz Rejection +
+b"01" 50 Hz Rejection +
+b"10" 60 Hz Rejection +
+b"11" reserved, do not use
+| 
+
+|pi_ch_cfg_speed
+|16 (0.16.0) change to 15 bit
+|1
+|'0' Normal speed, Auto-Calbration enabled +
+'1' 2x  speed, Auto-Calbration disabled 
+|
+
+|pi_ch_cfg_gain
+|16 (0.16.0) 
+|3
+|
+|pi_ch_cfg_gain = n +
+2^n = gain
+
+
+|===
+
+== Design Implementation 
+
+image::ltc2495_fsm.svg[]
+
+== Conversion Formula
+
+:stem: asciimath
+
+[stem]
+++++
+ "ADC Voltages in Volt" = "po_data"/ ("pi_ch_cfg_gain" * 2^16) * ("V"_(ref))/(2) 
+
+ "ADC Temperature in °C" = "po_data" * "V"_(ref) /12.25 - 273
+++++
+
+== Terms
+
+[cols="3,3,3,3"]
+|===
+|Term |Description |Characteristic |FW Configuration 
+
+|stem:[g]
+|programmable gain
+|1 - 128
+|stem:[g = 2^"cfg_gain"]
+
+|stem:[V_(ref)]
+|Reference Voltage in V
+|
+|not configurable
+
+|stem:[F_s]
+|Full scale
+|
+|not configurable
+
+|LSB
+|Least significant bit
+|stem:[F_s/(2^16)]
+|not configurable
+
+|IN+
+|Positive Input Channel
+|
+|Used with pi_ch_cfg_diff_ena. Set bit high to channel which is positive input channel.
+
+++++

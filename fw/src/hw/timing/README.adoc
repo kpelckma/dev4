@@ -1,0 +1,4 @@
+:imagesdir: doc/modules/ROOT/images
+include::doc/modules/ROOT/pages/intro.adoc[]
+include::doc/modules/ROOT/pages/registers.adoc[]
+

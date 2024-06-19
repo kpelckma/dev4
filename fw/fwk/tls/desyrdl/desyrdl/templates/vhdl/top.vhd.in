@@ -1,0 +1,369 @@
+------------------------------------------------------------------------------
+--          ____  _____________  __                                         --
+--         / __ \/ ____/ ___/\ \/ /                 _   _   _               --
+--        / / / / __/  \__ \  \  /                 / \ / \ / \              --
+--       / /_/ / /___ ___/ /  / /               = ( M | S | K )=            --
+--      /_____/_____//____/  /_/                   \_/ \_/ \_/              --
+--                                                                          --
+------------------------------------------------------------------------------
+--! @copyright Copyright 2021-2022 DESY
+--! SPDX-License-Identifier: Apache-2.0
+------------------------------------------------------------------------------
+--! @date 2021-04-07
+--! @author Michael Büchler <michael.buechler@desy.de>
+--! @author Lukasz Butkowski <lukasz.butkowski@desy.de>
+------------------------------------------------------------------------------
+--! @brief
+--! Top component of DesyRDL address space decoder for {node.type_name}
+------------------------------------------------------------------------------
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+library desyrdl;
+use desyrdl.common.all;
+
+use work.pkg_{{type_name_org}}.all;
+
+entity {{type_name_org}} is
+  port (
+    pi_clock : in std_logic;
+    pi_reset : in std_logic;
+    -- TOP subordinate memory mapped interface
+    pi_s_reset : in std_logic := '0';
+    pi_s_top   : in  t_{{type_name_org}}_m2s;
+    po_s_top   : out t_{{type_name_org}}_s2m;
+    -- to logic interface
+    pi_addrmap : in  t_addrmap_{{type_name_org}}_in;
+    po_addrmap : out t_addrmap_{{type_name_org}}_out
+  );
+end entity {{type_name_org}};
+
+architecture arch of {{type_name_org}} is
+
+  type t_data_out is array (natural range<>) of std_logic_vector(C_DATA_WIDTH-1 downto 0) ;
+
+  --{%- if n_reg_insts > 0 %}
+  signal reg_data_out_vect : t_data_out({{n_regs}}-1 downto 0);
+  signal reg_rd_stb   : std_logic_vector({{n_regs}}-1 downto 0);
+  signal reg_wr_stb   : std_logic_vector({{n_regs}}-1 downto 0);
+  signal reg_data_out : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  signal reg_data_in  : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  --{%- endif %}{%- if n_rgf_insts > 0 %}
+  signal rgf_reg_data_out_vect : t_data_out({{n_regf_regs}}-1 downto 0);
+  signal rgf_reg_rd_stb   : std_logic_vector({{n_regf_regs}}-1 downto 0);
+  signal rgf_reg_wr_stb   : std_logic_vector({{n_regf_regs}}-1 downto 0);
+  signal rgf_reg_data_in  : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  signal rgf_reg_data_out : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  --{%- endif %}{%- if n_mem_insts > 0 %}
+  signal mem_data_out_vect : t_data_out({{n_mems}}-1 downto 0);
+  signal mem_stb      : std_logic_vector({{n_mems}}-1 downto 0);
+  signal mem_we       : std_logic;
+  signal mem_addr     : std_logic_vector(C_ADDR_WIDTH-1 downto 0);
+  signal mem_data_out : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  signal mem_data_in  : std_logic_vector(C_DATA_WIDTH-1 downto 0);
+  signal mem_ack      : std_logic;
+  --{%- endif %}{%- if n_ext_insts > 0 %}
+  signal ext_if_i     : t_{{interface|lower}}_s2m_array({{n_exts}}-1 downto 0);
+  signal ext_if_o     : t_{{interface|lower}}_m2s_array({{n_exts}}-1 downto 0);
+  --{%- endif %}
+
+begin
+
+  ins_decoder_{{interface|lower}} : entity work.{{type_name_org}}_decoder_{{interface|lower}}
+  generic map (
+    g_addr_width    => C_ADDR_WIDTH,
+    g_data_width    => C_DATA_WIDTH
+  )
+  port map (
+    pi_clock      => pi_clock,
+    pi_reset      => pi_reset,
+
+    --{%- if n_reg_insts > 0 %}
+    po_reg_rd_stb => reg_rd_stb,
+    po_reg_wr_stb => reg_wr_stb,
+    po_reg_data   => reg_data_in,
+    pi_reg_data   => reg_data_out,
+    --{%- endif %}
+    --{%- if n_rgf_insts > 0 %}
+    po_rgf_reg_rd_stb  => rgf_reg_rd_stb,
+    po_rgf_reg_wr_stb  => rgf_reg_wr_stb,
+    po_rgf_reg_data    => rgf_reg_data_in,
+    pi_rgf_reg_data    => rgf_reg_data_out,
+    --{%- endif %}
+    --{%- if n_mem_insts > 0 %}
+    po_mem_stb    => mem_stb,
+    po_mem_we     => mem_we,
+    po_mem_addr   => mem_addr,
+    po_mem_data   => mem_data_in,
+    pi_mem_data   => mem_data_out,
+    pi_mem_ack    => mem_ack,
+    --{%- endif %}
+    --{%- if n_ext_insts > 0 %}
+    pi_ext      => ext_if_i,
+    po_ext      => ext_if_o,
+    --{%- endif %}
+    pi_s_reset  => pi_s_reset,
+    pi_s_top    => pi_s_top,
+    po_s_top    => po_s_top
+  );
+  --{%- if n_reg_insts > 0 %}
+  prs_reg_rd_mux: process(pi_clock)
+  begin
+    if rising_edge(pi_clock) then
+      for idx in 0 to {{n_regs}}-1 loop
+        if reg_rd_stb(idx) = '1' then
+          reg_data_out <= reg_data_out_vect(idx);
+        end if;
+      end loop;
+    end if;
+  end process prs_reg_rd_mux;
+  --{%- endif %}
+  --{%- if n_rgf_insts > 0 %}
+  prs_rgf_reg_rd_mux: process(pi_clock)
+  begin
+    if rising_edge(pi_clock) then
+      for idx in 0 to {{n_regf_regs}}-1 loop
+        if rgf_reg_rd_stb(idx) = '1' then
+          rgf_reg_data_out <= rgf_reg_data_out_vect(idx);
+        end if;
+      end loop;
+    end if;
+  end process prs_rgf_reg_rd_mux;
+  --{%- endif %}
+  --{%- if n_mem_insts > 0 %}
+  prs_mem_rd_mux: process(pi_clock)
+  begin
+    if rising_edge(pi_clock) then
+      for idx in 0 to {{n_mems}}-1 loop
+        if mem_stb(idx) = '1' then
+          mem_data_out <= mem_data_out_vect(idx);
+        end if;
+      end loop;
+    end if;
+  end process prs_mem_rd_mux;
+  --{%- endif %}
+
+  -- ===========================================================================
+  -- generated registers instances{% for reg in reg_insts %}
+  -- ---------------------------------------------------------------------------
+  -- reg name: {{reg.inst_name}}  reg type: {{reg.type_name}}
+  -- ---------------------------------------------------------------------------
+  blk_{{reg.inst_name}} : block
+  begin  --{% if reg.dim == 1 %}
+    inst_{{reg.inst_name}}: entity work.{{type_name_org}}_{{reg.type_name}}
+      port map(
+        pi_clock        => pi_clock,
+        pi_reset        => pi_reset,
+        -- to/from adapter
+        pi_decoder_rd_stb => reg_rd_stb({{reg.idx}}),
+        pi_decoder_wr_stb => reg_wr_stb({{reg.idx}}),
+        pi_decoder_data   => reg_data_in,
+        po_decoder_data   => reg_data_out_vect({{reg.idx}}),
+
+        pi_reg  => pi_addrmap.{{reg.inst_name}},
+        po_reg  => po_addrmap.{{reg.inst_name}}
+      );--{% elif reg.dim == 2 %}
+    gen_m: for idx_m in 0 to {{reg.dim_m}}-1 generate
+      inst_{{reg.inst_name}}: entity work.{{type_name_org}}_{{reg.type_name}}
+        port map(
+          pi_clock        => pi_clock,
+          pi_reset        => pi_reset,
+          -- to/from adapter
+          pi_decoder_rd_stb => reg_rd_stb({{reg.idx}}+idx_m),
+          pi_decoder_wr_stb => reg_wr_stb({{reg.idx}}+idx_m),
+          pi_decoder_data   => reg_data_in,
+          po_decoder_data   => reg_data_out_vect({{reg.idx}}+idx_m),
+
+          pi_reg  => pi_addrmap.{{reg.inst_name}}(idx_m),
+          po_reg  => po_addrmap.{{reg.inst_name}}(idx_m)
+        );
+    end generate;--{% elif reg.dim == 3 %}
+    gen_n : for idx_n in 0 to {{reg.dim_n}}-1 generate  -- outer dim, for 3D arrays
+      gen_m: for idx_m in 0 to {{reg.dim_m}}-1 generate -- inner dim, for 2D arrays
+        constant l_idx : natural := (idx_n*{{reg.dim_m}} + idx_m) ;
+      begin
+        inst_{{reg.inst_name}}: entity work.{{type_name_org}}_{{reg.type_name}}
+          port map(
+            pi_clock        => pi_clock,
+            pi_reset        => pi_reset,
+            -- to/from adapter
+            pi_decoder_rd_stb => reg_rd_stb({{reg.idx}}+l_idx),
+            pi_decoder_wr_stb => reg_wr_stb({{reg.idx}}+l_idx),
+            pi_decoder_data   => reg_data_in,
+            po_decoder_data   => reg_data_out_vect({{reg.idx}}+l_idx),
+
+            pi_reg  => pi_addrmap.{{reg.inst_name}}(idx_n,idx_m),
+            po_reg  => po_addrmap.{{reg.inst_name}}(idx_n,idx_m)
+          );
+      end generate;
+    end generate;--{% endif %}
+  end block;--{% endfor %}
+
+  -- ==========================================================================={% set rfns = namespace(reg_curr_idx = 0,reg_rf_idx = 0) %}
+  -- generated registers instances in regfiles {% for rgf in rgf_insts %}
+  -- ---------------------------------------------------------------------------
+  -- regfile instance name: {{rgf.inst_name}}  reg file type: {{rgf.type_name}}
+  -- ---------------------------------------------------------------------------
+  blk_{{rgf.inst_name}} : block
+  begin--{% if rgf.dim == 1 %}{% for reg in rgf.reg_insts %}
+    blk_{{reg.inst_name}} : block
+    begin  --{% if reg.dim == 1 %}
+      inst_{{reg.inst_name}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+        port map(
+          pi_clock        => pi_clock,
+          pi_reset        => pi_reset,
+          -- to/from adapter
+          pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+          pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+          pi_decoder_data   => rgf_reg_data_in,
+          po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+          pi_reg  => pi_addrmap.{{rgf.inst_name}}.{{reg.inst_name}},
+          po_reg  => po_addrmap.{{rgf.inst_name}}.{{reg.inst_name}}--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+        );--{% elif reg.dim == 2 %}{% for idx_m in range(reg.dim_m) %}
+        inst_{{reg.inst_name}}_{{idx_m}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+          port map(
+            pi_clock        => pi_clock,
+            pi_reset        => pi_reset,
+            -- to/from adapter
+            pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_data   => rgf_reg_data_in,
+            po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+            pi_reg  => pi_addrmap.{{rgf.inst_name}}.{{reg.inst_name}}({{idx_m}}),
+            po_reg  => po_addrmap.{{rgf.inst_name}}.{{reg.inst_name}}({{idx_m}})--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+          );--{% endfor %}{% elif reg.dim == 3 %}{% for idx_n in range(reg.dim_n) %}{% for idx_m in range(reg.dim_m) %}
+        inst_{{reg.inst_name}}__{{idx_n}}__{{idx_m}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+          port map(
+            pi_clock        => pi_clock,
+            pi_reset        => pi_reset,
+            -- to/from adapter
+            pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_data   => rgf_reg_data_in,
+            po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+            pi_reg  => pi_addrmap.{{rgf.inst_name}}.{{reg.inst_name}}(idx_n,idx_m),
+            po_reg  => po_addrmap.{{rgf.inst_name}}.{{reg.inst_name}}(idx_n,idx_m)--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+          );--{% endfor %}{% endfor %}{% endif %}
+    end block;--{% endfor %}{# end of register iteration #}
+    --{% elif rgf.dim == 2 %}{% for outer_idx_m in range(rgf.dim) %}{% for reg in rgf.reg_insts %}
+    blk_{{reg.inst_name}}_{{outer_idx_m}} : block
+    begin  --{% if reg.dim == 1 %}
+      inst_{{reg.inst_name}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+        port map(
+          pi_clock        => pi_clock,
+          pi_reset        => pi_reset,
+          -- to/from adapter
+          pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+          pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+          pi_decoder_data   => rgf_reg_data_in,
+          po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+          pi_reg  => pi_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}},
+          po_reg  => po_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}}--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+        );--{% elif reg.dim == 2 %}{% for idx_m in range(reg.dim_m) %}
+        inst_{{reg.inst_name}}_{{idx_m}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+          port map(
+            pi_clock        => pi_clock,
+            pi_reset        => pi_reset,
+            -- to/from adapter
+            pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_data   => rgf_reg_data_in,
+            po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+            pi_reg  => pi_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}}({{idx_m}}),
+            po_reg  => po_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}}({{idx_m}})--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+          );--{% endfor %}{% elif reg.dim == 3 %}{% for idx_n in range(reg.dim_n) %}{% for idx_m in range(reg.dim_m) %}
+        inst_{{reg.inst_name}}__{{idx_n}}__{{idx_m}}: entity work.{{type_name_org}}_{{rgf.type_name}}_{{reg.type_name}}
+          port map(
+            pi_clock        => pi_clock,
+            pi_reset        => pi_reset,
+            -- to/from adapter
+            pi_decoder_rd_stb => rgf_reg_rd_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_wr_stb => rgf_reg_wr_stb({{rfns.reg_curr_idx}}),
+            pi_decoder_data   => rgf_reg_data_in,
+            po_decoder_data   => rgf_reg_data_out_vect({{rfns.reg_curr_idx}}),
+
+            pi_reg  => pi_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}}(idx_n,idx_m),
+            po_reg  => po_addrmap.{{rgf.inst_name}}({{outer_idx_m}}).{{reg.inst_name}}(idx_n,idx_m)--{%- set rfns.reg_curr_idx = rfns.reg_curr_idx + 1 %}
+          );--{% endfor %}{% endfor %}{% endif %}
+    end block;--{% endfor %}{# end of register iteration#}{% endfor %}
+  --{% endif %}
+  end block;
+  -- ---------------------------------------------------------------------------{% endfor %}
+
+  -- ===========================================================================
+  -- Generated Meme Instances
+  --{% if n_mem_insts > 0 %}
+  mem_ack <= '1'; -- not used at the moment from external memories{% endif %}
+  -- ---------------------------------------------------------------------------{% for mem in mem_insts %}
+  -- mem name: {{mem.inst_name}}  mem type: {{mem.type_name}}
+  -- ---------------------------------------------------------------------------
+  blk_{{mem.inst_name}} : block
+  begin--{% if mem.dim == 1 %}{% if mem.node.is_sw_readable %}
+    mem_data_out_vect({{mem.idx}})({{mem.datawidth}}-1 downto 0) <= pi_addrmap.{{mem.inst_name}}.data;--{% if mem.datawidth < 32%}
+    mem_data_out_vect({{mem.idx}})(C_DATA_WIDTH-1 downto {{mem.datawidth}}) <= (others => '0');--{% endif %}{% else %}
+    mem_data_out_vect({{mem.idx}}) <= (others => '0');--{% endif %}
+    po_addrmap.{{mem.inst_name}}.addr <= mem_addr({{mem.addrwidth}}-1 downto 0);
+    po_addrmap.{{mem.inst_name}}.data <= mem_data_in({{mem.datawidth}}-1 downto 0);
+    po_addrmap.{{mem.inst_name}}.en <= mem_stb({{mem.idx}});
+    po_addrmap.{{mem.inst_name}}.we <= mem_we;--{% elif mem.dim == 2 %}
+    gen_m: for idx_m in 0 to {{mem.dim_m}}-1 generate--{% if mem.node.is_sw_readable %}
+      mem_data_out_vect({{mem.idx}}+idx_m)({{mem.datawidth}}-1 downto 0) <= pi_addrmap.{{mem.inst_name}}(idx_m).data;--{% if mem.datawidth < 32%}
+      mem_data_out_vect({{mem.idx}}+idx_m)(C_DATA_WIDTH-1 downto {{mem.datawidth}}) <= (others => '0');--{% endif %}{% else %}
+      mem_data_out_vect({{mem.idx}}+idx_m) <= (others => '0');--{% endif %}
+      po_addrmap.{{mem.inst_name}}(idx_m).addr <= mem_addr({{mem.addrwidth}}-1 downto 0);
+      po_addrmap.{{mem.inst_name}}(idx_m).data <= mem_data_in({{mem.datawidth}}-1 downto 0);
+      po_addrmap.{{mem.inst_name}}(idx_m).en <= mem_stb({{mem.idx}}+idx_m);
+      po_addrmap.{{mem.inst_name}}(idx_m).we <= mem_we;
+    end generate;
+    --{% endif %}
+  end block;
+  -- ---------------------------------------------------------------------------{% endfor %}
+
+  -- ===========================================================================
+  -- External Busses{% for ext in ext_insts %}
+  -- ---------------------------------------------------------------------------
+  -- ext name: {{ext.inst_name}}  ext type: {{ext.type_name}}
+  -- ---------------------------------------------------------------------------
+  blk_{{ext.inst_name}} : block
+  begin--{% if ext.dim == 1 %}
+    --{% if ext.interface|lower == interface|lower %}
+    po_addrmap.{{ext.inst_name}} <= ext_if_o({{ext.idx}});
+    ext_if_i({{ext.idx}}) <= pi_addrmap.{{ext.inst_name}};
+    --{% else %}
+    ins_{{interface|lower}}_to_{{ext.interface|lower}} : entity desyrdl.{{interface|lower}}_to_{{ext.interface|lower}}
+    port map (
+      pi_clock => pi_clock,
+      pi_reset => pi_reset,
+      pi_s_decoder => ext_if_o({{ext.idx}}),
+      po_s_decoder => ext_if_i({{ext.idx}}),
+      po_m_ext     => po_addrmap.{{ext.inst_name}},
+      pi_m_ext     => pi_addrmap.{{ext.inst_name}}
+    );--{% endif %}
+    ----{% elif ext.dim == 2 %}
+    gen_m: for idx_m in 0 to {{ext.dim_m}}-1 generate
+      --{% if ext.interface|lower == interface|lower %}
+      po_addrmap.{{ext.inst_name}}(idx_m) <= ext_if_o({{ext.idx}}+idx_m);
+      ext_if_i({{ext.idx}}+idx_m) <= pi_addrmap.{{ext.inst_name}}(idx_m);
+      --{% else %}
+      ins_{{interface|lower}}_to_{{ext.interface|lower}} : entity desyrdl.{{interface|lower}}_to_{{ext.interface|lower}}
+      port map (
+        pi_clock => pi_clock,
+        pi_reset => pi_reset,
+        pi_s_decoder => ext_if_o({{ext.idx}}+idx_m),
+        po_s_decoder => ext_if_i({{ext.idx}}+idx_m),
+        po_m_ext     => po_addrmap.{{ext.inst_name}}(idx_m),
+        pi_m_ext     => pi_addrmap.{{ext.inst_name}}(idx_m)
+      );--{% endif %}
+    end generate;
+    --{% endif %}
+  end block;--{% endfor %}
+
+end architecture;
+

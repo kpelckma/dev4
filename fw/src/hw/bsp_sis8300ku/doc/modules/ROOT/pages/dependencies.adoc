@@ -1,0 +1,14 @@
+== HDL Dependencies
+
+This module does not automatically add dependent libraries and modules. 
+Instead the super-project should add the necessary dependencies as the git submodule.
+
+This BSP Module depends on the following modules and libraries:
+
+* https://gitlab.msktools.desy.de/fpgafw/src/mod/fpga_config_manager[DESY SVN Library]
+* https://gitlab.msktools.desy.de/fpgafw/lib/desy_vhdl[DESY VDHL Library]
+
+
+== Tool Dependencies
+
+This module currently written based on Vivado 2020.2. Higher Vivado versions are technically possible with minimal modification to Block Design.

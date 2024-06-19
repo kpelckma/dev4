@@ -1,0 +1,31 @@
+addrmap standalone {
+  external regfile {
+    reg {
+      field {} data[32] ;
+    } my_reg_array[4] ;
+  } my_regfile;
+
+  reg  {
+    field {
+      desc = "Count overflow events" ;
+      sw = r ;
+      hw = w ;
+      counter ;
+    } ov[16] ;
+    field {
+      desc = "Report error status" ;
+      sw = r ;
+      hw = w ;
+    } err[1] ;
+  } status ;
+
+  reg {
+    field {
+      desc = "Phuon generation rate (Megaphuons/s)" ;
+      sw = rw ;
+      hw = r ;
+      reset = 3 ;
+    } rate[8] ;
+  } control ;
+};
+

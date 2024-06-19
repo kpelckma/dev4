@@ -1,0 +1,7 @@
+== HDL Dependencies
+
+DAQ Module depends on the following packages: 
+
+* DESY_VHDL Library (https://gitlab.msktools.desy.de/fpgafw/lib/desy_vhdl)
+
+Registers are generated using DesyRDL. (https://pypi.org/project/desyrdl/)

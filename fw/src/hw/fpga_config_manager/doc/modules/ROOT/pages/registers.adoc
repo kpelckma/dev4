@@ -1,0 +1,130 @@
+= Register Descriptions
+
+[cols="3,3,3,3,9"]
+|===
+|Name |Register Width |Number of Elements | RO/RW | Description
+
+|WRITE_BUF
+|8
+|1024
+|RW
+|Write to EEPROM buffer. Programmer script uses this buffer to write to EEPROM. EEPROM commands and data.
+
+|READ_BUF
+|8
+|1024
+|RW
+|Read from EEPROM buffer. Programmer script uses this buffer to read from EEPROM. EEPROM commands and data.
+
+|SPI_DIVIDER
+|16
+|1
+|RW
+|Clock divider value for SPI interface. Default = 10
+
+|BYTES_TO_WRITE
+|16
+|1
+|RW
+|Bytes to write to EEPROM from WRITE_BUF
+
+
+|BYTES_TO_READ
+|16
+|1
+|RW
+|Bytes to read from EEPROM to READ_BUF
+
+|CONTROL
+|8
+|1
+|RW
+|Control and status of the FSM. Used for handshaking with programmer software.
+
+
+|JTAG_TCK
+|1
+|1
+|RW
+|JTAG lane Test Clock
+
+
+|JTAG_TMS
+|1
+|1
+|RW
+|JTAG lane Test Mode Select
+
+|JTAG_TDI
+|1
+|1
+|RW
+|JTAG lane Test Data In
+
+|JTAG_TDO
+|1
+|1
+|RO
+|JTAG lane Test Data Outs
+
+|MAGIC
+|32
+|1
+|RO
+|Magic number for the programmer to understand (do sanity check) if target memory region is correct.
+
+
+|REV_SWITCH
+|32
+|1
+|RW
+|Trigger FPGA to boot from selected revision (REV_SEL). Reboot is triggered by writing 0x2eb0070
+
+
+|REV_SEL
+|2
+|1
+|RW
+|In multiboot select revision to boot from.
+
+|CRC_ERROR
+|1
+|1
+|RO
+|FPGA configuration check CRC error. Provided by FRAME_ECC primitive.
+
+
+|CRC_ERROR_CNT
+|32
+|1
+|RO
+|FPGA configuration check CRC errors counter.
+
+
+|ECC_ERROR_CNT
+|32
+|1
+|RO
+|FPGA configuration check ECC errors counter.
+
+
+|ECC_SYNDROME
+|13
+|1
+|RO
+|FPGA configuration check ECC syndrome. Provided by FRAME_ECC primitive.
+
+|ID
+|32
+|1
+|RO
+|Module Identyfication Number
+
+|VERSION
+|32
+|1
+|RO
+|Module Version Number
+
+...
+|===
